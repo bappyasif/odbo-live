@@ -1,0 +1,182 @@
+.App {
+  text-align: center;
+  height: 100vh;
+}
+
+.wrapper-div.nav-wrapper,
+.wrapper-div.fl-wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+.wrapper-div.nav-wrapper {
+  background-color: darkgray;
+}
+
+.wrapper-div.fl-wrapper {
+  align-items: center;
+}
+
+.wrapper-div.login-form {
+  padding: 11px;
+}
+
+/* .wrapper-div.login-form, */
+.wrapper-div.register-user {
+  position: relative;
+}
+
+.wrapper-div.show-errors {
+  position: absolute;
+  text-align: justify;
+}
+
+/* .cards-wrapper .all-cards {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 29px;
+} */
+
+p {
+  padding: 0;
+  margin: 0;
+}
+
+.css-l086p4-MuiImageListItem-root .MuiImageListItem-img {
+  height: 341px !important;
+}
+
+.css-14q7c0c-MuiImageListItemBar-titleWrap {
+  -webkit-flex-grow: 0 !important;
+  flex-grow: 0 !important;
+}
+
+.MuiCardHeader-content.css-1qbkelo-MuiCardHeader-content {
+  margin-left: 17px !important;
+}
+
+.css-1rplq84 {
+  margin-bottom: 6px !important;
+}
+
+.cards-wrapper {
+  width: 92vw;
+  margin: auto;
+}
+
+.cards-wrapper .all-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 29px;
+  justify-items: center;
+}
+
+.cards-wrapper .card-wrapper {
+  width: 420px;
+  border-radius: 10px 70px;
+  padding: 35px 38px 8px 35px;
+}
+
+.MuiCardHeader-content.css-1qbkelo-MuiCardHeader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  margin-left: 29px;
+}
+
+/* .cards-wrapper .all-cards  {
+  column-count: 4;
+  column-gap: 10px;
+}
+
+.cards-wrapper .all-cards .card-wrapper {
+  margin: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  margin-bottom: 10px;
+  break-inside: avoid;
+} */
+
+/* .row,
+.cards-wrapper .all-cards {
+  -moz-column-width: 18em;
+  -webkit-column-width: 18em;
+  -moz-column-gap: 1em;
+  -webkit-column-gap:1em; 
+   
+ }
+ 
+ .item,
+ .cards-wrapper .all-cards .card-wrapper {
+  display: inline-block;
+  padding:  .25rem;
+  width:  100%; 
+ } */
+
+.af-wrapper {
+  margin: 0 11px;
+}
+
+.af-wrapper .fc,
+.af-wrapper .fr .all-btns {
+  flex-direction: row;
+  margin: auto;
+}
+
+.af-wrapper .fc {
+  display: flex;
+}
+
+.af-wrapper .fr .all-btns {
+  gap: 11px;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0 0 auto;
+}
+
+.all-posts .post-card {
+  width: 920px;
+  margin: 4px auto;
+  border-radius: 11px;
+}
+
+.all-posts .post-card .post-actions-icons,
+.all-posts .post-card .icon-button {
+  display: flex;
+  justify-content: center;
+}
+
+.all-posts .post-card .post-actions-icons {
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.all-posts .post-card .icon-button {
+  flex-direction: column;
+  align-items: center;
+}
+
+/* for some explicit tooltips */
+.posted-by {
+  position: relative;
+}
+
+.posted-by-tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+.posted-by:hover .posted-by-tooltip-text {
+  visibility: visible;
+}
