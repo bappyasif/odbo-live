@@ -54,6 +54,10 @@ function EditUserProfile() {
     }, [])
 
     useEffect(() => {
+        setUserData(appCtx.user || fakeDataModel[0])
+    }, [appCtx.user])
+
+    useEffect(() => {
         if (reloadDataFlag) {
             setUserData(appCtx.user)
             setReloadDataFlag(false)
