@@ -267,13 +267,13 @@ let RenderLoginOutlet = ({ item }) => {
     let handleClick = evt => {
         let url = ''
         if (item.name === "Google") {
-            url = `http://localhost:3000/auth/google`
+            url = `${appCtx.baseUrl}/auth/google`
         } else if (item.name === "Facebook") {
-            url = `http://localhost:3000/auth/facebook`
+            url = `${appCtx.baseUrl}/auth/facebook`
         } else if (item.name === "Github") {
-            url = `http://localhost:3000/auth/github`
+            url = `${appCtx.baseUrl}/auth/github`
         } else if (item.name === "Twitter") {
-            url = `http://localhost:3000/auth/twitter`
+            url = `${appCtx.baseUrl}/auth/twitter`
         }
 
         loginPrompt(url, getAuthenticatedUserData)
