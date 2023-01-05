@@ -104,7 +104,7 @@ let RenderUserProfilePhoto = ({ userData, fromPP, forVisitingProfile }) => {
             <ImageListItem>
                 <img
                     src={decideImgResourceUrl()}
-                    srcSet={`${decideImgResourceUrl()}&dpr= 2 2x`}
+                    // srcSet={`${decideImgResourceUrl()}&dpr= 2 2x`}
                     alt={`user ${fullName ? fullName : "X"} profile display`}
                     loading='lazy'
                     style={{objectFit: fromPP ? "fill" : "cover"}}

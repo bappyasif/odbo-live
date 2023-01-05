@@ -154,10 +154,12 @@ function App() {
     setDarkMode(themeType ? "dark": "light")
   }
 
-  const getUserDataFromJwtTokenStoredInLocalStorage = () => {
+  function getUserDataFromJwtTokenStoredInLocalStorage () {
     const token = localStorage.getItem("token");
 
-    const url = `http://localhost:3000/protected`
+    // const url = `http://localhost:3000/protected`
+
+    const url = `${contexts.baseUrl}/protected`
 
     if (userStillLoggedIn() && token) {
       getUserDataAfterJwtVerification(url, token, handleData)

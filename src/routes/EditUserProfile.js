@@ -1,5 +1,5 @@
-import { CloseTwoTone, NotInterestedTwoTone, SaveAltTwoTone, WallpaperRounded } from '@mui/icons-material'
-import { TextField, Box, Button, FormControl, IconButton, ImageListItem, ImageListItemBar, Input, InputLabel, Paper, Stack, TextareaAutosize, Typography, Tooltip } from '@mui/material'
+import { CloseTwoTone, NotInterestedTwoTone, SaveAltTwoTone } from '@mui/icons-material'
+import { Box, Button, FormControl, ImageListItem, ImageListItemBar, Input, InputLabel, Paper, Stack, TextareaAutosize, Typography, Tooltip } from '@mui/material'
 import moment from 'moment'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -17,14 +17,6 @@ function EditUserProfile() {
     let [reloadDataFlag, setReloadDataFlag] = useState(false);
 
     const appCtx = useContext(AppContexts);
-
-    // const navigate = useNavigate()
-
-    // const beginTimer = () => {
-    //     let timer = setTimeout(() => {
-    //         !userData?.fullName && console.log(appCtx?.user)
-    //     }, [990])
-    // }
 
     let updateUserEditTopicsDataFromChooser = (updatedTopicsList) => {
         setUserData({})
@@ -68,7 +60,7 @@ function EditUserProfile() {
         }
     }, [reloadDataFlag])
 
-    console.log(userData, "!!")
+    // console.log(userData, "!!")
 
     return (
         <Box
@@ -115,7 +107,7 @@ let RenderActionButton = ({ item, userData, appCtx }) => {
 
         let data = { "fullName": fullName, "topics": topics, "cpUrl": cpUrl, "ppUrl": ppUrl, "bio": bio }
 
-        console.log(data,"!!")
+        // console.log(data,"!!")
 
         updateDataInDatabase(url, data, updateDataInApp)
     }
@@ -250,7 +242,7 @@ let RenderFormControlItem = ({ handleData, dataVal, elem, updateTopicsDataFromCh
             label = "It's system generated and can not be altered directly"
         }
 
-        console.log(elem, "elem")
+        // console.log(elem, "elem")
 
         return label
     }
@@ -401,10 +393,8 @@ export let RenderPhoto = ({ ppUrl, cpUrl, fullName }) => {
     return (
         <ImageListItem sx={{ width: ppUrl && "650px" }}>
             <img
-                // src={`${ppUrl ? ppUrl : fakeDataModel[0].coverPhotoUrl}?w85&h95&fit=crop&auto=format`}
-                // srcSet={`${ppUrl ? ppUrl : fakeDataModel[0].coverPhotoUrl}?w85&h95&fit=crop&auto=format&dpr= 2 2x`}
                 src={decideImgResourceUrl()}
-                srcSet={`${decideImgResourceUrl()}&dpr=2 2x`}
+                // srcSet={`${decideImgResourceUrl()}&dpr=2 2x`}
                 alt={`user ${fullName ? fullName : "X"} profile display`}
                 loading='lazy'
             />

@@ -50,7 +50,7 @@ const ShowPoll = ({ pollData, order, postId }) => {
 
     const appCtx = useContext(AppContexts)
 
-    const dataUpdater = result => console.log(result, "poll data!!")
+    const dataUpdater = result => null
 
     const checkUserAlreadyVoted = () => {
         const foundUser = votersList?.length ? votersList?.filter(id => id === appCtx.user._id) : []
@@ -73,7 +73,7 @@ const ShowPoll = ({ pollData, order, postId }) => {
 
         updateDataInDatabase(url, data, dataUpdater)
 
-        console.log(data, 'ready!!', updatedList, [].push(appCtx.user._id))
+        // console.log(data, 'ready!!', updatedList, [].push(appCtx.user._id))
     }
 
     const updatePostPollDataInDatabase = (optionCountObj) => {
@@ -114,7 +114,7 @@ const ShowPoll = ({ pollData, order, postId }) => {
 
             {(voteAttempted) ? <VoteAlert setVoteAttempted={setVoteAttempted} text={'You Voted, One Vote Per User!!'} severity={"success"} /> : null}
 
-            <Divider sx={{ mb: 3.5 }} />
+            <Divider sx={{ mb: 5.8 }} />
 
             <Stack
                 sx={{ flexDirection: "column", gap: 1.1, flexWrap: "wrap", height: "290px", alignItems: renderOptions()?.length >= 3 ? "center" : "center" }}
@@ -139,7 +139,7 @@ const VoteAlert = ({ setVoteAttempted, text, severity }) => {
     }, [])
 
     return (
-        <Alert sx={{ justifyContent: "center", position: "absolute", left: "35%" }} severity={severity}>{text}</Alert>
+        <Alert sx={{ justifyContent: "center", position: "absolute", width: "-webkit-fill-available" }} severity={severity}>{text}</Alert>
     )
 }
 

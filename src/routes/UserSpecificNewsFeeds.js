@@ -100,11 +100,10 @@ function UserSpecificNewsFeeds(props) {
 
     let handleToggle = () => setToggle(!toggle)
 
-    console.log(showPostsUntilIndex, "untilIndex", appCtx.availablePostsFeeds.length)
+    // console.log(showPostsUntilIndex, "untilIndex", appCtx.availablePostsFeeds.length)
 
     return (
         <Paper sx={{minHeight: "100vh"}}>
-            {/* <Typography variant='h1' id="top-marker">User Specific News Feeds</Typography> */}
 
             {showCreatePost ? <CreatePost /> : null}
 
@@ -203,7 +202,7 @@ const ShowPostsFromThirdPartyApisTopBunk = () => {
 
     let topics = appCtx.randomizedTopics.slice(0, 2)
 
-    console.log(topics, "topics!!")
+    // console.log(topics, "topics!!")
 
     return (
         <>
