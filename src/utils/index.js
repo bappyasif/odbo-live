@@ -94,7 +94,7 @@ const getAuthenticatedUserDataFromServer = (endpoint, dataUpdater) => {
             }
         }
     ).then(resp => {
-        if (resp.status === 200) {
+        if (resp.status >= 200 && resp.status < 300) {
             return resp.json()
         }
     }).catch(err => console.error(err, "response err!!"))

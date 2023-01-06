@@ -146,7 +146,7 @@ function App() {
     // let url = `http://localhost:3000/login/success`
     const url = `${contexts.baseUrl}/login/success`
     getAuthenticatedUserDataFromServer(url, handleData)
-    // console.log("running from app scope!!")
+    console.log("running from app scope!!")
   }
 
   const getSystemPreferenceTheme = () => {
