@@ -44,7 +44,7 @@ function ShowUserCreatedPost({ postData, setShowCreatePost }) {
       <RenderPostDataEssentials postData={postData} />
       {postData?.includedSharedPostId ? <ShowIncludedSharedPost appCtx={appCtx} includedPostId={postData.includedSharedPostId} /> : null}
       <UserEngagementWithPost postData={postData} appCtx={appCtx} setShowCreatePost={setShowCreatePost} handleCommentsDataUpdate={handleCommentsDataUpdate} />
-      {(postData?.commentsCount || commentsData.length) ? <RenderPostComments postOwner={postData.userId === appCtx.user._id} postId={postData._id} commentsData={commentsData} setCommentsData={setCommentsData} deleteCommentFromDataset={deleteCommentFromDataset} /> : null}
+      {(postData?.commentsCount || commentsData.length) ? <RenderPostComments postOwner={postData.userId === appCtx?.user?._id} postId={postData._id} commentsData={commentsData} setCommentsData={setCommentsData} deleteCommentFromDataset={deleteCommentFromDataset} /> : null}
     </Box>
   )
 }
@@ -155,8 +155,8 @@ export let UserEngagementWithPost = ({ postData, appCtx, setShowCreatePost, hand
   }, [])
 
   useEffect(() => {
-    if (postData && postData?.usersEngagged.length && appCtx?.user._id) {
-      let findIdx = postData?.usersEngagged?.findIndex(item => Object.keys(item)[0] === appCtx.user._id.toString())
+    if (postData && postData?.usersEngagged.length && appCtx?.user?._id) {
+      let findIdx = postData?.usersEngagged?.findIndex(item => Object.keys(item)[0] === appCtx?.user?._id.toString())
 
       postData?.usersEngagged[findIdx] && setCounts(prev => ({ ...prev, engaggedUser: Object.values(postData?.usersEngagged[findIdx])[0] }))
 
@@ -217,7 +217,7 @@ let RenderActionableIcon = ({ item, appCtx, handleCounts, counts, setShowModal, 
 
   return (
     <>
-      <Tooltip title={(flag && counts[item.name]) ? `${item.name}d already` : (!appCtx.user._id) ? `Login to ${item.name}` : item.name}>
+      <Tooltip title={(flag && counts[item.name]) ? `${item.name}d already` : (!appCtx?.user?._id) ? `Login to ${item.name}` : item.name}>
         <Stack
           onClick={handleClick}
           sx={{
@@ -237,7 +237,7 @@ let RenderActionableIcon = ({ item, appCtx, handleCounts, counts, setShowModal, 
 
       </Tooltip>
 
-      {(promptLogin && !appCtx.user._id) ? <ShowUserAuthenticationOptions promptLogin={promptLogin} setPromptLogin={setPromptLogin} itemName={item.name} /> : null}
+      {(promptLogin && !appCtx?.user?._id) ? <ShowUserAuthenticationOptions promptLogin={promptLogin} setPromptLogin={setPromptLogin} itemName={item.name} /> : null}
     </>
   )
 }
@@ -306,7 +306,7 @@ export let ShowIncludedSharedPost = ({ includedPostId, appCtx }) => {
     >
       <Typography>Shared Post</Typography>
       {_id ? <RenderPostDataEssentials postData={sharedPostData} shareMode={true} /> : null}
-      {_id ? <ShowPostUserEngagementsDetails counts={counts} currentUser={appCtx.user._id} /> : null}
+      {_id ? <ShowPostUserEngagementsDetails counts={counts} currentUser={appCtx?.user?._id} /> : null}
     </Box>
   )
 }

@@ -36,7 +36,7 @@ function UserSpecificNewsFeeds(props) {
     let handleAllAccessiblePosts = result => {
         appCtx.handleAvailablePostsFeeds(result.data.data)
         // when already available posts are ready to display, commence with private posts fetch request
-        appCtx.user.friends?.length && setFetchPrivatePosts(true);
+        appCtx?.user?.friends?.length && setFetchPrivatePosts(true);
     }
 
     let topics = appCtx?.user?.topics;
@@ -66,7 +66,7 @@ function UserSpecificNewsFeeds(props) {
     }
 
     let getFriendsPrivatePosts = () => {
-        let url = `${appCtx.baseUrl}/posts/${appCtx.user._id}/friends/posts/private`
+        let url = `${appCtx.baseUrl}/posts/${appCtx?.user?._id}/friends/posts/private`
         readDataFromServer(url, handleAllPrivatePosts)
     }
 

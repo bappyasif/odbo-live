@@ -126,9 +126,9 @@ let RenderPostOption = ({ postOwner, item, postId, commentId, deleteCommentFromD
         if (postOwner && item.text === "Delete") {
             optionsActions()
         } else if (
-            (userId !== appCtx.user._id) && (item.text !== "Thread")
+            (userId !== appCtx?.user?._id) && (item.text !== "Thread")
             ||
-            (!appCtx.user._id && item.text !== "Thread")
+            (!appCtx?.user?._id && item.text !== "Thread")
         ) {
             alert("This is not an authorized action, probably you are not owner of this content....")
         } else {
@@ -144,9 +144,9 @@ let RenderPostOption = ({ postOwner, item, postId, commentId, deleteCommentFromD
                 p: 0
             }}
         >
-            <Tooltip title={(!appCtx.user._id && item.text !== "Thread") ? `Login to ${item.text}` : item.text}>
+            <Tooltip title={(!appCtx?.user?._id && item.text !== "Thread") ? `Login to ${item.text}` : item.text}>
                 <Button
-                    onClick={(!appCtx.user._id && item.text === "Thread") ? handleClick : (appCtx.user._id) ? handleClick : null}
+                    onClick={(!appCtx?.user?._id && item.text === "Thread") ? handleClick : (appCtx?.user?._id) ? handleClick : null}
                     startIcon={item.icon}
                 >
                     <Typography variant='h6' sx={{fontWeight: "bold"}}>{item.text}</Typography>

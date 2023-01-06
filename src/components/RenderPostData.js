@@ -78,24 +78,24 @@ export const RenderCardHeader = ({ userData, forComment }) => {
                 backgroundColor: forComment ? "primary.light" : "info.light"
             }}
             avatar={
-                <Link className='posted-by' style={{ textDecoration: "none" }} to={appCtx.user._id ? `/users/${userData._id}/visit/profile` : '/'}>
+                <Link className='posted-by' style={{ textDecoration: "none" }} to={appCtx?.user?._id ? `/users/${userData?._id}/visit/profile` : '/'}>
                     <Avatar
                         src={userData?.ppUrl || "https://random.imagecdn.app/500/150"}
                         sx={{ bgcolor: "red[500]", width: forComment ? "42px" : "74px", height: forComment ? "42px" : "74px" }}
                         aria-label="recipe"
-                        alt={`User ${userData.fullName || ''} profile display`}
+                        alt={`User ${userData?.fullName || ''} profile display`}
                     />
-                    <p className='posted-by-tooltip-text'>{appCtx.user._id ? "Visit Profile" : "Login To Visit Profile"}</p>
+                    <p className='posted-by-tooltip-text'>{appCtx?.user?._id ? "Visit Profile" : "Login To Visit Profile"}</p>
                 </Link>
             }
             title={
-                <Link className='posted-by' style={{ textDecoration: "none" }} to={appCtx.user._id ? `/users/${userData._id}/visit/profile` : '/'}>
-                    <Typography sx={{color: "info.contrastText"}} variant={forComment ? "h6" : "h4"}>{userData.fullName || "User Name"}</Typography>
-                    <p className='posted-by-tooltip-text'>{appCtx.user._id ? "Visit Profile" : "Login To Visit Profile"}</p>
+                <Link className='posted-by' style={{ textDecoration: "none" }} to={appCtx?.user?._id ? `/users/${userData?._id}/visit/profile` : '/'}>
+                    <Typography sx={{color: "info.contrastText"}} variant={forComment ? "h6" : "h4"}>{userData?.fullName || "User Name"}</Typography>
+                    <p className='posted-by-tooltip-text'>{appCtx?.user?._id ? "Visit Profile" : "Login To Visit Profile"}</p>
                 </Link>
             }
             subheader={
-                <Typography sx={{ color: "info.contrastText", fontSize: forComment ? "smaller" : "auto" }} variant={forComment ? "p" : "subtitle2"}>{`Member Since: ${moment(userData.created).fromNow()}`}</Typography>
+                <Typography sx={{ color: "info.contrastText", fontSize: forComment ? "smaller" : "auto" }} variant={forComment ? "p" : "subtitle2"}>{`Member Since: ${moment(userData?.created).fromNow()}`}</Typography>
             }
         />
     )

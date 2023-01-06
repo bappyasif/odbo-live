@@ -73,7 +73,7 @@ const FloatingAuthenticatedUserFunctionality = ({ appCtx }) => {
         }}
         variant="h6"
       >
-        Welcome, Dear {appCtx.user.fullName}
+        Welcome, Dear {appCtx?.user?.fullName}
       </Typography>
 
       <UserProfileNavigationIcon appCtx={appCtx} />
@@ -116,7 +116,7 @@ const UserProfileNavigationIcon = ({ appCtx }) => {
   return (
     <Tooltip title={"Visit Your User Profile"}>
       <Link to={`/users/${appCtx.user?._id}/profile`}>
-        <Avatar sx={{ width: 65, height: 51 }} alt={`profile picture of ${appCtx.user.fullName}`} src={appCtx.user.ppUrl || "https://random.imagecdn.app/500/150"} />
+        <Avatar sx={{ width: 65, height: 51 }} alt={`profile picture of ${appCtx?.user?.fullName}`} src={appCtx?.user?.ppUrl || "https://random.imagecdn.app/500/150"} />
       </Link>
     </Tooltip>
   )

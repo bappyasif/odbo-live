@@ -94,7 +94,7 @@ export const RenderComment = ({ fromThread, postOwner, commentData, deleteCommen
     let handleCountsForCurrentUser = (elem, flag) => setCountsForCurrentUser(prev => ({ ...prev, [elem]: (prev[elem] && !flag) ? prev[elem] : (prev[elem] && flag) ? prev[elem] - 1 : 1 }))
 
     let clickHandler = elem => {
-        if (appCtx.user._id) {
+        if (appCtx?.user?._id) {
             setFetchReady(true);
             !countsForCurrentUser[elem] && handleCounts(elem)
             countsForCurrentUser[elem] && handleCounts(elem, "deduct")
@@ -138,9 +138,9 @@ export const RenderComment = ({ fromThread, postOwner, commentData, deleteCommen
             Love: loveCount || 0
         })
 
-        let findIdx = commentData.engaggedUsers.findIndex(engaggedUser => engaggedUser && (appCtx.user._id === Object.keys(engaggedUser)[0]?.toString()))
+        let findIdx = commentData.engaggedUsers.findIndex(engaggedUser => engaggedUser && (appCtx?.user?._id === Object.keys(engaggedUser)[0]?.toString()))
 
-        if (findIdx !== -1 && appCtx.user._id) {
+        if (findIdx !== -1 && appCtx?.user?._id) {
             setCountsForCurrentUser({
                 Like: Object.values(commentData.engaggedUsers[findIdx])[0].Like,
                 Love: Object.values(commentData.engaggedUsers[findIdx])[0].Love,
@@ -177,9 +177,9 @@ export const RenderComment = ({ fromThread, postOwner, commentData, deleteCommen
                     : <Typography variant='body1' sx={{ fontWeight: "bolder", color: "info.dark", p: .1, textAlign: "justify", margin: "0 36px 0 91.1px"}} dangerouslySetInnerHTML={{ __html: body }}></Typography>
             }
 
-            <ShowPostUserEngagementsDetails currentUser={appCtx.user._id} counts={counts} countsForCurrentUser={countsForCurrentUser} forComment={true} clickHandler={clickHandler} />
+            <ShowPostUserEngagementsDetails currentUser={appCtx?.user?._id} counts={counts} countsForCurrentUser={countsForCurrentUser} forComment={true} clickHandler={clickHandler} />
             
-            {(promptLogin && !appCtx.user._id) ? <ShowUserAuthenticationOptions setPromptLogin={setPromptLogin} itemName={currentlyClickedElement} forComments={true} /> : null}
+            {(promptLogin && !appCtx?.user?._id) ? <ShowUserAuthenticationOptions setPromptLogin={setPromptLogin} itemName={currentlyClickedElement} forComments={true} /> : null}
         </Box>
     )
 }

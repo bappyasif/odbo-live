@@ -53,7 +53,7 @@ const ShowPoll = ({ pollData, order, postId }) => {
     const dataUpdater = result => null
 
     const checkUserAlreadyVoted = () => {
-        const foundUser = votersList?.length ? votersList?.filter(id => id === appCtx.user._id) : []
+        const foundUser = votersList?.length ? votersList?.filter(id => id === appCtx?.user?._id) : []
 
         return foundUser?.length
     }
@@ -105,7 +105,7 @@ const ShowPoll = ({ pollData, order, postId }) => {
     }, [])
 
     return (
-        <Paper sx={{ mb: 2, order: order, pointerEvents: appCtx.user._id ? "auto" : "none" }}>
+        <Paper sx={{ mb: 2, order: order, pointerEvents: appCtx?.user?._id ? "auto" : "none" }}>
             <Typography
                 variant='h4'
             >Poll Question: {question}</Typography>

@@ -52,7 +52,7 @@ function CreatePost({ handleSuccessfullPostShared }) {
   }
 
   let createPost = () => {
-    if (appCtx.user._id) {
+    if (appCtx?.user?._id) {
       if (addedOptions.body) {
         if (addedOptions.body.length < 220) {
           let url = `${appCtx.baseUrl}/posts/post/create/${appCtx.user._id}`
@@ -170,7 +170,7 @@ const CreatePostButton = ({ handleCreatePost, appCtx }) => {
       onClick={handleCreatePost}
     >
       <Button sx={{ backgroundColor: "primary.light" }} variant='contained' endIcon={<PostAddTwoTone />}>
-        <Typography variant={"h6"}>{!appCtx.user._id ? "Login to " : ""}Create Post</Typography>
+        <Typography variant={"h6"}>{!appCtx?.user?._id ? "Login to " : ""}Create Post</Typography>
       </Button>
     </Stack>
   )

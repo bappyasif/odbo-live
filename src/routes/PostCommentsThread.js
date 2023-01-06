@@ -101,7 +101,7 @@ let RenderThisPostComments = (props) => {
                 alignItems: "center",
                 // gap: .6 
                 maxHeight: "400px",
-                overflowY: renderComments().length > 4 ? "scroll" : "auto"
+                overflowY: renderComments()?.length > 4 ? "scroll" : "auto"
             }}
         >
             <Toolbar id="top-marker">
@@ -112,7 +112,7 @@ let RenderThisPostComments = (props) => {
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: .6, position: "relative" }}
             >
                 {
-                    renderComments().length === 0
+                    renderComments()?.length === 0
                         ?
                         <Box>
                             <Divider />

@@ -31,7 +31,7 @@ function ConnectUsers() {
     timers && setTimers(false);
   }, [])
 
-  let renderUsers = () => data?.data?.data.map(user => appCtx.user._id.toString() !== user._id && <RenderUser key={user._id} userData={user} />)
+  let renderUsers = () => data?.data?.data.map(user => appCtx?.user?._id.toString() !== user._id && <RenderUser key={user._id} userData={user} />)
 
   return (
     <Paper className="cards-wrapper">
@@ -85,8 +85,8 @@ let RenderUser = ({ userData }) => {
   }
 
   useEffect(() => {
-    setFriendAlready(appCtx.user.friends.includes(_id))
-    setFriendRequestSentAlready(appCtx.user.frSent.includes(_id))
+    setFriendAlready(appCtx?.user?.friends.includes(_id))
+    setFriendRequestSentAlready(appCtx?.user?.frSent.includes(_id))
   }, [_id])
 
   // console.log(appCtx.user.frSent.includes(_id) || appCtx.user.friends.includes(_id), appCtx.user.frSent.includes(_id), appCtx.user.friends.includes(_id))

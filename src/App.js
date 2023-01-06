@@ -216,7 +216,7 @@ function App() {
 
   useEffect(() => {
     // making topics get refreshed before user comes back to news feeds
-    user._id && topics.length && setTopics([])
+    user?._id && topics.length && setTopics([])
   }, [location.pathname !== "/"])
 
   useEffect(() => {
@@ -231,7 +231,7 @@ function App() {
   }, [topics])
 
   useEffect(() => {
-    if (user._id && user.topics) {
+    if (user?._id && user?.topics) {
       setTopics([])
     }
   }, [user?._id])

@@ -53,7 +53,8 @@ p {
   flex-grow: 0 !important;
 }
 
-.MuiCardHeader-content.css-1qbkelo-MuiCardHeader-content {
+.MuiCardHeader-content.css-1qbkelo-MuiCardHeader-content,
+.MuiCardHeader-content.css-11qjisw {
   margin-left: 17px !important;
 }
 
@@ -79,7 +80,8 @@ p {
   padding: 35px 38px 8px 35px;
 }
 
-.MuiCardHeader-content.css-1qbkelo-MuiCardHeader-content {
+.MuiCardHeader-content.css-1qbkelo-MuiCardHeader-content,
+.MuiCardHeader-content.css-11qjisw {
   display: flex;
   flex-direction: column;
   align-items: baseline;
