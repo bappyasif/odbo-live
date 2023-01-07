@@ -18,7 +18,7 @@ import PostCommentsThread from './routes/PostCommentsThread';
 import UserProfile from './routes/UserProfile';
 import VisitAnotherUserProfile from './routes/VisitAnotherUserProfile';
 import { ThemeProvider } from '@emotion/react';
-import { createTheme, Paper } from '@mui/material';
+import { createTheme, Paper, Typography } from '@mui/material';
 import { getDesignTokens } from './utils/customTheme';
 
 export const AppContexts = createContext()
@@ -257,6 +257,9 @@ function App() {
     <AppContexts.Provider value={contexts}>
       <div className="App" style={{ backgroundColor: "grey[400]", height: "100vh" }}>
         <MainNavigation />
+
+        <Typography variant='h2'>This is not a fully safe and tested site by Security Experts</Typography>
+        <Typography variant='h2'>Please be advised before using any of your personal data</Typography>
 
         {routeBeforeSessionExpired && !jwtExists ? <ShowSessionExpiredDialog /> : null}
 

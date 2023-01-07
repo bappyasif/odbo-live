@@ -16,7 +16,8 @@ function RenderPostDataEssentials({ postData, shareMode }) {
     let handleUserData = (result) => setUserData(result.data.data)
 
     let getDataAboutThisPostUser = () => {
-        let url = `${appCtx.baseUrl}/users/${postData.userId}`
+        // let url = `${appCtx.baseUrl}/users/${postData.userId}`
+        let url = `${appCtx.baseUrl}/users/${postData.userId}/publicPayload`
         readDataFromServer(url, handleUserData)
     }
 

@@ -81,7 +81,8 @@ export const RenderComment = ({ fromThread, postOwner, commentData, deleteCommen
     let handleUserData = (result) => setUserData(result.data.data)
 
     let getDataAboutThisPostUser = () => {
-        let url = `${appCtx.baseUrl}/users/${userId}`
+        // let url = `${appCtx.baseUrl}/users/${userId}`
+        let url = `${appCtx.baseUrl}/users/${userId}/publicPayload`
         readDataFromServer(url, handleUserData)
     }
 

@@ -15,7 +15,8 @@ function UserProfileInfoSection({ appCtx, userId }) {
     const userprofileDataHandler = result => setUserProfileData(result.data.data)
 
     let getDataForUserProfile = () => {
-        let url = `${appCtx.baseUrl}/users/${userId}`
+        // let url = `${appCtx.baseUrl}/users/${userId}`
+        let url = `${appCtx.baseUrl}/users/${userId}/publicPayload`
         readDataFromServer(url, userprofileDataHandler)
     }
 
