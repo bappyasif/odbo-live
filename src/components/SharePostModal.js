@@ -84,11 +84,12 @@ export let ShowPostUserEngagementsDetails = ({ counts, forComment, clickHandler,
                             backgroundColor: counts[item.name] ? "secondary.light" : "info.light",
                             cursor: forComment ? "pointer" : "auto",
                             p: forComment && 0,
-
+                            my: .6,
+                            borderRadius: 4
                         }}
                     >
                         <Button
-                            sx={{ cursor: "auto", color: "info.contrastText" }}
+                            // sx={{ cursor: "auto", color: "info.contrastText" }}
                             startIcon={counts[item.name] ? item.icon : null}
                         >
                             {counts[item.name] ? null : item.icon}

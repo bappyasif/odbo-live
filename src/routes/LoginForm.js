@@ -259,7 +259,7 @@ let RenderLoginOutlet = ({ item }) => {
 
     let appCtx = useContext(AppContexts);
 
-    let getAuthenticatedUserData = () => {
+    let getAuthenticatedUserData = () => {        
         appCtx.getUser();
         navigate("/")
     }
@@ -276,7 +276,10 @@ let RenderLoginOutlet = ({ item }) => {
             url = `${appCtx.baseUrl}/auth/twitter`
         }
 
-        loginPrompt(url, getAuthenticatedUserData)
+
+        alert("will be available shortly!! thanks for your patience :)")
+
+        // loginPrompt(url, getAuthenticatedUserData)
     }
 
     return (
