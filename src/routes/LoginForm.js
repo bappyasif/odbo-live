@@ -277,9 +277,9 @@ let RenderLoginOutlet = ({ item }) => {
         }
 
 
-        // alert("will be available shortly!! thanks for your patience :)")
+        alert("will be available shortly!! thanks for your patience :)")
 
-        loginPrompt(url, getAuthenticatedUserData)
+        // loginPrompt(url, getAuthenticatedUserData)
     }
 
     return (
