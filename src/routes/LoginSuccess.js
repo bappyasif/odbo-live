@@ -1,14 +1,37 @@
-import { Typography } from '@mui/material'
 import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 function LoginSuccess() {
-    useEffect(() => {
-        setTimeout(() => {
-            window.close()
-        }, 1100)
-    }, [])
+  const navigate = useNavigate(); 
+
+  useEffect(() => {
+    fetch("http://localhost:4000/auth/secretPage",{
+      method: "GET",
+      credentials: "include",
+      // "Access-Control-Allow-Origin": "http://localhost:4000",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": true,
+        // "Access-Control-Allow-Headers": "Accept",
+        // "Access-Control-Allow-Origin": "http://localhost:4000"
+      }
+    }).then((resp) => {
+    console.log("request done")
+    if(resp.status != 200) {
+      return navigate("/login")
+    }
+    return resp.json();
+  })
+    .catch(err=>console.log('request error', err))
+    .then((data)=>{
+      console.log("response done", data)
+    })
+    .catch(err=>console.log('response error', err))
+  }, [])
+
   return (
-    <Typography variant='h1'>Thanks for loging in!!</Typography>
+    <div>Login Successfull Validated With Jwt and Session Cookie</div>
   )
 }
 
