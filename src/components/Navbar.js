@@ -1,10 +1,11 @@
 import React from 'react'
 import {Link} from "react-router-dom"
+import { baseUrl } from '../App';
 
 
 export const Navbar = ({ user }) => {
     const logout = () => {
-      window.open("http://localhost:4000/auth/logout", "_self");
+      window.open(`${baseUrl}/auth/logout`, "_self");
     };
     return (
       <div className="navbar">

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '../App';
 
 function LoginSuccess() {
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    fetch("http://localhost:4000/auth/secretPage",{
+    fetch(`${baseUrl}/auth/secretPage`,{
       method: "GET",
       credentials: "include",
       // "Access-Control-Allow-Origin": "http://localhost:4000",

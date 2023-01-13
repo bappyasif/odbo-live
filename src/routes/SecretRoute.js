@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
+import { baseUrl } from '../App'
 
 function SecretRoute({setUser}) {
     useEffect(() => {
-        const url = "http:///localhost:4000/ep-auth/userSecrets"
+        const url = `${baseUrl}/ep-auth/userSecrets`
         fetchAuthenticatedUserData(url, setUser)
     }, [])
 

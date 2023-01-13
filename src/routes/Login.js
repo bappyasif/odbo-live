@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '../App';
 import AuthenticationForm from '../components/AuthenticationForm';
 
 export const Login = ({ setUser, user }) => {
@@ -8,7 +9,7 @@ export const Login = ({ setUser, user }) => {
     const toggle = () => setShowRegistration(prev => !prev);
 
     const google = () => {
-        window.open("http://localhost:4000/auth/google", "_self");
+        window.open(`${baseUrl}/auth/google`, "_self");
     };
 
     const github = () => {
@@ -68,7 +69,7 @@ const DecideWhichAuthenticationMethodToShow = ({toggle ,showRegistration}) => {
 }
 
 const UserRegistration = ({ setUser }) => {
-    const url = 'http:///localhost:4000/ep-auth/register';
+    const url = `${baseUrl}/ep-auth/register`;
 
     const formControls = [
         { label: "Name", type: "text", id: "name", placeholder: "enter your name here" },
@@ -78,7 +79,7 @@ const UserRegistration = ({ setUser }) => {
     ];
 
     return (
-        <div>
+        <div style={{width: "fit-content", margin: "auto"}}>
             <h1>Registration Form</h1>
             <AuthenticationForm url={url} formControls={formControls} setUser={setUser} actionText={"Register"} />
         </div>
@@ -86,7 +87,7 @@ const UserRegistration = ({ setUser }) => {
 }
 
 const UserLogin = ({ setUser }) => {
-    const url = 'http:///localhost:4000/ep-auth/login';
+    const url = `${baseUrl}/ep-auth/login`;
 
     const formControls = [
         { label: "Email", type: "email", id: "email", placeholder: "enter your registered email address here" },
@@ -94,7 +95,7 @@ const UserLogin = ({ setUser }) => {
     ];
 
     return (
-        <div>
+        <div style={{width: "fit-content", margin: "auto"}}>
             <h1>Login Form</h1>
             <AuthenticationForm url={url} formControls={formControls} setUser={setUser} actionText={"Login"} />
         </div>
