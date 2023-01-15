@@ -19,7 +19,8 @@ export const fetchAuthenticatedUserData = (url, setData) => {
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            // "Access-Control-Allow-Credentials": true
+            "Access-Control-Allow-Credentials": true,
+            "ACCESS-CONTROL-ALLOW-ORIGIN": baseUrl
         }
     }).then(resp => resp.json())
         .catch(err => console.log("response error", err))
