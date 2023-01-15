@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
+import { Navbar } from './legacy-attempt/components/Navbar';
 import Home from './routes/Home';
-import Oauth2Login from './routes/Oauth2Login';
+import { Login } from './routes/Login';
+import LoginSuccess from './routes/LoginSuccess';
+import SecretRoute, { fetchAuthenticatedUserData } from './routes/SecretRoute';
 
-// export const baseUrl = "http://localhost:4000"
+export const baseUrl = "http://localhost:4000"
 
-export const baseUrl = "https://busy-lime-dolphin-hem.cyclic.app"
+// export const baseUrl = "https://busy-lime-dolphin-hem.cyclic.app"
 
 function App() {
   let [user, setUser] = useState()
   const getUser = () => {
-    fetch(`${baseUrl}/login/success`, {
+    fetch(`${baseUrl}/auth/login/success`, {
       method: "GET",
       credentials: "include",
       headers: {
@@ -29,20 +32,24 @@ function App() {
 
   const getNonOauth2UserAuthenticatedData = () => {
     const url = `${baseUrl}/ep-auth/userSecrets`
-    // fetchAuthenticatedUserData(url, setUser)
+    fetchAuthenticatedUserData(url, setUser)
   }
 
   useEffect(() => {
     !user && getUser()
+    !user && getNonOauth2UserAuthenticatedData();
   }, [])
 
   console.log(user, "user!!")
 
   return (
     <div className="App">
+      <Navbar user={user?.user} />
       <Routes>
-        <Route path='/' element={<Home user={user?.user} />} />
-        <Route path='/login' element={<Oauth2Login />} />
+        <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login setUser={setUser} user={user} />} />
+        <Route path='/login/success' element={<LoginSuccess />} />
+        <Route path='/secretRoute' element={<SecretRoute setUser={setUser} />} />
       </Routes>
     </div>
   );

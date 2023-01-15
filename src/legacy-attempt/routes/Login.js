@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../App';
-import AuthenticationForm from '../components/AuthenticationForm';
+import AuthenticationForm from '../legacy-attempt/components/AuthenticationForm';
 
 export const Login = ({ setUser, user }) => {
     const [showRegistration, setShowRegistration] = useState(false);
