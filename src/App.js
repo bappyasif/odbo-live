@@ -4,9 +4,9 @@ import './App.css';
 import Home from './routes/Home';
 import Oauth2Login from './routes/Oauth2Login';
 
-// export const baseUrl = "http://localhost:4000"
+export const baseUrl = "http://localhost:4000"
 
-export const baseUrl = "https://busy-lime-dolphin-hem.cyclic.app"
+// export const baseUrl = "https://busy-lime-dolphin-hem.cyclic.app"
 
 function App() {
   let [user, setUser] = useState()
@@ -15,7 +15,7 @@ function App() {
       method: "GET",
       credentials: "include",
       headers: {
-        // "Accept": "application/json",
+        "Accept": "application/json",
         // "Content-Type": "application/json",
         "Access-Control-Allow-Credentials": true,
         // "ACCESS-CONTROL-ALLOW-ORIGIN": baseUrl
