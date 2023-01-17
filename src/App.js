@@ -15,8 +15,8 @@ function App() {
       method: "GET",
       credentials: "include",
       headers: {
-        "Accept": "application/json",
-        "Content-Type": "text/plain",
+        // "Accept": "application/json",
+        // "Content-Type": "text/plain",
         "Access-Control-Allow-Credentials": true,
         "ACCESS-CONTROL-ALLOW-ORIGIN": baseUrl
       }
