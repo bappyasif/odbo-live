@@ -16,9 +16,9 @@ function App() {
       credentials: "include",
       headers: {
         "Accept": "application/json",
-        // "Content-Type": "application/json",
+        "Content-Type": "text/plain",
         "Access-Control-Allow-Credentials": true,
-        // "ACCESS-CONTROL-ALLOW-ORIGIN": baseUrl
+        "ACCESS-CONTROL-ALLOW-ORIGIN": baseUrl
       }
     })
       .then(resp => resp.status === 200 && resp.json())
