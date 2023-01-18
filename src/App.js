@@ -13,7 +13,8 @@ function App() {
   const getUser = () => {
     fetch(`${baseUrl}/login/success`, {
       method: "GET",
-      credentials: "include",
+      // credentials: "include",
+      credentials: 'include' | 'omit',
       headers: {
         // "Accept": "application/json",
         // "Content-Type": "text/plain",
@@ -36,7 +37,7 @@ function App() {
     !user && getUser()
   }, [])
 
-  console.log(user, "user!!")
+  console.log(user, "user!!", document.cookie)
 
   return (
     <div className="App">
