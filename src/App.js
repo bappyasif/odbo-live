@@ -11,14 +11,14 @@ import ChooseTopics from './routes/ChooseTopics';
 import EditUserProfile from './routes/EditUserProfile';
 import TopicCategory from './routes/TopicCategory';
 import LoginSuccess from './routes/LoginSuccess';
-import { getAuthenticatedUserDataFromServer, getUserDataAfterJwtVerification, removeJwtDataFromLocalStorage, storeJwtAuthDataInLocalstorage, userStillLoggedIn } from './utils';
+import { getAuthenticatedUserDataFromServer, getUserDataAfterJwtVerification, storeJwtAuthDataInLocalstorage, userStillLoggedIn } from './utils';
 import UserSpecificNewsFeeds from './routes/UserSpecificNewsFeeds';
 import UserFriendships from './routes/UserFriendships';
 import PostCommentsThread from './routes/PostCommentsThread';
 import UserProfile from './routes/UserProfile';
 import VisitAnotherUserProfile from './routes/VisitAnotherUserProfile';
 import { ThemeProvider } from '@emotion/react';
-import { createTheme, Paper, Typography } from '@mui/material';
+import { createTheme, Paper } from '@mui/material';
 import { getDesignTokens } from './utils/customTheme';
 
 export const AppContexts = createContext()
@@ -257,9 +257,6 @@ function App() {
     <AppContexts.Provider value={contexts}>
       <div className="App" style={{ backgroundColor: "grey[400]", height: "100vh" }}>
         <MainNavigation />
-
-        <Typography variant='h2'>This is not a fully safe and tested site by Security Experts</Typography>
-        <Typography variant='h2'>Please be advised before using any of your personal data</Typography>
 
         {routeBeforeSessionExpired && !jwtExists ? <ShowSessionExpiredDialog /> : null}
 

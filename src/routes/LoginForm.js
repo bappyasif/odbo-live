@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { FieldsetElement, FormElement, InputElement, LabelElement, LegendElement, SubmitButton } from '../components/FormElements'
-import { H1Element, WrapperDiv } from '../components/GeneralElements'
+import { FormElement, LegendElement } from '../components/FormElements'
+import { WrapperDiv } from '../components/GeneralElements'
 import { removeJwtDataFromLocalStorage, sendDataToServer } from '../utils';
 import { AppContexts } from "../App"
 import ShowErrors from '../components/ShowErrors';
-import { Box, Button, Dialog, DialogContent, DialogTitle, Fab, FormControl, Icon, IconButton, Input, InputAdornment, InputLabel, LinearProgress, Paper, Stack, Typography } from '@mui/material';
-import { AccountCircleTwoTone, Check, Error, Facebook, GitHub, Google, LinkedIn, LoginTwoTone, PasswordTwoTone, Twitter } from '@mui/icons-material';
+import { Box, Button, Dialog, DialogContent, DialogTitle, Fab, FormControl, Icon, IconButton, Input, InputAdornment, LinearProgress, Paper, Stack, Typography } from '@mui/material';
+import { AccountCircleTwoTone, Check, Error, Facebook, GitHub, Google, LoginTwoTone, PasswordTwoTone, Twitter } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { VisualizeWordCountProgress } from '../components/CreatePost';
 import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside';
@@ -66,6 +66,9 @@ function LoginForm() {
             sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", position: "relative", gap: 6, height: "100vh" }}
         >
             <ShowDataProcessingLoaders processingRequest={processingRequest} />
+            
+            <ShowWarningAboutSecurity />
+
             <GuestUsers setFormData={setFormData} handleSubmit={handleSubmit} />
 
             <WrapperDiv className="login-form">
@@ -90,6 +93,15 @@ function LoginForm() {
     )
 }
 
+export const ShowWarningAboutSecurity = () => {
+    return (
+        <Stack>
+            <Typography variant='h2'>This is not a fully tested site by any Security Experts</Typography>
+            <Typography variant='h4'>Please be advised before using any of your personal data</Typography>
+        </Stack>
+    )
+}
+
 export const ShowSessionExpiredDialog = () => {
     const [show, setShow] = useState(false);
 
@@ -104,7 +116,7 @@ export const ShowSessionExpiredDialog = () => {
             return () => clearTimeout(timer)
         }, 2000)
     }
-    
+
     useEffect(() => {
         show && closeModalAfterTwoSeconds()
     }, [show])
@@ -157,9 +169,9 @@ export const RenderFormControlElement = ({ item, handleChange }) => {
 
     const handleUserInput = (evt) => {
         if (
-            item.name === "email" && evt.target.value.length < 45
+            (item.name === "email" && evt.target.value.length < 45)
             ||
-            item.name === "password" && evt.target.value.length < 90
+            (item.name === "password" && evt.target.value.length < 90)
         ) {
             setUserInput(evt.target.value);
             handleChange(evt, item.name)
@@ -259,7 +271,7 @@ let RenderLoginOutlet = ({ item }) => {
 
     let appCtx = useContext(AppContexts);
 
-    let getAuthenticatedUserData = () => {        
+    let getAuthenticatedUserData = () => {
         appCtx.getUser();
         navigate("/")
     }
@@ -277,7 +289,7 @@ let RenderLoginOutlet = ({ item }) => {
         }
 
 
-        alert("will be available shortly!! thanks for your patience :)")
+        alert("would have been available if this was hosted in a custom domain!! try using any of these guest accounts or (email / password) based login option, thanks for your interest :)")
 
         // loginPrompt(url, getAuthenticatedUserData)
     }
@@ -321,27 +333,27 @@ let RenderGuestUser = ({ item, handleSubmit, setFormData }) => {
     }, [dataReady])
 
     return (
-        <IconButton sx={{px: 2, py: 1}} onClick={handleClick}>
+        <IconButton sx={{ px: 2, py: 1 }} onClick={handleClick}>
             <AccountCircleTwoTone />
             <Typography>{item.name}</Typography>
         </IconButton>
     )
 }
 
-let loginPrompt = (url, getData) => {
-    const newWindow = window.open(url, "_blank", "width=500, height=500")
+// let loginPrompt = (url, getData) => {
+//     const newWindow = window.open(url, "_blank", "width=500, height=500")
 
-    let timer = 0;
+//     let timer = 0;
 
-    if (newWindow) {
-        timer = setInterval(() => {
-            if (newWindow.closed) {
-                if (timer) clearInterval(timer)
-                getData()
-            }
-        }, 1001)
-    }
-}
+//     if (newWindow) {
+//         timer = setInterval(() => {
+//             if (newWindow.closed) {
+//                 if (timer) clearInterval(timer)
+//                 getData()
+//             }
+//         }, 1001)
+//     }
+// }
 
 let loginOutlets = [
     {

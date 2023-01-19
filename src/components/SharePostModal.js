@@ -94,7 +94,7 @@ export let ShowPostUserEngagementsDetails = ({ counts, forComment, clickHandler,
                         onClick={() => forComment ? clickHandler(item.name) : null}
                         sx={{
                             backgroundColor: counts[item.name] ? "secondary.light" : "info.light",
-                            cursor: forSharedPost ? "none" : forComment ? "pointer" : "auto",
+                            cursor: forComment && forSharedPost ? "auto" : forComment ? "pointer" : "auto",
                             p: forComment && 0,
                             my: .6,
                             borderRadius: 4
