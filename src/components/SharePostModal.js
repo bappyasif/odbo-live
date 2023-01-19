@@ -70,19 +70,31 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
     )
 }
 
-export let ShowPostUserEngagementsDetails = ({ counts, forComment, clickHandler, currentUser }) => {
+export let ShowPostUserEngagementsDetails = ({ counts, forComment, clickHandler, currentUser, forSharedPost }) => {
     return (
         <Stack
             className="post-actions-icons"
             sx={{ flexDirection: "row", justifyContent: "center", backgroundColor: "primary.light", color: "info.contrastText", gap: 2, position: "relative" }}
         >
             {actions.map(item => !((item.name === "Comment" || item.name === "Share") && forComment) && (
-                <Tooltip key={item.name} sx={{ cursor: "help" }} title={(!currentUser) ? `Login to ${item.name}` : `${item.name}d by`}>
+                <Tooltip
+                    key={item.name}
+                    sx={{ cursor: "help" }}
+                    title={
+                        (!currentUser)
+                            ? `Login to ${item.name}`
+                            : counts[item.name]
+                                ? `${item.name}d by ${counts[item.name]} people`
+                                : forSharedPost
+                                ? `${item.name}d by ${counts[item.name] || 0} people`
+                                : `Be first to ${item.name}`
+                    }
+                >
                     <Stack
                         onClick={() => forComment ? clickHandler(item.name) : null}
                         sx={{
                             backgroundColor: counts[item.name] ? "secondary.light" : "info.light",
-                            cursor: forComment ? "pointer" : "auto",
+                            cursor: forComment && forSharedPost ? "auto" : forComment ? "pointer" : "auto",
                             p: forComment && 0,
                             my: .6,
                             borderRadius: 4
@@ -95,7 +107,7 @@ export let ShowPostUserEngagementsDetails = ({ counts, forComment, clickHandler,
                             {counts[item.name] ? null : item.icon}
                             <Typography variant={"subtitle2"}>{counts[item.name] ? counts[item.name] : null}</Typography>
                         </Button>
-                    </Stack>                   
+                    </Stack>
                 </Tooltip>
             ))}
         </Stack>

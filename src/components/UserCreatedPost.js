@@ -306,7 +306,7 @@ export let ShowIncludedSharedPost = ({ includedPostId, appCtx }) => {
     >
       <Typography>Shared Post</Typography>
       {_id ? <RenderPostDataEssentials postData={sharedPostData} shareMode={true} /> : null}
-      {_id ? <ShowPostUserEngagementsDetails counts={counts} currentUser={appCtx?.user?._id} /> : null}
+      {_id ? <ShowPostUserEngagementsDetails forSharedPost={true} counts={counts} currentUser={appCtx?.user?._id} /> : null}
     </Box>
   )
 }

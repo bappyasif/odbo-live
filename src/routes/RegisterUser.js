@@ -9,7 +9,7 @@ import { FormElement, LegendElement } from '../components/FormElements'
 import { H1Element, WrapperDiv } from '../components/GeneralElements'
 import ShowErrors from '../components/ShowErrors';
 import { sendDataToServer } from '../utils';
-import { ShowDataProcessingLoaders } from './LoginForm';
+import { ShowDataProcessingLoaders, ShowWarningAboutSecurity } from './LoginForm';
 
 function RegisterUser({ handleData }) {
     let [errors, setErrors] = useState([]);
@@ -55,6 +55,8 @@ function RegisterUser({ handleData }) {
     return (
         <WrapperDiv className={"register-user"} styles={{height: "100vh"}}>
             <ShowDataProcessingLoaders processingRequest={processingRequest} />
+
+            <ShowWarningAboutSecurity />
             
             <H1Element value={"Register User"} />
 
