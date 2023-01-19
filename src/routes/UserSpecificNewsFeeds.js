@@ -171,13 +171,14 @@ const ShowApiContentsToggler = ({ toggle, handleToggle, dataReady }) => {
                 checked={toggle}
                 onChange={handleToggle}
                 name="api content loader toogle"
-                color="primary"
+                color="secondary"
             />
             <Button
+                sx={{color: "text.primary"}}
                 onClick={handleToggle}
                 startIcon={toggle ? <CheckCircleTwoTone /> : <DownloadingTwoTone />}
             >
-                <Typography>{`${toggle ? "Hide" : "Show"} Third Party Api Contents`}</Typography>
+                <Typography sx={{color: "text.primary"}}>{`${toggle ? "Hide" : "Show"} Third Party Api Contents`}</Typography>
             </Button>
         </Stack>
     )

@@ -183,8 +183,8 @@ function App() {
   }
 
   const contexts = {
-    // baseUrl: "http://localhost:3000",
-    baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
+    baseUrl: "http://localhost:3000",
+    // baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
     user: user,
     handleData: handleData,
     updateData: updateData,

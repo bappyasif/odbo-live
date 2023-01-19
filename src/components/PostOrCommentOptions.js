@@ -51,7 +51,7 @@ export const PostOrCommentOptions = ({ postOwner, postId, commentId, deleteComme
             <Popper
                 sx={{
                     backgroundColor: "gainsboro",
-                    left: "-33px !important"
+                    left: "-45.6px !important"
                 }}
                 id="lock-menu"
                 anchorEl={anchorEl}
@@ -66,9 +66,8 @@ export const PostOrCommentOptions = ({ postOwner, postId, commentId, deleteComme
                 <ClickAwayListener onClickAway={handleClose}>
                     <MenuList
                         sx={{
-                            p: 0, backgroundColor: "info.dark",
-                            color: "info.contrastText",
-                            fontWeight: "bold"
+                            p: 0, backgroundColor: "secondary.light",
+                            fontWeight: "bold",
                         }}
                     >
                         {renderOptions()}
@@ -141,15 +140,17 @@ let RenderPostOption = ({ postOwner, item, postId, commentId, deleteCommentFromD
     return (
         <MenuItem
             sx={{
-                p: 0
+                p: 0,
+                borderRadius: 2
             }}
         >
             <Tooltip title={(!appCtx?.user?._id && item.text !== "Thread") ? `Login to ${item.text}` : item.text}>
                 <Button
+                    sx={{color: "text.primary", px: 2.4,}}
                     onClick={(!appCtx?.user?._id && item.text === "Thread") ? handleClick : (appCtx?.user?._id) ? handleClick : null}
                     startIcon={item.icon}
                 >
-                    <Typography variant='h6' sx={{fontWeight: "bold"}}>{item.text}</Typography>
+                    <Typography variant='h6' sx={{color: "text.primary", fontWeight: "bold"}}>{item.text}</Typography>
                 </Button>
             </Tooltip>
         </MenuItem>
