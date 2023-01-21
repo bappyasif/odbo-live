@@ -94,7 +94,7 @@ let RenderFriend = ({ friendID, baseUrl }) => {
     }
 
     let getFriendData = () => {
-        let url = `${baseUrl}/users/${friendID}`
+        let url = `${baseUrl}/users/${friendID}/publicPayload`
         readDataFromServer(url, dataHandler)
     }
 

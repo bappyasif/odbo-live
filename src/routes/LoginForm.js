@@ -4,7 +4,7 @@ import { WrapperDiv } from '../components/GeneralElements'
 import { removeJwtDataFromLocalStorage, sendDataToServer } from '../utils';
 import { AppContexts } from "../App"
 import ShowErrors from '../components/ShowErrors';
-import { Box, Button, Dialog, DialogContent, DialogTitle, Fab, FormControl, Icon, IconButton, Input, InputAdornment, LinearProgress, Paper, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, Dialog, DialogContent, DialogTitle, Fab, FormControl, Icon, IconButton, Input, InputAdornment, LinearProgress, Paper, Stack, Typography } from '@mui/material';
 import { AccountCircleTwoTone, Check, Error, Facebook, GitHub, Google, LoginTwoTone, PasswordTwoTone, Twitter } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { VisualizeWordCountProgress } from '../components/CreatePost';
@@ -66,28 +66,32 @@ function LoginForm() {
             sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", position: "relative", gap: 6, height: "100vh" }}
         >
             <ShowDataProcessingLoaders processingRequest={processingRequest} />
-            
-            <ShowWarningAboutSecurity />
 
-            <GuestUsers setFormData={setFormData} handleSubmit={handleSubmit} />
+            <Stack>
+                <ShowWarningAboutSecurity />
 
-            <WrapperDiv className="login-form">
-                <Typography fontWeight={"bold"} fontSize={"42px"} variant='h3'>Login Form</Typography>
+                <Container sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                    <GuestUsers setFormData={setFormData} handleSubmit={handleSubmit} />
 
-                <FormElement handleSubmit={handleSubmit}>
-                    <LegendElement text={"Enter your registered email and password"} />
-                    <LoginFromControlComponent handleChange={handleChange} />
-                    <Button
-                        type='submit' variant='contained' startIcon={<LoginTwoTone />}
-                    >
-                        <Typography variant='h6'>Login</Typography>
-                    </Button>
-                </FormElement>
+                    <WrapperDiv className="login-form">
+                        <Typography fontWeight={"bold"} fontSize={"42px"} variant='h3'>Login Form</Typography>
 
-                {errors?.length ? <ShowErrors errors={errors} /> : null}
-            </WrapperDiv>
+                        <FormElement handleSubmit={handleSubmit}>
+                            <LegendElement text={"Enter your registered email and password"} />
+                            <LoginFromControlComponent handleChange={handleChange} />
+                            <Button
+                                type='submit' variant='contained' startIcon={<LoginTwoTone />}
+                            >
+                                <Typography variant='h6'>Login</Typography>
+                            </Button>
+                        </FormElement>
 
-            <ThirdPartyLoginOutlets />
+                        {errors?.length ? <ShowErrors errors={errors} /> : null}
+                    </WrapperDiv>
+
+                    <ThirdPartyLoginOutlets />
+                </Container>
+            </Stack>
 
         </Box>
     )
@@ -95,7 +99,7 @@ function LoginForm() {
 
 export const ShowWarningAboutSecurity = () => {
     return (
-        <Stack>
+        <Stack sx={{py: 6}}>
             <Typography variant='h2'>This is not a fully tested site by any Security Experts</Typography>
             <Typography variant='h4'>Please be advised before using any of your personal data</Typography>
         </Stack>

@@ -136,17 +136,20 @@ const deleteResourceFromServer = (endpoint, dataObj, dataUpdater) => {
     .catch(err => console.error(err))
 }
 
-const getUserDataAfterJwtVerification = (url, accessToken, dataUpdater) => {
+const getUserDataAfterJwtVerification = (url, accessToken, dataUpdater, refreshToken) => {
+    console.log(accessToken, refreshToken, "!!")
     fetch(url,
         {
             method: "GET",
             credentials: 'include',
             headers: {
-                "Authorization": `${accessToken}`,
+                "Authorization": `Bearer ${accessToken}`,
+                "refreshToken": `${refreshToken}`,
                 "Accept": 'application/json',
                 'Content-Type': 'application/json',
                 "Access-Control-Allow-Credentials": true
-            }
+            },
+            // body: JSON.stringify({refreshToken: refreshToken})
         }
     ).then(resp => {
         if(resp.status >= 200) {

@@ -43,7 +43,7 @@ function App() {
 
   const handleToggleDarkMode = () => {
     setDarkMode(prev => {
-      localStorage.setItem("mode", !prev)
+      localStorage.setItem("odbo-dark-mode", !prev)
       return !prev
     })
   }
@@ -163,7 +163,8 @@ function App() {
     const url = `${contexts.baseUrl}/protected`
 
     if (userStillLoggedIn() && token) {
-      getUserDataAfterJwtVerification(url, token, handleData)
+      // getUserDataAfterJwtVerification(url, token, handleData)
+      getUserDataAfterJwtVerification(url, token, handleData, user?.userJwt?.refreshToken)
       setJwtExists(true);
     } else if (!userStillLoggedIn() && token) {
       clearCurrentUserData();
@@ -173,7 +174,7 @@ function App() {
   }
 
   const previouslyExistingAppDataOnLocalstorage = () => {
-    const isDarkMode = localStorage.getItem("mode");
+    const isDarkMode = localStorage.getItem("odbo-dark-mode");
 
     if(isDarkMode !== null) {
       setDarkMode(isDarkMode)
