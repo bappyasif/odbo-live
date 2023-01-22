@@ -152,12 +152,16 @@ const getUserDataAfterJwtVerification = (url, accessToken, dataUpdater, refreshT
             // body: JSON.stringify({refreshToken: refreshToken})
         }
     ).then(resp => {
-        if(resp.status >= 200) {
+        if(resp.status >= 200 && resp.status < 400) {
             return resp.json()
+        } else {
+            removeJwtDataFromLocalStorage()
+            // navigate("/login")
         }
     })
     .catch(err => console.log(err, "response error!!"))
     .then(result => {
+        console.log(result, "RESULT!!")
         dataUpdater && dataUpdater(result)
     })
     .catch(err => console.error(err))

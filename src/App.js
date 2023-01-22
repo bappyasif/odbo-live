@@ -74,15 +74,19 @@ function App() {
     // console.log(result, "result!!", jwtUser)
     result?.user ? setJwtUser(result?.user) : setUser(result?.data?.data)
 
+    console.log(result, "RESUKLLTTTT!!!!")
+
     // this is for user authentication via third party passwport jwt startegy
     if (result?.data?.userJwt) {
+      console.log("SSO Block")
       setUser(prev => ({ ...prev, userJwt: result.data.userJwt }))
       const data = result.data.userJwt;
       storeJwtAuthDataInLocalstorage(data.token, data.expiresIn)
     }
 
     // this is for jwt based passport authentication
-    if (result?.userJwt) {
+    if (result?.userJwt !== undefined) {
+      console.log("JWT Block")
       setJwtUser(prev => ({ ...prev, userJwt: result.userJwt }))
       const data = result.userJwt;
       storeJwtAuthDataInLocalstorage(data.token, data.expiresIn)
@@ -155,22 +159,50 @@ function App() {
     setDarkMode(themeType ? "dark": "light")
   }
 
+  const updateUserStateForProtectiveRoutes = result => {
+    if(result?.userJwt) {
+      console.log("!!JWT Block!!")
+      // setJwtUser(prev => ({ ...prev, userJwt: result.userJwt }))
+      setUser(prev => ({ ...prev, userJwt: result.userJwt }))
+      const data = result.userJwt;
+      storeJwtAuthDataInLocalstorage(data.token, data.expiresIn)
+    } else if(result?.success === false) {
+      clearCurrentUserData();
+      navigate("/login")
+    }
+  }
+
   function getUserDataFromJwtTokenStoredInLocalStorage () {
     const token = localStorage.getItem("token");
 
     // const url = `http://localhost:3000/protected`
 
     const url = `${contexts.baseUrl}/protected`
+    // getUserDataAfterJwtVerification(url, token, updateUserStateForProtectiveRoutes, user?.userJwt?.refreshToken)
+    // getUserDataAfterJwtVerification(url, token, handleData, user?.userJwt?.refreshToken)
+    
+    console.log(user, jwtUser)
 
-    if (userStillLoggedIn() && token) {
-      // getUserDataAfterJwtVerification(url, token, handleData)
-      getUserDataAfterJwtVerification(url, token, handleData, user?.userJwt?.refreshToken)
+    if(token) {
       setJwtExists(true);
-    } else if (!userStillLoggedIn() && token) {
+      getUserDataAfterJwtVerification(url, token, updateUserStateForProtectiveRoutes, user?.userJwt?.refreshToken)
+    } else {
       clearCurrentUserData();
       setJwtExists(false);
-      navigate("/login");
+      navigate("/login"); 
     }
+
+    // if (userStillLoggedIn() && token) {
+    //   // getUserDataAfterJwtVerification(url, token, handleData)
+    //   console.log(user?.userJwt?.refreshToken, "user?.userJwt?.refreshToken", user)
+    //   getUserDataAfterJwtVerification(url, token, updateUserStateForProtectiveRoutes, user?.userJwt?.refreshToken)
+    //   // getUserDataAfterJwtVerification(url, token, handleData, user?.userJwt?.refreshToken)
+    //   setJwtExists(true);
+    // } else if (!userStillLoggedIn() && token) {
+    //   clearCurrentUserData();
+    //   setJwtExists(false);
+    //   navigate("/login");
+    // }
   }
 
   const previouslyExistingAppDataOnLocalstorage = () => {
