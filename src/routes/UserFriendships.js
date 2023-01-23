@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContexts } from '../App'
 import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside';
 import { ButtonToIndicateHelp, HowToUseExistingFriendsListings, HowToUseFriendsRequestsListings } from '../components/HowToUseApp';
-import { readDataFromServer, updateDataInDatabase, updateUserInDatabase } from '../utils';
+import { performUserRelatedProtectedUpdateOperation, readDataFromServer, updateDataInDatabase, updateUserInDatabase } from '../utils';
 import { MutualFriends } from './ConnectUsers';
 
 let UserFriendships = () => {
@@ -206,9 +206,11 @@ let RenderActionListOption = ({ item, toggleShowActionOptions, friendId }) => {
     let removeFromCurentUserStateVariable = () => appCtx.removeIdFromCurrentUserFriendsList(friendId)
 
     let removeFromFriendList = () => {
-        let url = `${appCtx.baseUrl}/users/${appCtx.user._id}/remove`
+        const url = `${appCtx.baseUrl}/users/${appCtx.user._id}/remove`
+        const data = { friendId: friendId }
 
-        updateDataInDatabase(url, { friendId: friendId }, removeFromCurentUserStateVariable)
+        // updateDataInDatabase(url, { friendId: friendId }, removeFromCurentUserStateVariable)
+        performUserRelatedProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, removeFromCurentUserStateVariable, "user-friendships", navigate)
     }
 
     let visitUserProfile = () => {
@@ -295,7 +297,9 @@ function FriendsRequests() {
 let ShowFriendRequest = ({ friendId, baseUrl }) => {
     let [data, setData] = useState({})
 
-    let url = `${baseUrl}/users/${friendId}`
+    // let url = `${baseUrl}/users/${friendId}`
+
+    let url = `${baseUrl}/users/${friendId}/publicPayload`
 
     const appCtx = useContext(AppContexts);
 
@@ -322,12 +326,12 @@ let ShowFriendRequest = ({ friendId, baseUrl }) => {
                 >
                     <Avatar
                         alt='user profile picture'
-                        src={data.ppUrl || 'https://random.imagecdn.app/76/56'}
+                        src={data?.ppUrl || 'https://random.imagecdn.app/76/56'}
                         sx={{ width: 76, height: 56 }}
                     />
 
-                    <Typography sx={{ ml: 2, mr: 2 }} variant="h4">{data.fullName}</Typography>
-                    <MutualFriends friends={data.friends} variantType="p" />
+                    <Typography sx={{ ml: 2, mr: 2 }} variant="h4">{data?.fullName}</Typography>
+                    <MutualFriends friends={data?.friends} variantType="p" />
                     <Stack
                         sx={{
                             flexDirection: "row",
@@ -352,11 +356,15 @@ let RenderListIconElement = ({ elem, friendId }) => {
 
         if (elem.tooltip === "Accept") {
             let data = { accept: friendId }
-            updateUserInDatabase(`${url}/accept`, data, appCtx.acceptOrRejectFriendRequestUpdater, navigate, "user-friendships")
+            // todo
+            // updateUserInDatabase(`${url}/accept`, data, appCtx.acceptOrRejectFriendRequestUpdater, navigate, "user-friendships")
+            performUserRelatedProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, `${url}/accept`, appCtx.acceptOrRejectFriendRequestUpdater, "user-friendships", navigate)
 
         } else if (elem.tooltip === "Reject") {
             let data = { reject: friendId }
-            updateUserInDatabase(`${url}/reject`, data, appCtx.acceptOrRejectFriendRequestUpdater, navigate, "user-friendships")
+            // todo
+            // updateUserInDatabase(`${url}/reject`, data, appCtx.acceptOrRejectFriendRequestUpdater, navigate, "user-friendships")
+            performUserRelatedProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, `${url}/reject`, appCtx.acceptOrRejectFriendRequestUpdater, "user-friendships", navigate)
         }
     }
 

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppContexts } from '../App'
 import { ButtonToIndicateHelp, HowToUseConnectUsersListings } from '../components/HowToUseApp'
 import { BoxElement, ButtonElement, CardContentElement, CardElement, CardHeaderElement, MasonryElement, SkeletonBasicElement, StackElement, TypographyElement } from '../components/MuiElements'
-import { readDataFromServer, updateUserInDatabase } from '../utils'
+import { getProtectedUserData, performUserRelatedProtectedUpdateOperation, readDataFromServer, updateUserInDatabase } from '../utils'
 
 function ConnectUsers() {
   let [data, setData] = useState({})
@@ -17,10 +17,11 @@ function ConnectUsers() {
   let dataHandler = dataset => setData(dataset)
 
   useEffect(() => {
-    readDataFromServer(url, dataHandler);
+    // readDataFromServer(url, dataHandler);
+    getProtectedUserData(appCtx?.user?.userJwt?.refreshToken, url, dataHandler)
     appCtx.handleLastVisitedRouteBeforeSessionExpired("/connect");
     appCtx.getUserDataFromJwtTokenStoredInLocalStorage();
-  }, [url])
+  }, [])
 
   // making timers flag to be true after 1.7sec
   let timer = setTimeout(() => setTimers(true), 1700)
@@ -31,7 +32,7 @@ function ConnectUsers() {
     timers && setTimers(false);
   }, [])
 
-  let renderUsers = () => data?.data?.data.map(user => appCtx?.user?._id.toString() !== user._id && <RenderUser key={user._id} userData={user} />)
+  let renderUsers = () => data?.data?.map(user => appCtx?.user?._id.toString() !== user._id && <RenderUser key={user._id} userData={user} />)
 
   return (
     <Paper className="cards-wrapper">
@@ -71,7 +72,8 @@ let RenderUser = ({ userData }) => {
 
   let updatingUserDataInDatabase = (data, endpoint) => {
     let url = `${appCtx.baseUrl}/users/${endpoint}`
-    updateUserInDatabase(url, data, appCtx.updateData, navigate, "connect")
+    // updateUserInDatabase(url, data, appCtx.updateData, navigate, "connect")
+    performUserRelatedProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, appCtx.updateData, "connect", navigate)
   }
 
   let handleSend = (evt) => {

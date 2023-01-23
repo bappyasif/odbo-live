@@ -166,7 +166,7 @@ function App() {
       setUser(prev => ({ ...prev, userJwt: result.userJwt }))
       const data = result.userJwt;
       storeJwtAuthDataInLocalstorage(data.token, data.expiresIn)
-    } else if(result?.success === false) {
+    } else if(result === undefined) {
       clearCurrentUserData();
       navigate("/login")
     }

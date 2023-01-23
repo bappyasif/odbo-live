@@ -48,9 +48,34 @@ const updateUserInDatabase = (endpoint, dataObj, dataUpdater, navigate, navigate
                 let value = Object.values(dataObj)[0]
                 dataUpdater(key, value)
                 navigateTo ? navigate(`/${navigateTo}`) : navigate("/")
-            }).catch(err=>console.log(err))
+            }).catch(err => console.log(err))
         }
-    }).catch(err=>console.log(err));
+    }).catch(err => console.log(err));
+}
+
+const updateProtectedUserData = (endpoint, dataObj, dataUpdater, navigate, navigateTo, refreshToken, accessToken) => {
+    fetch(endpoint, {
+        method: "put",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+            "refreshToken": `${refreshToken}`,
+        },
+        body: JSON.stringify(dataObj)
+    }).then(resp => {
+        let data = null
+        if (resp.status >= 200 && resp.status <= 299) {
+            data = resp.json();
+            data.then(() => {
+                // alert("user data is updated, will be redirected to home page")
+                let key = Object.keys(dataObj)[0]
+                let value = Object.values(dataObj)[0]
+                dataUpdater(key, value)
+                navigateTo ? navigate(`/${navigateTo}`) : navigate("/")
+            }).catch(err => console.log(err))
+        }
+    }).catch(err => console.log(err));
 }
 
 const updateDataInDatabase = (endpoint, dataObj, dataUpdater) => {
@@ -62,11 +87,11 @@ const updateDataInDatabase = (endpoint, dataObj, dataUpdater) => {
         },
         body: JSON.stringify(dataObj)
     }).then(resp => resp.json())
-    .catch(err => console.error(err, "request responded with error"))
-    .then(data => {
-        dataUpdater && dataUpdater(data)
-    })
-    .catch(err => console.error(err, "something's wrong!!"))
+        .catch(err => console.error(err, "request responded with error"))
+        .then(data => {
+            dataUpdater && dataUpdater(data)
+        })
+        .catch(err => console.error(err, "something's wrong!!"))
 }
 
 const readDataFromServer = (endpoint, dataUpdater) => {
@@ -125,15 +150,15 @@ const deleteResourceFromServer = (endpoint, dataObj, dataUpdater) => {
         },
         body: JSON.stringify(dataObj)
     }).then(resp => {
-        if(resp.status === 200) {
+        if (resp.status === 200) {
             return resp.json()
         }
     })
-    .catch(err => console.log(err, "response error!!"))
-    .then(result => {
-        dataUpdater && dataUpdater(result)
-    })
-    .catch(err => console.error(err))
+        .catch(err => console.log(err, "response error!!"))
+        .then(result => {
+            dataUpdater && dataUpdater(result)
+        })
+        .catch(err => console.error(err))
 }
 
 const getUserDataAfterJwtVerification = (url, accessToken, dataUpdater, refreshToken) => {
@@ -152,19 +177,30 @@ const getUserDataAfterJwtVerification = (url, accessToken, dataUpdater, refreshT
             // body: JSON.stringify({refreshToken: refreshToken})
         }
     ).then(resp => {
-        if(resp.status >= 200 && resp.status < 400) {
+        if (resp.status >= 200 && resp.status < 400) {
             return resp.json()
         } else {
             removeJwtDataFromLocalStorage()
             // navigate("/login")
         }
     })
-    .catch(err => console.log(err, "response error!!"))
-    .then(result => {
-        console.log(result, "RESULT!!")
-        dataUpdater && dataUpdater(result)
-    })
-    .catch(err => console.error(err))
+        .catch(err => console.log(err, "response error!!"))
+        .then(result => {
+            console.log(result, "RESULT!!")
+            dataUpdater && dataUpdater(result)
+        })
+        .catch(err => console.error(err))
+}
+
+const getProtectedUserData = (refreshToken, url, dataUpdater) => {
+    const accessToken = localStorage.getItem("token");
+    // const url = `${baseUrl}/protected`
+    getUserDataAfterJwtVerification(url, accessToken, dataUpdater, refreshToken)
+}
+
+const performUserRelatedProtectedUpdateOperation = (data, refreshToken, url, dataUpdater, routeName, navigate) => {
+    const accessToken = localStorage.getItem("token");
+    updateProtectedUserData(url, data, dataUpdater, navigate, routeName, refreshToken, accessToken)
 }
 
 const storeJwtAuthDataInLocalstorage = (token, expiresIn) => {
@@ -182,7 +218,7 @@ export const getExpiration = () => {
 
 const userStillLoggedIn = () => {
     const loginStatus = moment().isBefore(getExpiration());
-    
+
     return loginStatus
 }
 
@@ -202,5 +238,7 @@ export {
     deleteResourceFromServer,
     storeJwtAuthDataInLocalstorage,
     removeJwtDataFromLocalStorage,
-    userStillLoggedIn
+    userStillLoggedIn,
+    getProtectedUserData,
+    performUserRelatedProtectedUpdateOperation
 }

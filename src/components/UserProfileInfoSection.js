@@ -241,7 +241,7 @@ let UserFriendsAndInfo = ({ userData }) => {
 
     let innerStackStyles = { flexDirection: "row", gap: "35px", alignItems: "baseline" }
 
-    let items = [{ name: "Friends count", value: friends.length || fakeDataModel[0].friends }, { name: "Friend Requests Recieved", value: frRecieved.length || fakeDataModel[0].frRcvd }, { name: "Friend Requests Sent", value: frSent.length || fakeDataModel[0].frSent }]
+    let items = [{ name: "Friends count", value: friends?.length || fakeDataModel[0].friends }, { name: "Friend Requests Recieved", value: frRecieved?.length || fakeDataModel[0].frRcvd }, { name: "Friend Requests Sent", value: frSent?.length || fakeDataModel[0].frSent }]
 
     let renderItems = () => items.map(item => <RenderUserProfileData key={item.name} item={item} styles={innerStackStyles} />)
 
