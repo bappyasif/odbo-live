@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContexts } from '../App'
 import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside';
 import { ButtonToIndicateHelp, HowToUseExistingFriendsListings, HowToUseFriendsRequestsListings } from '../components/HowToUseApp';
-import { performUserRelatedProtectedUpdateOperation, readDataFromServer, updateDataInDatabase, updateUserInDatabase } from '../utils';
+import { performProtectedUpdateOperation, readDataFromServer, updateDataInDatabase, updateUserInDatabase } from '../utils';
 import { MutualFriends } from './ConnectUsers';
 
 let UserFriendships = () => {
@@ -210,7 +210,7 @@ let RenderActionListOption = ({ item, toggleShowActionOptions, friendId }) => {
         const data = { friendId: friendId }
 
         // updateDataInDatabase(url, { friendId: friendId }, removeFromCurentUserStateVariable)
-        performUserRelatedProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, removeFromCurentUserStateVariable, "user-friendships", navigate)
+        performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, removeFromCurentUserStateVariable, "user-friendships", navigate)
     }
 
     let visitUserProfile = () => {
@@ -358,13 +358,13 @@ let RenderListIconElement = ({ elem, friendId }) => {
             let data = { accept: friendId }
             // todo
             // updateUserInDatabase(`${url}/accept`, data, appCtx.acceptOrRejectFriendRequestUpdater, navigate, "user-friendships")
-            performUserRelatedProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, `${url}/accept`, appCtx.acceptOrRejectFriendRequestUpdater, "user-friendships", navigate)
+            performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, `${url}/accept`, appCtx.acceptOrRejectFriendRequestUpdater, "user-friendships", navigate)
 
         } else if (elem.tooltip === "Reject") {
             let data = { reject: friendId }
             // todo
             // updateUserInDatabase(`${url}/reject`, data, appCtx.acceptOrRejectFriendRequestUpdater, navigate, "user-friendships")
-            performUserRelatedProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, `${url}/reject`, appCtx.acceptOrRejectFriendRequestUpdater, "user-friendships", navigate)
+            performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, `${url}/reject`, appCtx.acceptOrRejectFriendRequestUpdater, "user-friendships", navigate)
         }
     }
 

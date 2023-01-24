@@ -9,7 +9,7 @@ import ShowUserCreatedPost from '../components/UserCreatedPost';
 
 
 import UserProfileInfoSection from '../components/UserProfileInfoSection'
-import { readDataFromServer } from '../utils';
+import { getProtectedDataFromServer, readDataFromServer } from '../utils';
 
 function UserProfile() {
     let appCtx = useContext(AppContexts);
@@ -82,12 +82,14 @@ export let RenderAllPostsTab = () => {
 
     let handlePostsData = (result) => {
         // console.log(result.data.data, result, "!!")
-        setPostsData(result.data.data)
+        // setPostsData(result.data.data)
+        setPostsData(result.data)
     }
 
     let getAllPostsForThisUser = () => {
         let url = `${appCtx.baseUrl}/posts/${params.userID}`
-        readDataFromServer(url, handlePostsData)
+        // readDataFromServer(url, handlePostsData)
+        getProtectedDataFromServer(appCtx.user?.userJwt?.refreshToken, url, handlePostsData)
     }
 
     // making sure every time when another user profile is getting visited from that same visiting user profile route, it refreshes already existing dataset before rendering

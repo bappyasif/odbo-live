@@ -3,7 +3,7 @@ import { Box, Button, ClickAwayListener, IconButton, MenuItem, MenuList, Popper,
 import React, { useContext, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AppContexts } from '../App';
-import { deleteResourceFromServer } from '../utils';
+import { deleteProtectedDataFromServer, deleteResourceFromServer } from '../utils';
 
 export const PostOrCommentOptions = ({ postOwner, postId, commentId, deleteCommentFromDataset, userId, showEditableText }) => {
     let [showMenu, setShowMenu] = useState(false);
@@ -95,7 +95,8 @@ let RenderPostOption = ({ postOwner, item, postId, commentId, deleteCommentFromD
         const userChoice = prompt("Are you sure you want to delete? Deleted data is not again retrieveable....Type in Y to delete", "N")
 
         if (userChoice === "Y" || userChoice === "y") {
-            deleteResourceFromServer(url, data, deleteThisPostFromAppData)
+            // deleteResourceFromServer(url, data, deleteThisPostFromAppData)
+            deleteProtectedDataFromServer(url, data, deleteThisPostFromAppData)
         } else {
             alert("you chose not to delete :)")
         }

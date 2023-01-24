@@ -10,7 +10,7 @@ import CreatePoll from './CreatePoll'
 import ShowUserPostMedias from './ShowUserPostMedias'
 import { Avatar, Box, Button, CardContent, CircularProgress, Paper, Stack, Typography } from '@mui/material'
 import { PostAddTwoTone } from '@mui/icons-material'
-import { sendDataToServer } from '../utils'
+import { sendDataToServer, sendDataWithProtectionToServer } from '../utils'
 import { AppContexts } from '../App'
 import { useNavigate } from 'react-router-dom'
 import { ButtonToIndicateHelp, HowToUseCreatePostComponent } from './HowToUseApp'
@@ -56,7 +56,8 @@ function CreatePost({ handleSuccessfullPostShared }) {
       if (addedOptions.body) {
         if (addedOptions.body.length < 220) {
           let url = `${appCtx.baseUrl}/posts/post/create/${appCtx.user._id}`
-          sendDataToServer(url, addedOptions, handleErrors, handlePostData)
+          // sendDataToServer(url, addedOptions, handleErrors, handlePostData)
+          sendDataWithProtectionToServer(url, addedOptions, handlePostData, handleErrors, appCtx?.user?.userJwt?.refreshToken)
         } else {
           alert("more than characters limit count found, maximum word count is 220")
         }

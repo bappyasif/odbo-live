@@ -1,17 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContexts } from '../App';
-import { readDataFromServer } from '../utils';
+import { getProtectedDataFromServer, readDataFromServer } from '../utils';
 
 function useToFetchUserActionSpecificPostData(appCtx, type) {
     let [postsData, setPostsData] = useState([]);
 
     let handlePostsData = (result) => {
-        setPostsData(result.data.data)
+        // setPostsData(result.data.data)
+        setPostsData(result.data)
     }
 
     let getAllPostsForThisUser = () => {
         let url = `${appCtx.baseUrl}/posts/${appCtx.user._id}/specific/${type ? type : ""}`
-        readDataFromServer(url, handlePostsData)
+        // readDataFromServer(url, handlePostsData)
+        getProtectedDataFromServer(appCtx.user?.userJwt?.refreshToken, url, handlePostsData)
     }
 
     useEffect(() => {

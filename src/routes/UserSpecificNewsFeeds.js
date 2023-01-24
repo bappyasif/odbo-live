@@ -9,7 +9,7 @@ import CreatePost from '../components/CreatePost';
 import { ButtonToIndicateHelp, HowToUseShowMorePostsListings } from '../components/HowToUseApp';
 import ShowPostsFromTwitter, { RenderPost } from '../components/ShowPostsFromTwitter';
 import ShowUserCreatedPost from '../components/UserCreatedPost';
-import { readDataFromServer } from '../utils';
+import { getProtectedDataFromServer, readDataFromServer } from '../utils';
 import { ScrollToTop } from './PostCommentsThread';
 
 function UserSpecificNewsFeeds(props) {
@@ -58,7 +58,8 @@ function UserSpecificNewsFeeds(props) {
 
     let handleAllPrivatePosts = (result) => {
         // creating a new dataset from already available posts data and then adding on found Private Posts from fetch request
-        let newPosts = [...appCtx.availablePostsFeeds, ...result.data.data]
+        let newPosts = [...appCtx.availablePostsFeeds, ...result.data]
+        // let newPosts = [...appCtx.availablePostsFeeds, ...result.data.data]
         // after curating a modified posts dataset, updating app posts data with this new dataset
         appCtx.handleAvailablePostsFeeds(newPosts)
         // once done, resetting private posts fetch request flag to false
@@ -67,7 +68,8 @@ function UserSpecificNewsFeeds(props) {
 
     let getFriendsPrivatePosts = () => {
         let url = `${appCtx.baseUrl}/posts/${appCtx?.user?._id}/friends/posts/private`
-        readDataFromServer(url, handleAllPrivatePosts)
+        getProtectedDataFromServer(appCtx?.user?.userJwt?.refreshToken, url, handleAllPrivatePosts)
+        // readDataFromServer(url, handleAllPrivatePosts)
     }
 
     // when fetchPrivateRequest flag is on then code for private posts requests will run

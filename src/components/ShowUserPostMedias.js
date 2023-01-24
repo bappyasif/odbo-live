@@ -3,7 +3,7 @@ import { ChevronLeftTwoTone, ChevronRightTwoTone } from '@mui/icons-material';
 import { Alert, Box, Divider, ListItem, ListItemButton, ListItemText, Paper, Stack, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContexts } from '../App';
-import { updateDataInDatabase } from '../utils';
+import { performProtectedUpdateOperation, updateDataInDatabase } from '../utils';
 import { ShowRespectiveIcon } from './ChoosePrivacy';
 
 function ShowUserPostMedias({ mediaContents }) {
@@ -71,7 +71,9 @@ const ShowPoll = ({ pollData, order, postId }) => {
 
         const url = `${appCtx.baseUrl}/posts/update/shared/${postId}`
 
-        updateDataInDatabase(url, data, dataUpdater)
+        // updateDataInDatabase(url, data, dataUpdater)
+
+        performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, dataUpdater, null, null)
 
         // console.log(data, 'ready!!', updatedList, [].push(appCtx.user._id))
     }

@@ -11,7 +11,7 @@ import ChooseTopics from './routes/ChooseTopics';
 import EditUserProfile from './routes/EditUserProfile';
 import TopicCategory from './routes/TopicCategory';
 import LoginSuccess from './routes/LoginSuccess';
-import { getAuthenticatedUserDataFromServer, getUserDataAfterJwtVerification, storeJwtAuthDataInLocalstorage, userStillLoggedIn } from './utils';
+import { getAuthenticatedUserDataFromServer, getProtectedDataAfterJwtVerification, getUserDataAfterJwtVerification, storeJwtAuthDataInLocalstorage, userStillLoggedIn } from './utils';
 import UserSpecificNewsFeeds from './routes/UserSpecificNewsFeeds';
 import UserFriendships from './routes/UserFriendships';
 import PostCommentsThread from './routes/PostCommentsThread';
@@ -185,7 +185,7 @@ function App() {
 
     if(token) {
       setJwtExists(true);
-      getUserDataAfterJwtVerification(url, token, updateUserStateForProtectiveRoutes, user?.userJwt?.refreshToken)
+      getProtectedDataAfterJwtVerification(url, token, updateUserStateForProtectiveRoutes, user?.userJwt?.refreshToken)
     } else {
       clearCurrentUserData();
       setJwtExists(false);

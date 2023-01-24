@@ -5,7 +5,7 @@ import { AppContexts } from '../App';
 import CreatePost from './CreatePost';
 import RenderPostDataEssentials from './RenderPostData';
 import { actions } from './UserCreatedPost';
-import { updateDataInDatabase } from '../utils';
+import { performProtectedUpdateOperation, updateDataInDatabase } from '../utils';
 
 function SharePostModal({ counts, postData, showModal, setShowModal, setShowCreatePost, handleCounts, setShareFlag, shareFlag }) {
     let appCtx = useContext(AppContexts);
@@ -32,6 +32,13 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
         Share: counts.Share || shareCount
     }
 
+    let updateNewlyCreatedPostWithSharedPostId = (newPostId) => {
+        let url = `${appCtx.baseUrl}/posts/update/shared/${newPostId}/`
+        const data = { propKey: "includedSharedPostId", propValue: _id }
+        // it needs an updater to reflect shared post included at initial post rendering
+        performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, null, null, null)
+    }
+
     let handleModalsVisibility = () => {
         setShowCreatePost(true)
         setShowModal(false)
@@ -47,10 +54,12 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
         updateNewlyCreatedPostWithSharedPostId(newlyCreatedPostId)
     }
 
-    let updateNewlyCreatedPostWithSharedPostId = (newPostId) => {
-        let url = `${appCtx.baseUrl}/posts/update/shared/${newPostId}/`
-        updateDataInDatabase(url, { propKey: "includedSharedPostId", propValue: _id })
-    }
+    // let updateNewlyCreatedPostWithSharedPostId = (newPostId) => {
+    //     let url = `${appCtx.baseUrl}/posts/update/shared/${newPostId}/`
+    //     // updateDataInDatabase(url, { propKey: "includedSharedPostId", propValue: _id })
+    //     const data = { propKey: "includedSharedPostId", propValue: _id }
+    //     performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, null, null, null)
+    // }
 
     // console.log(shareFlag, "!!from share", preparingCounts.Share)
 

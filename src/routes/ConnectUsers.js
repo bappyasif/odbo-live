@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppContexts } from '../App'
 import { ButtonToIndicateHelp, HowToUseConnectUsersListings } from '../components/HowToUseApp'
 import { BoxElement, ButtonElement, CardContentElement, CardElement, CardHeaderElement, MasonryElement, SkeletonBasicElement, StackElement, TypographyElement } from '../components/MuiElements'
-import { getProtectedUserData, performUserRelatedProtectedUpdateOperation, readDataFromServer, updateUserInDatabase } from '../utils'
+import { getProtectedDataFromServer, performProtectedUpdateOperation, readDataFromServer, updateUserInDatabase } from '../utils'
 
 function ConnectUsers() {
   let [data, setData] = useState({})
@@ -18,7 +18,7 @@ function ConnectUsers() {
 
   useEffect(() => {
     // readDataFromServer(url, dataHandler);
-    getProtectedUserData(appCtx?.user?.userJwt?.refreshToken, url, dataHandler)
+    getProtectedDataFromServer(appCtx?.user?.userJwt?.refreshToken, url, dataHandler)
     appCtx.handleLastVisitedRouteBeforeSessionExpired("/connect");
     appCtx.getUserDataFromJwtTokenStoredInLocalStorage();
   }, [])
@@ -73,7 +73,7 @@ let RenderUser = ({ userData }) => {
   let updatingUserDataInDatabase = (data, endpoint) => {
     let url = `${appCtx.baseUrl}/users/${endpoint}`
     // updateUserInDatabase(url, data, appCtx.updateData, navigate, "connect")
-    performUserRelatedProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, appCtx.updateData, "connect", navigate)
+    performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, appCtx.updateData, "connect", navigate)
   }
 
   let handleSend = (evt) => {
