@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { AppContexts } from '../App'
 import ShowUserPostMedias from './ShowUserPostMedias'
 import { readDataFromServer } from '../utils'
+import { sanitize } from 'dompurify'
 
 function RenderPostDataEssentials({ postData, shareMode }) {
     let { body, created, gif, poll, privacy, imageUrl, videoUrl, _id } = { ...postData }
@@ -64,7 +65,7 @@ export const RenderCardContent = ({ postId, body, preparingAdditionalsForRenderi
             }}
             onClick={handleShowThread}
         >
-            <Typography variant='h4' sx={{ color: "primary.light", p: .2, textAlign: "justify", margin: "0 20px 0 108px" }} dangerouslySetInnerHTML={{ __html: body }}></Typography>
+            <Typography variant='h4' sx={{ color: "primary.light", p: .2, textAlign: "justify", margin: "0 20px 0 108px" }} dangerouslySetInnerHTML={{ __html: sanitize(body) }}></Typography>
             <ShowUserPostMedias mediaContents={preparingAdditionalsForRendering} />
         </CardContent>
     )
