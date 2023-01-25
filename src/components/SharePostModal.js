@@ -36,7 +36,8 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
         let url = `${appCtx.baseUrl}/posts/update/shared/${newPostId}/`
         const data = { propKey: "includedSharedPostId", propValue: _id }
         // it needs an updater to reflect shared post included at initial post rendering
-        performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, null, null, null)
+        performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url)
+        // performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, () => null, null, null)
     }
 
     let handleModalsVisibility = () => {

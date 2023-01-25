@@ -73,7 +73,9 @@ const ShowPoll = ({ pollData, order, postId }) => {
 
         // updateDataInDatabase(url, data, dataUpdater)
 
-        performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, dataUpdater, null, null)
+        // performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, dataUpdater, null, null)
+
+        performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url)
 
         // console.log(data, 'ready!!', updatedList, [].push(appCtx.user._id))
     }

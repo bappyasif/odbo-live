@@ -2,7 +2,7 @@ import { Cancel, Update } from '@mui/icons-material';
 import { Box, Fab, Stack, TextField, Tooltip } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContexts } from '../App';
-import { updateDataInDatabase } from '../utils';
+import { performProtectedUpdateOperation, updateDataInDatabase } from '../utils';
 
 export const EditComment = ({ commentId, doneEditing, body, updateCommentText, updateCommentTextFromThread }) => {
     let [text, setText] = useState();
@@ -55,7 +55,13 @@ const RenderOption = ({ item, commentId, commentText, doneEditing, updateComment
     
     const updateCommentTextInDatabase = () => {
         let url = `${appCtx.baseUrl}/comments/${commentId}/text`
-        updateDataInDatabase(url, {body: commentText}, updateCommentTextInCurrentAppDataset)
+        // updateDataInDatabase(url, {body: commentText}, updateCommentTextInCurrentAppDataset)
+        const data = {body: commentText};
+        const refreshToken = appCtx.user?.userJwt?.refreshToken;
+
+        performProtectedUpdateOperation(data, refreshToken, url, updateCommentTextInCurrentAppDataset)
+
+        // performProtectedUpdateOperation(data, refreshToken, url, updateCommentTextInCurrentAppDataset, null, null)
     }
 
     const handleClick = evt => {

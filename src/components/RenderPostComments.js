@@ -9,7 +9,7 @@ import { PostOrCommentOptions } from './PostOrCommentOptions';
 import { RenderCardHeader } from './RenderPostData';
 import { ShowPostUserEngagementsDetails } from './SharePostModal';
 import { ShowUserAuthenticationOptions } from './UserCreatedPost';
-import { readDataFromServer, updateDataInDatabase } from '../utils'
+import { performProtectedUpdateOperation, readDataFromServer, updateDataInDatabase } from '../utils'
 
 function RenderPostComments({ postOwner, postId, commentsData, setCommentsData, deleteCommentFromDataset }) {
     let navigate = useNavigate()
@@ -110,7 +110,9 @@ export const RenderComment = ({ fromThread, postOwner, commentData, deleteCommen
     let updateCommentCountsData = () => {
         let url = `${appCtx.baseUrl}/comments/${_id}`
         let data = { ...counts, userCounts: { ...countsForCurrentUser }, userId: appCtx.user._id }
-        updateDataInDatabase(url, data)
+        // updateDataInDatabase(url, data)
+        // performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, () => null, null, null)
+        performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url)
     }
 
     useEffect(() => {

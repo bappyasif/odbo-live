@@ -10,7 +10,7 @@ import RenderPostComments from './RenderPostComments'
 import RenderPostDataEssentials from './RenderPostData'
 import LoginForm from '../routes/LoginForm'
 import SharePostModal, { ShowPostUserEngagementsDetails } from './SharePostModal'
-import { performProtectedUpdateOperation, readDataFromServer, sendDataToServer, updateDataInDatabase } from '../utils'
+import { performProtectedUpdateOperation, readDataFromServer, sendDataToServer, sendDataWithProtectionToServer, updateDataInDatabase } from '../utils'
 
 function ShowUserCreatedPost({ postData, setShowCreatePost }) {
   let [commentsData, setCommentsData] = useState([])
@@ -117,8 +117,8 @@ export let UserEngagementWithPost = ({ postData, appCtx, setShowCreatePost, hand
     counts.currentUserCounts = onlyUserCounts;
 
     // updateDataInDatabase(url, counts)
-    // TO DO
-    performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url, null, null, null)
+    // performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url, () => null, null, null)
+    performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url)
   }
 
   let handleCreateNewComment = () => {
@@ -135,7 +135,9 @@ export let UserEngagementWithPost = ({ postData, appCtx, setShowCreatePost, hand
       setCommentText(null)
     }
 
-    sendDataToServer(url, data, () => null, handleSuccess)
+    // sendDataToServer(url, data, () => null, handleSuccess)
+    const refreshToken = appCtx.user?.userJwt?.refreshToken;
+    sendDataWithProtectionToServer(url, data, handleSuccess, () => null, refreshToken)
   }
 
   useEffect(() => {
