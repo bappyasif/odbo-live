@@ -26,13 +26,16 @@ function RenderPostDataEssentials({ postData, shareMode }) {
         postData.userId && getDataAboutThisPostUser()
     }, [])
 
+    // {"gif": {$exists: true, $not: {$size: 0}}}
     let preparingAdditionalsForRendering = {
         Id: _id,
         Image: imageUrl,
         Video: videoUrl,
-        Gif: gif[0],
+        // Gif: gif[0],
+        Gif: gif,
         Poll: poll[0],
-        Privacy: privacy
+        Privacy: privacy,
+        // GifMod: gif
     }
 
     return (

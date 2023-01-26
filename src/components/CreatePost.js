@@ -274,7 +274,8 @@ let ShowGifSelectingElement = ({ handleValue, currentElement }) => {
   let [searchText, setSearchText] = useState(null);
   let [gifData, setGifData] = useState(null);
 
-  let giphyFetch = new GiphyFetch("TpnE8CtDArV0DqW17cilRKXCIptJJ621");
+  // let giphyFetch = new GiphyFetch("TpnE8CtDArV0DqW17cilRKXCIptJJ621");
+  let giphyFetch = new GiphyFetch(process.env.REACT_APP_GIPHY_FETCH_API_KEY);
 
   let fetchGifs = (offset) => searchText ? giphyFetch.search(searchText, { offset, limit: 10 }) : giphyFetch.trending({ offset, limit: 10 });
 

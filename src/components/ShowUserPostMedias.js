@@ -1,3 +1,4 @@
+import { GiphyFetch } from '@giphy/js-fetch-api';
 import { Gif } from '@giphy/react-components';
 import { ChevronLeftTwoTone, ChevronRightTwoTone } from '@mui/icons-material';
 import { Alert, Box, Divider, ListItem, ListItemButton, ListItemText, Paper, Stack, Typography } from '@mui/material';
@@ -39,6 +40,21 @@ function ShowUserPostMedias({ mediaContents }) {
             {renderContents()}
         </Box>
     )
+}
+
+const ShowGif = (id) => {
+    const [gifData, setGifData] = useState(null)
+
+    const gf = new GiphyFetch(process.env.REACT_APP_GIPHY_FETCH_API_KEY)
+
+    gf.gif(id)
+    .then(data => {
+        if(data) {
+            setGifData(data)
+        }
+    }).catch(err => console.log("gif fetching has failed", err))
+
+    return <Gif key={"Gif"} gif={gifData} height={{ lg: "100%" }} width={"100%"} style={{ order: 3 }} />
 }
 
 const ShowPoll = ({ pollData, order, postId }) => {
