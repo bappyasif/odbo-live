@@ -146,7 +146,7 @@ function App() {
     setUserAccessiblePostsDataset({})
   }
 
-  function getUser () {
+  function getUser() {
     // let url = `http://localhost:3000/login/success`
     const url = `${contexts.baseUrl}/login/success`
     getAuthenticatedUserDataFromServer(url, handleData)
@@ -156,23 +156,23 @@ function App() {
   const getSystemPreferenceTheme = () => {
     const themeType = window.matchMedia("(prefers-color-scheme): dark").matches
 
-    setDarkMode(themeType ? "dark": "light")
+    setDarkMode(themeType ? "dark" : "light")
   }
 
   const updateUserStateForProtectiveRoutes = result => {
-    if(result?.userJwt) {
+    if (result?.userJwt) {
       console.log("!!JWT Block!!")
       // setJwtUser(prev => ({ ...prev, userJwt: result.userJwt }))
       setUser(prev => ({ ...prev, userJwt: result.userJwt }))
       const data = result.userJwt;
       storeJwtAuthDataInLocalstorage(data.token, data.expiresIn)
-    } else if(result === undefined) {
+    } else if (result === undefined) {
       clearCurrentUserData();
       navigate("/login")
     }
   }
 
-  function getUserDataFromJwtTokenStoredInLocalStorage () {
+  function getUserDataFromJwtTokenStoredInLocalStorage() {
     const token = localStorage.getItem("token");
 
     // const url = `http://localhost:3000/protected`
@@ -180,16 +180,16 @@ function App() {
     const url = `${contexts.baseUrl}/protected`
     // getUserDataAfterJwtVerification(url, token, updateUserStateForProtectiveRoutes, user?.userJwt?.refreshToken)
     // getUserDataAfterJwtVerification(url, token, handleData, user?.userJwt?.refreshToken)
-    
+
     console.log(user, jwtUser)
 
-    if(token) {
+    if (token) {
       setJwtExists(true);
       getProtectedDataAfterJwtVerification(url, token, updateUserStateForProtectiveRoutes, user?.userJwt?.refreshToken)
     } else {
       clearCurrentUserData();
       setJwtExists(false);
-      navigate("/login"); 
+      navigate("/login");
     }
 
     // if (userStillLoggedIn() && token) {
@@ -208,7 +208,7 @@ function App() {
   const previouslyExistingAppDataOnLocalstorage = () => {
     const isDarkMode = localStorage.getItem("odbo-dark-mode");
 
-    if(isDarkMode !== null) {
+    if (isDarkMode !== null) {
       setDarkMode(isDarkMode)
     }
 
@@ -296,7 +296,46 @@ function App() {
         <ThemeProvider theme={theme}>
           <Paper>
             <Routes>
+              {
+                !user?._id
+                  ?
+                  <>
+                    {/* <Route path='/' element={<UserSpecificNewsFeeds />} /> */}
+                    <Route path='/login' element={<LoginForm handleData={handleData} />} />
+                    <Route path='/login/success' element={<LoginSuccess />} />
+                    <Route path='/register' element={<RegisterUser handleData={handleData} />} />
+                    {/* <Route path='/posts/:postId/comments' element={<PostCommentsThread />} />
+                    <Route path='/users/:userID/visit/profile' element={<VisitAnotherUserProfile />} /> */}
+                  </>
+                  :
+                  <>
+                    {/* <Route path='/' element={<UserSpecificNewsFeeds />} /> */}
+                    <Route path='/user-friendships' element={<UserFriendships />} />
+                    <Route path='/connect' element={<ConnectUsers />} />
+                    {/* <Route path='/posts/:postId/comments' element={<PostCommentsThread />} /> */}
+                    <Route path='/edit-user-profile' element={<EditUserProfile />} />
+                    <Route path='/users/:userID/profile' element={<UserProfile />} />
+                    {/* <Route path='/users/:userID/profile' element={<UserProfile />} />
+                    <Route path='/users/:userID/visit/profile' element={<VisitAnotherUserProfile />} /> */}
+                    <Route path='/choose-topics' element={<ChooseTopics />} />
+
+                    <Route path='/choose-topics/:category' element={<TopicCategory />} errorElement={<ErrorPage />} />
+                  </>
+              }
+
               <Route path='/' element={<UserSpecificNewsFeeds />} />
+
+              {/* <Route path='/choose-topics' element={<ChooseTopics />} />
+
+              <Route path='/choose-topics/:category' element={<TopicCategory />} errorElement={<ErrorPage />} /> */}
+
+              <Route path='/posts/:postId/comments' element={<PostCommentsThread />} />
+
+              <Route path='/users/:userID/visit/profile' element={<VisitAnotherUserProfile />} />
+
+              <Route path='*' element={<ErrorPage />} />
+
+              {/* <Route path='/' element={<UserSpecificNewsFeeds />} />
               <Route path='/login' element={<LoginForm handleData={handleData} />} />
               <Route path='/login/success' element={<LoginSuccess />} />
               <Route path='/register' element={<RegisterUser handleData={handleData} />} />
@@ -309,7 +348,7 @@ function App() {
               <Route path='/edit-user-profile' element={<EditUserProfile />} />
               <Route path='/users/:userID/profile' element={<UserProfile />} />
               <Route path='/users/:userID/visit/profile' element={<VisitAnotherUserProfile />} />
-              <Route path='*' element={<ErrorPage />} />
+              <Route path='*' element={<ErrorPage />} /> */}
             </Routes>
           </Paper>
         </ThemeProvider>
