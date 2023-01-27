@@ -1,5 +1,5 @@
 import { GiphyFetch } from '@giphy/js-fetch-api';
-import { Gif } from '@giphy/react-components';
+import { Gif, VideoOverlay } from '@giphy/react-components';
 import { ChevronLeftTwoTone, ChevronRightTwoTone } from '@mui/icons-material';
 import { Alert, Box, Divider, ListItem, ListItemButton, ListItemText, Paper, Stack, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react'
@@ -19,7 +19,8 @@ function ShowUserPostMedias({ mediaContents }) {
             } else if (key === "Video" && mediaContents[key]?.includes("http")) {
                 content.push(<video key={"Video"} height={200} src={mediaContents[key]} controls style={{ order: 2 }} />)
             } else if (key === "Gif" && mediaContents[key]) {
-                content.push(<Gif key={"Gif"} gif={mediaContents[key]} height={{ lg: "100%" }} width={"100%"} style={{ order: 3 }} />)
+                content.push(<ShowGif key={"Gif"} id={mediaContents[key]} />)
+                // content.push(<Gif key={"Gif"} gif={mediaContents[key]} height={{ lg: "100%" }} width={"100%"} style={{ order: 3 }} />)
             } else if (key === "Poll" && mediaContents[key]) {
                 content.push(<ShowPoll key={"Poll"} pollData={mediaContents[key]} postId={mediaContents.Id} order={4} />)
             } else if (key === "Privacy") {
@@ -35,26 +36,44 @@ function ShowUserPostMedias({ mediaContents }) {
 
     return (
         <Box
-            sx={{ display: "flex", flexDirection: "column", mb: 2, gap: 2 }}
+            sx={{ display: "flex", flexDirection: "column", mb: 2, gap: 2, justifyContent: "stretch", }}
         >
             {renderContents()}
         </Box>
     )
 }
 
-const ShowGif = (id) => {
+const ShowGif = (idObj) => {
     const [gifData, setGifData] = useState(null)
 
     const gf = new GiphyFetch(process.env.REACT_APP_GIPHY_FETCH_API_KEY)
 
-    gf.gif(id)
-    .then(data => {
-        if(data) {
-            setGifData(data)
-        }
-    }).catch(err => console.log("gif fetching has failed", err))
+    const beginGifFetch = () => {
+        console.log(idObj, "fetching!!")
+        gf.gif(idObj.id)
+            .then(data => {
+                if (data) {
+                    console.log(data, "data!!!!")
+                    setGifData(data.data)
+                }
+            }).catch(err => console.log("gif fetching has failed", err))
+    }
 
-    return <Gif key={"Gif"} gif={gifData} height={{ lg: "100%" }} width={"100%"} style={{ order: 3 }} />
+    useEffect(() => {
+        idObj && beginGifFetch()
+    }, [idObj])
+
+    return (
+        gifData
+            ? <Gif
+                gif={gifData}
+                // height={{ lg: "60%" }}
+                // overlay={VideoOverlay}
+                width={510}
+                style={{ order: 3, pointerEvents: "none", alignSelf: "center"}}
+            />
+            : null
+    )
 }
 
 const ShowPoll = ({ pollData, order, postId }) => {
@@ -209,7 +228,7 @@ const RenderPollOption = ({ setVoteAttempted, option, numberOfOptions, updatePos
                                 position: "absolute",
                                 opacity: .51
                             }}></Typography>
-                        <Typography variant='h5' sx={{color: "chartreuse", display: "flex", alignItems: "center", fontWeight: "bold"}}><ChevronLeftTwoTone fontSize='large' /> {` ${clickCount} `} <ChevronRightTwoTone fontSize='large' /> Votes</Typography>
+                        <Typography variant='h5' sx={{ color: "chartreuse", display: "flex", alignItems: "center", fontWeight: "bold" }}><ChevronLeftTwoTone fontSize='large' /> {` ${clickCount} `} <ChevronRightTwoTone fontSize='large' /> Votes</Typography>
                     </>
                 }
                 secondary={

@@ -37,7 +37,11 @@ function CreatePost({ handleSuccessfullPostShared }) {
   }
 
   let handleAddedOptions = (evt, elm, val) => {
-    if (elm !== "body") {
+    // console.log(elm, "ELEM!!")
+    if (elm === "Gif") {
+      console.log(elm, "ELEM!!", val?.id)
+      setAddedOptions(prev => ({ ...prev, [elm]: val?.id, current: elm }))
+    } else if (elm !== "body") {
       val
         ? setAddedOptions(prev => ({ ...prev, [elm]: val, current: elm }))
         : setAddedOptions(prev => {
@@ -73,7 +77,7 @@ function CreatePost({ handleSuccessfullPostShared }) {
     }
   }
 
-  // console.log(addedOptions, "addedOptions!!")
+  console.log(addedOptions, "addedOptions!!")
 
   // console.log(appCtx.dialogTextFor, "dialogTextFor")
 
@@ -284,6 +288,7 @@ let ShowGifSelectingElement = ({ handleValue, currentElement }) => {
     // console.log(gif, "gif!!")
     setGifData(gif)
     handleValue(e, currentElement, gif);
+    // handleValue(e, currentElement, gif?.id);
     handleValue(e, "choose again", "");
   }
 
