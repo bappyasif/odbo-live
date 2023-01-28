@@ -8,7 +8,7 @@ import { VisualizeWordCountProgress } from '../components/CreatePost'
 import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside'
 import { ButtonToIndicateHelp, HowToUseEditUserProfilePage } from '../components/HowToUseApp'
 import { fakeDataModel } from '../components/UserProfileInfoSection'
-import { updateDataInDatabase } from '../utils'
+import { performProtectedUpdateOperation, updateDataInDatabase } from '../utils'
 import ChooseTopics from './ChooseTopics'
 
 function EditUserProfile() {
@@ -113,7 +113,10 @@ let RenderActionButton = ({ item, userData, appCtx }) => {
 
         // console.log(data,"!!")
 
-        updateDataInDatabase(url, data, updateDataInApp)
+        // updateDataInDatabase(url, data, updateDataInApp)
+        const refreshToken = appCtx.user?.userJwt?.refreshToken;
+
+        performProtectedUpdateOperation(data, refreshToken, url, updateDataInApp)
     }
 
     let handleClick = () => {
@@ -140,7 +143,7 @@ let RenderFormWithData = ({ handleData, data, updateTopicsDataFromChooser }) => 
 
     for (let key in data) {
 
-        if (key !== "__v" && key !== "_id" && key !== "salt" && key !== "hash" && key !== "albums" && key !== "userJwt" ) {
+        if (key !== "__v" && key !== "_id" && key !== "salt" && key !== "hash" && key !== "albums" && key !== "userJwt" && key !== "password" ) {
             let elem = key;
             let initialValue = data[key]
 
