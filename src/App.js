@@ -215,6 +215,12 @@ function App() {
     getUserDataFromJwtTokenStoredInLocalStorage()
   }
 
+  const fetchUserDataWithValidAccessToken = () => {
+    const token = localStorage.getItem("token");
+    const url = `${contexts.baseUrl}/valid-user`
+    getProtectedDataAfterJwtVerification(url, token, handleData, null)
+  }
+
   const contexts = {
     baseUrl: "http://localhost:3000",
     // baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
@@ -274,6 +280,9 @@ function App() {
       const fakeTopics = ["astronomy", "animalplanet", "world", "sport"]
       setTopics(fakeTopics)
     }
+
+    // to fetch data when page reloads and token is still valid
+    fetchUserDataWithValidAccessToken();
 
     getSystemPreferenceTheme();
   }, [])

@@ -57,6 +57,11 @@ function LoginForm() {
             if (timer >= 1700) clearTimeout(timer)
         }, 1700)
     }
+
+    useEffect(() => {
+        appCtx.clearCurrentUserData();
+        removeJwtDataFromLocalStorage();
+    }, [])
     // console.log(formData, "formData!!");
 
     // console.log(appCtx.routeBeforeSessionExpired, "appCtx.routeBeforeSessionExpired")
