@@ -114,7 +114,12 @@ const updateProtectedUserData = (endpoint, dataObj, dataUpdater, navigate, navig
                 data.then(() => {
                     let key = Object.keys(dataObj)[0]
                     let value = Object.values(dataObj)[0]
-                    key && value && dataUpdater && dataUpdater(key, value)
+                    if(key && value) {
+                        dataUpdater && dataUpdater(key, value)
+                    } else {
+                        dataUpdater && dataUpdater()
+                    }
+                    // key && value && dataUpdater && dataUpdater(key, value)
                         (navigate !== null && navigateTo) ? navigate(`/${navigateTo}`) : navigate && navigate("/")
                 }).catch(err => console.log(err))
             }

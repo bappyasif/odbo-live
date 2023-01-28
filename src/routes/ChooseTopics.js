@@ -3,7 +3,7 @@ import { Box, Button, IconButton, Paper, Stack, Typography } from '@mui/material
 import React, { useState, useEffect, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AppContexts } from '../App'
-import { updateUserInDatabase } from '../utils'
+import { performProtectedUpdateOperation, updateUserInDatabase } from '../utils'
 
 function ChooseTopics({closeTopicChooserModal}) {
     let [selectedTopics, setSelectedTopics] = useState([])
@@ -14,9 +14,10 @@ function ChooseTopics({closeTopicChooserModal}) {
 
     let dataUpdateForUserEditModule = () => {
         appCtx.updateUserProfileDataInApp("topics", selectedTopics)
-        console.log("topicscheckit", selectedTopics)
+        // console.log("topicscheckit", selectedTopics)
         // closeTopicChooserModal(selectedTopics)
-        // closeTopicChooserModal()
+        closeTopicChooserModal && closeTopicChooserModal()
+        // !closeTopicChooserModal && navigate("/edit-user-profile")
     }
 
     let handleClickAndSave = () => {
@@ -24,13 +25,21 @@ function ChooseTopics({closeTopicChooserModal}) {
         // updateUserInDatabase(url, {topics: selectedTopics}, appCtx.updateData, navigate)
 
         // updateUserInDatabase(url, {topics: selectedTopics}, appCtx.updateData, closeTopicChooserModal ? closeTopicChooserModal() : navigate)
-        if(closeTopicChooserModal) {
-            updateUserInDatabase(url, {topics: selectedTopics}, dataUpdateForUserEditModule, closeTopicChooserModal)
-            // updateUserInDatabase(url, {topics: selectedTopics}, dataUpdateForUserEditModule, () => null)
-        } else {
-            updateUserInDatabase(url, {topics: selectedTopics}, dataUpdateForUserEditModule, navigate, "edit-user-profile")
-            // updateUserInDatabase(url, {topics: selectedTopics}, appCtx.updateData, navigate)
-        }
+        const refreshToken = appCtx.user?.userJwt?.refreshToken;
+
+        console.log(refreshToken, "refreshToken!!")
+
+        performProtectedUpdateOperation({topics: selectedTopics}, refreshToken, url, dataUpdateForUserEditModule, "edit-user-profile", navigate)
+
+        // if(closeTopicChooserModal) {
+        //     performProtectedUpdateOperation({topics: selectedTopics}, refreshToken, url, dataUpdateForUserEditModule)
+        //     // updateUserInDatabase(url, {topics: selectedTopics}, dataUpdateForUserEditModule, closeTopicChooserModal)
+        //     // updateUserInDatabase(url, {topics: selectedTopics}, dataUpdateForUserEditModule, () => null)
+        // } else {
+        //     performProtectedUpdateOperation({topics: selectedTopics}, refreshToken, url, dataUpdateForUserEditModule, "edit-user-profile", navigate)
+        //     // updateUserInDatabase(url, {topics: selectedTopics}, dataUpdateForUserEditModule, navigate, "edit-user-profile")
+        //     // updateUserInDatabase(url, {topics: selectedTopics}, appCtx.updateData, navigate)
+        // }
     }
 
     useEffect(() => {
