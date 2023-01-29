@@ -218,7 +218,7 @@ function App() {
   const fetchUserDataWithValidAccessToken = () => {
     const token = localStorage.getItem("token");
     const url = `${contexts.baseUrl}/valid-user`
-    getProtectedDataAfterJwtVerification(url, token, handleData, null)
+    token && getProtectedDataAfterJwtVerification(url, token, handleData, null)
   }
 
   const contexts = {
@@ -250,7 +250,7 @@ function App() {
     isUserLoggedIn: userStillLoggedIn,
     getUserDataFromJwtTokenStoredInLocalStorage: getUserDataFromJwtTokenStoredInLocalStorage,
     routeBeforeSessionExpired: routeBeforeSessionExpired,
-    handleLastVisitedRouteBeforeSessionExpired: handleLastVisitedRouteBeforeSessionExpired
+    handleLastVisitedRouteBeforeSessionExpired: handleLastVisitedRouteBeforeSessionExpired,
   }
 
   useEffect(() => {

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { LoginTwoTone, AppRegistrationTwoTone, VerifiedUserSharp, DynamicFeedSharp, PeopleTwoTone, PersonTwoTone, DynamicFeedTwoTone, ManageAccountsTwoTone, LogoutTwoTone, InfoTwoTone, DarkModeTwoTone, SettingsSuggestTwoTone, Settings, LightModeTwoTone } from "@mui/icons-material";
+import { LoginTwoTone, AppRegistrationTwoTone, VerifiedUserSharp, DynamicFeedSharp, PeopleTwoTone, PersonTwoTone, DynamicFeedTwoTone, ManageAccountsTwoTone, LogoutTwoTone, InfoTwoTone, DarkModeTwoTone, SettingsSuggestTwoTone, Settings, LightModeTwoTone, DeleteForeverTwoTone } from "@mui/icons-material";
 import { H1Element, NavElement, WrapperDiv } from '../components/GeneralElements'
 import { MuiInputElement, TabElement } from '../components/MuiElements';
-import { logoutUserFromApp, sendDataToServer } from '../utils';
+import { logoutUserFromApp, sendDataToServer, deleteProtectedDataFromServer, removeJwtDataFromLocalStorage } from '../utils';
 import { AppContexts } from '../App';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AppBar, Avatar, Box, Button, ButtonGroup, FormControl, FormControlLabel, Switch, Tooltip, Typography } from '@mui/material';
@@ -64,7 +64,7 @@ const FloatingAuthenticatedUserFunctionality = ({ appCtx }) => {
   return (
     <Stack sx={{ flexDirection: "row", gap: 4, position: "relative", alignItems: "center" }}>
       <AssistiveModeActivatingToggler />
-      
+
       <AppDarkModeToggler />
 
       <Typography
@@ -77,7 +77,7 @@ const FloatingAuthenticatedUserFunctionality = ({ appCtx }) => {
       </Typography>
 
       <UserProfileNavigationIcon appCtx={appCtx} />
-      
+
       <DropdownMenu closeDropdown={closeDropdown} toggleDropdown={toggleDropdown} showDropdown={showDropdown} />
     </Stack>
   )
@@ -102,7 +102,7 @@ const DropdownMenu = ({ closeDropdown, toggleDropdown, showDropdown }) => {
         }}
         onClick={toggleDropdown}
       >
-        <Tooltip title={ showDropdown ? "" : "More Options"}>
+        <Tooltip title={showDropdown ? "" : "More Options"}>
           <Settings fontSize='large' />
         </Tooltip>
       </Button>
@@ -171,9 +171,10 @@ let ShowAuthUserDropdowns = ({ closeDropdown }) => {
 
   let options = [
     { name: "Assistive Mode", icon: <InfoTwoTone /> },
-    { name: `${appCtx.darkMode ? "Light" : "Dark"} Mode`, icon: appCtx.darkMode ? <LightModeTwoTone />  : <DarkModeTwoTone /> },
+    { name: `${appCtx.darkMode ? "Light" : "Dark"} Mode`, icon: appCtx.darkMode ? <LightModeTwoTone /> : <DarkModeTwoTone /> },
     { name: "Edit Profile", icon: <ManageAccountsTwoTone /> },
-    { name: "Logout", icon: <LogoutTwoTone /> }
+    { name: "Logout", icon: <LogoutTwoTone /> },
+    { name: "Delete Account", icon: <DeleteForeverTwoTone /> },
   ]
 
   let renderOptions = () => options.map(item => <RenderDropDownOption key={item.name} item={item} closeDropdown={closeDropdown} />)
@@ -206,6 +207,25 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
     logoutUserFromApp(url, clearOutUserData)
   }
 
+  const afterDelete = () => {
+    removeJwtDataFromLocalStorage();
+    appCtx.clearCurrentUserData();
+    alert("so sorry to see you go :( you can always choose to comeback again, see ya soon, tot ziens, tot zo :)")
+  }
+
+  const deleteCurrentlyLoggedInUserAccount = () => {
+    const getConsent = prompt("Are you sure you want to delete your account? This process is irreversible!! Press Y to Delete Your Account")
+
+    if (["Y", "y"].includes(getConsent)) {
+      const url = `${appCtx.baseUrl}/users/${appCtx.user._id}`
+      const refreshToken = appCtx.user?.userJwt?.refreshToken;
+      deleteProtectedDataFromServer(url, {}, afterDelete, refreshToken)
+      console.log(url, "delete account!!")
+    } else {
+      alert("Its nice to have you here, keep enjoying what you like :)")
+    }
+  }
+
   let handleClick = () => {
     if (item.name === "Logout") {
       handleLogoutUser()
@@ -215,6 +235,8 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
       appCtx.handleAssitiveModeToggle()
     } else if (item.name === "Dark Mode" || item.name === "Light Mode") {
       appCtx.handleToggleDarkMode()
+    } else if (item.name === "Delete Account") {
+      deleteCurrentlyLoggedInUserAccount()
     }
     closeDropdown()
   }
