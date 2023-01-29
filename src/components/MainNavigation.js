@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { LoginTwoTone, AppRegistrationTwoTone, VerifiedUserSharp, DynamicFeedSharp, PeopleTwoTone, PersonTwoTone, DynamicFeedTwoTone, ManageAccountsTwoTone, LogoutTwoTone, InfoTwoTone, DarkModeTwoTone, SettingsSuggestTwoTone, Settings, LightModeTwoTone, DeleteForeverTwoTone } from "@mui/icons-material";
+import { LoginTwoTone, AppRegistrationTwoTone, VerifiedUserSharp, DynamicFeedSharp, PeopleTwoTone, PersonTwoTone, DynamicFeedTwoTone, ManageAccountsTwoTone, LogoutTwoTone, InfoTwoTone, DarkModeTwoTone, SettingsSuggestTwoTone, Settings, LightModeTwoTone, DeleteForeverTwoTone, SyncLockTwoTone } from "@mui/icons-material";
 import { H1Element, NavElement, WrapperDiv } from '../components/GeneralElements'
 import { MuiInputElement, TabElement } from '../components/MuiElements';
 import { logoutUserFromApp, sendDataToServer, deleteProtectedDataFromServer, removeJwtDataFromLocalStorage } from '../utils';
@@ -173,6 +173,7 @@ let ShowAuthUserDropdowns = ({ closeDropdown }) => {
     { name: "Assistive Mode", icon: <InfoTwoTone /> },
     { name: `${appCtx.darkMode ? "Light" : "Dark"} Mode`, icon: appCtx.darkMode ? <LightModeTwoTone /> : <DarkModeTwoTone /> },
     { name: "Edit Profile", icon: <ManageAccountsTwoTone /> },
+    { name: "Reset Password", icon: <SyncLockTwoTone /> },
     { name: "Logout", icon: <LogoutTwoTone /> },
     { name: "Delete Account", icon: <DeleteForeverTwoTone /> },
   ]
@@ -214,16 +215,24 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
   }
 
   const deleteCurrentlyLoggedInUserAccount = () => {
-    const getConsent = prompt("Are you sure you want to delete your account? This process is irreversible!! Press Y to Delete Your Account")
+    const url = `${appCtx.baseUrl}/users/${appCtx.user._id}`
+    const refreshToken = appCtx.user?.userJwt?.refreshToken;
+    deleteProtectedDataFromServer(url, {}, afterDelete, refreshToken)
+    console.log(url, "delete account!!")
+  }
+
+  const handleDelete = () => {
+    const getConsent = prompt("Are you sure you want to delete your account? This process is irreversible!! Press Y to Delete Your Account", "N")
 
     if (["Y", "y"].includes(getConsent)) {
-      const url = `${appCtx.baseUrl}/users/${appCtx.user._id}`
-      const refreshToken = appCtx.user?.userJwt?.refreshToken;
-      deleteProtectedDataFromServer(url, {}, afterDelete, refreshToken)
-      console.log(url, "delete account!!")
+      deleteCurrentlyLoggedInUserAccount()
     } else {
       alert("Its nice to have you here, keep enjoying what you like :)")
     }
+  }
+
+  const handleReset = () => {
+    console.log("reset password!!")
   }
 
   let handleClick = () => {
@@ -236,7 +245,9 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
     } else if (item.name === "Dark Mode" || item.name === "Light Mode") {
       appCtx.handleToggleDarkMode()
     } else if (item.name === "Delete Account") {
-      deleteCurrentlyLoggedInUserAccount()
+      handleDelete()
+    } else if (item.name === "Reset Password") {
+      handleReset()
     }
     closeDropdown()
   }
