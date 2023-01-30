@@ -20,6 +20,7 @@ import VisitAnotherUserProfile from './routes/VisitAnotherUserProfile';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme, Paper } from '@mui/material';
 import { getDesignTokens } from './utils/customTheme';
+import PasswordReset from './components/PasswordReset';
 
 export const AppContexts = createContext()
 
@@ -318,6 +319,7 @@ function App() {
                   </>
                   :
                   <>
+                    <Route path='/reset-password' element={<PasswordReset />} />
                     {/* <Route path='/' element={<UserSpecificNewsFeeds />} /> */}
                     <Route path='/user-friendships' element={<UserFriendships />} />
                     <Route path='/connect' element={<ConnectUsers />} />

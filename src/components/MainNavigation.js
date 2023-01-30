@@ -222,7 +222,7 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
   }
 
   const handleDelete = () => {
-    const getConsent = prompt("Are you sure you want to delete your account? This process is irreversible!! Press Y to Delete Your Account", "N")
+    const getConsent = prompt("Continue to delete your account? This process is irreversible!! Press Y to Delete Your Account", "N")
 
     if (["Y", "y"].includes(getConsent)) {
       deleteCurrentlyLoggedInUserAccount()
@@ -233,6 +233,7 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
 
   const handleReset = () => {
     console.log("reset password!!")
+    navigate("/reset-password");
   }
 
   let handleClick = () => {
