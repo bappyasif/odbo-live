@@ -23,11 +23,22 @@ function PasswordReset() {
         navigate("/");
     }
 
+    const checkGuestUserPresence = () => {
+        const restrictedUsers = ["Guest Een", "Guest Twee"];
+        return restrictedUsers.includes(appCtx?.user?.fullName)
+        // return restrictedUsers.find(name => name === appCtx?.user?.fullName)
+    }
+
     const handleReset = () => {
         console.log("reset!!", formData)
         const url = `${appCtx.baseUrl}/users/${appCtx.user._id}/reset-password`
         const refreshToken = appCtx.user?.userJwt?.refreshToken;
-        performProtectedUpdateOperation(formData, refreshToken, url, null, null, navigate )
+        if(checkGuestUserPresence()) {
+            alert("nope, no cant do, protected account!!")
+            navigate("/")
+        } else {
+            performProtectedUpdateOperation(formData, refreshToken, url, null, null, navigate )
+        }
     }
 
     const handleCancel = () => {
@@ -37,6 +48,9 @@ function PasswordReset() {
 
     useEffect(() => {
         setShowDialog(true);
+        appCtx.handleLastVisitedRouteBeforeSessionExpired("/reset-password")
+        // appCtx.handleLastVisitedRouteBeforeSessionExpired(`/users/${appCtx?.user?._id}/profile`)
+        appCtx.getUserDataFromJwtTokenStoredInLocalStorage()
     }, [])
 
     return (
