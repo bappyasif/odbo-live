@@ -23,17 +23,11 @@ function PasswordReset() {
         navigate("/");
     }
 
-    const checkGuestUserPresence = () => {
-        const restrictedUsers = ["Guest Een", "Guest Twee"];
-        return restrictedUsers.includes(appCtx?.user?.fullName)
-        // return restrictedUsers.find(name => name === appCtx?.user?.fullName)
-    }
-
     const handleReset = () => {
         console.log("reset!!", formData)
         const url = `${appCtx.baseUrl}/users/${appCtx.user._id}/reset-password`
         const refreshToken = appCtx.user?.userJwt?.refreshToken;
-        if(checkGuestUserPresence()) {
+        if(checkGuestUserPresence(appCtx?.user?.fullName)) {
             alert("nope, no cant do, protected account!!")
             navigate("/")
         } else {
@@ -58,13 +52,19 @@ function PasswordReset() {
             open={showDialog}
         >
             <DialogContent>
-                <PasswordResetFormView handleFormData={handleFormData} primaryAction={handleReset} secondaryAction={handleCancel} />
+                <ReusableFormView 
+                    handleFormData={handleFormData} 
+                    primaryAction={handleReset} 
+                    secondaryAction={handleCancel} 
+                    legendText={"Fillup These Informations To Reset Your Current Password"}
+                    formControls={formControls}
+                />
             </DialogContent>
         </Dialog>
     )
 }
 
-const PasswordResetFormView = ({ handleFormData, primaryAction, secondaryAction }) => {
+export const ReusableFormView = ({ handleFormData, primaryAction, secondaryAction, legendText, formControls }) => {
     // const [formData, setFormData] = useState({})
 
     // const handleFormData = evt => console.log("form data!!")
@@ -74,7 +74,7 @@ const PasswordResetFormView = ({ handleFormData, primaryAction, secondaryAction 
     return (
         <form onSubmit={e => e.preventDefault()} method="post">
             <legend>
-                <Typography variant='h4'>Fillup These Informations To Reset Your Current Password</Typography>
+                <Typography variant='h4'>{legendText}</Typography>
             </legend>
             <Stack>
                 {renderFormControls()}
@@ -84,7 +84,7 @@ const PasswordResetFormView = ({ handleFormData, primaryAction, secondaryAction 
     )
 }
 
-const RenderingFormControl = ({ item, handleFormData }) => {
+export const RenderingFormControl = ({ item, handleFormData }) => {
     return (
         <FormControl sx={{mt: 2}}>
             <InputLabel>{item.labelText}</InputLabel>
@@ -121,7 +121,7 @@ const PasswordResetFormButtons = ({ primaryAction, secondaryAction, checkConditi
     )
 }
 
-const ReusableFormActionButtons = ({ actionMethod, buttonItem, forSubmit }) => {
+export const ReusableFormActionButtons = ({ actionMethod, buttonItem, forSubmit }) => {
     return (
         <Button
             variant={buttonItem.variant}
@@ -133,6 +133,13 @@ const ReusableFormActionButtons = ({ actionMethod, buttonItem, forSubmit }) => {
             {buttonItem.name}
         </Button>
     )
+}
+
+const checkGuestUserPresence = (userFullname) => {
+    const restrictedUsers = ["Guest Een", "Guest Twee"];
+    return restrictedUsers.includes(userFullname)
+    // return restrictedUsers.includes(appCtx?.user?.fullName)
+    // return restrictedUsers.find(name => name === appCtx?.user?.fullName)
 }
 
 const formControls = [

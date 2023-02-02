@@ -4,9 +4,9 @@ import { WrapperDiv } from '../components/GeneralElements'
 import { removeJwtDataFromLocalStorage, sendDataToServer } from '../utils';
 import { AppContexts } from "../App"
 import ShowErrors from '../components/ShowErrors';
-import { Box, Button, Container, Dialog, DialogContent, DialogTitle, Fab, FormControl, Icon, IconButton, Input, InputAdornment, LinearProgress, Paper, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, Dialog, DialogContent, DialogTitle, Divider, Fab, FormControl, Icon, IconButton, Input, InputAdornment, LinearProgress, Paper, Stack, Typography } from '@mui/material';
 import { AccountCircleTwoTone, Check, Error, Facebook, GitHub, Google, LoginTwoTone, PasswordTwoTone, Twitter } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { VisualizeWordCountProgress } from '../components/CreatePost';
 import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside';
 
@@ -89,6 +89,9 @@ function LoginForm() {
                             >
                                 <Typography variant='h6'>Login</Typography>
                             </Button>
+
+                            <Divider sx={{my: 1.1}} />
+                            <Link style={{display: "flex"}} to="/recover-password">Forgot Password</Link>
                         </FormElement>
 
                         {errors?.length ? <ShowErrors errors={errors} /> : null}

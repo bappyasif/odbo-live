@@ -20,7 +20,8 @@ import VisitAnotherUserProfile from './routes/VisitAnotherUserProfile';
 import { ThemeProvider } from '@emotion/react';
 import { createTheme, Paper } from '@mui/material';
 import { getDesignTokens } from './utils/customTheme';
-import PasswordReset from './components/PasswordReset';
+import PasswordReset from './routes/PasswordReset';
+import RecoverPassword from "./routes/RecoverPassword"
 
 export const AppContexts = createContext()
 
@@ -311,6 +312,7 @@ function App() {
                   ?
                   <>
                     {/* <Route path='/' element={<UserSpecificNewsFeeds />} /> */}
+                    <Route path="/recover-password" element={<RecoverPassword />} />
                     <Route path='/login' element={<LoginForm handleData={handleData} />} />
                     <Route path='/login/success' element={<LoginSuccess />} />
                     <Route path='/register' element={<RegisterUser handleData={handleData} />} />
