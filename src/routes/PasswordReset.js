@@ -95,6 +95,8 @@ export const RenderingFormControl = ({ item, handleFormData }) => {
                 placeholder={item.placeholder}
                 onChange={handleFormData}
                 required
+                disabled={item?.disabled ? item.disabled : false}
+                defaultValue={item?.value ? item.value : null}
             />
         </FormControl>
     )

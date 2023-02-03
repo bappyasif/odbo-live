@@ -8,7 +8,12 @@ import { sendDataToServer } from '../utils'
 
 function RecoverPassword() {
   let [otpReady, setOtpReady] = useState(null);
-  console.log(otpReady, "!!")
+  // let [otpCodeAfterVerified, setOtpCodeAfterVerified] = useState(null);
+  let [afterVerified, setAfterVerified] = useState({})
+
+  const handleAfterVerified = (elem, value) => setAfterVerified(prev => ({...prev, [elem]: value}));
+
+  console.log(otpReady, "!!", afterVerified)
 
   useEffect(() => {
     setOtpReady("send");
@@ -19,18 +24,110 @@ function RecoverPassword() {
       <Typography variant='h2'>Recover Your Password With An OTP</Typography>
       {
         otpReady === "send"
-          ? <GetOtpFromServer setOtpReady={setOtpReady} />
+          ? <GetOtpFromServer setOtpReady={setOtpReady} handleAfterVerified={handleAfterVerified} />
           : otpReady === "verify"
-            ? <VerifyOtpFromServer setOtpReady={setOtpReady} />
+            ? <VerifyOtpFromServer setOtpReady={setOtpReady} handleAfterVerified={handleAfterVerified} />
             : otpReady === "reset"
-              ? alert("reset")
-              : alert("what happened?!")
+              ? <ResetPasswordAfterVerification afterVerified={afterVerified} />
+              : null
       }
     </Container>
   )
 }
 
-const VerifyOtpFromServer = ({ setOtpReady }) => {
+const ResetPasswordAfterVerification = ({afterVerified}) => {
+  let [formData, setFormData] = useState();
+
+  const navigate = useNavigate();
+
+  const appCtx = useContext(AppContexts);
+
+  const formControls = [
+    {
+      id: "otpCode",
+      labelText: "*OTP Code: ",
+      type: "text",
+      placeholder: "Your Verified OTP Code",
+      required: true,
+      disabled: true,
+      value: afterVerified?.otpCode
+    },
+    {
+      id: "email",
+      labelText: "*Email Address: ",
+      type: "email",
+      placeholder: "Enter Your Already Registered Email Address",
+      required: true,
+      disabled: true,
+      value: afterVerified?.email
+    },
+    {
+      id: "password",
+      labelText: "*New Password: ",
+      type: "password",
+      placeholder: "Please Choose Your Password",
+      required: true
+    },
+    {
+      id: "confirm",
+      labelText: "*Confirm Password: ",
+      type: "password",
+      placeholder: "Please Confirm Your Password",
+      required: true
+    },
+  ];
+
+  const handleFormData = evt => {
+    const elem = evt.target.id;
+    const value = evt.target.value;
+    setFormData(prev => ({ ...prev, [elem]: value }))
+  }
+
+  const handleCancel = () => {
+    console.log("cancel")
+    navigate("/")
+  }
+
+  const afterPasswordReset = (result) => {
+    console.log(result, "RESULT!!")
+    alert("Your password has been now reset, and will be taken to Login Page :)")
+    // setOtpReady("verify")
+    navigate("/login");
+  }
+
+  const handleResetPassword = () => {
+    console.log("handle reset passord!!", formData)
+    const url = `${appCtx.baseUrl}/users/reset-password-with-otp`
+
+    if (checkGuestUserPresence(formData?.email)) {
+      alert("nope, no cant do, protected account!!")
+      navigate("/")
+    } else if (!formData?.password || !formData?.confirm) {
+      alert("nope, no cant do, No Password or Confirm Password Has Been Provided!!")
+    } else {
+      // to do
+      console.log("password reset request sent")
+      sendDataToServer(url, formData, () => null, afterPasswordReset)
+      // performProtectedUpdateOperation(formData, refreshToken, url, null, null, navigate)
+    }
+  }
+
+  useEffect(() => {
+    setFormData({email: afterVerified.email, otpCode: afterVerified.otpCode})
+  }, [])
+
+  return (
+    <ReusableFormView
+        handleFormData={handleFormData}
+        primaryAction={handleResetPassword}
+        secondaryAction={handleCancel}
+        legendText={"Fillup all these informations to complete your Password Reset Process"}
+        formControls={formControls}
+      />
+  )
+}
+
+const VerifyOtpFromServer = ({ setOtpReady, setOtpCodeAfterVerified, handleAfterVerified }) => {
   let [data, setData] = useState();
 
   const appCtx = useContext(AppContexts);
@@ -45,7 +142,10 @@ const VerifyOtpFromServer = ({ setOtpReady }) => {
 
   const afterOtpBeenVerified = (result) => {
     alert("otp verified!!")
-    setOtpReady("reset")
+    setOtpReady("reset");
+    console.log(result, "VERFIED")
+    // setOtpCodeAfterVerified(result?.otpCode)
+    handleAfterVerified("otpCode", result?.otpCode)
   }
 
   const handleVerificationFailed = (result) => {
@@ -106,10 +206,12 @@ const VerifyOtpFromServer = ({ setOtpReady }) => {
   )
 }
 
-const GetOtpFromServer = ({ setOtpReady }) => {
+const GetOtpFromServer = ({ setOtpReady, handleAfterVerified }) => {
   const appCtx = useContext(AppContexts);
 
   const [formData, setFormData] = useState({})
+  
+  let [disableEmail, setDisableEmail] = useState(false);
 
   const navigate = useNavigate()
 
@@ -127,7 +229,8 @@ const GetOtpFromServer = ({ setOtpReady }) => {
   const afterOtpBeenSent = (result) => {
     console.log(result, "RESULT!!")
     alert("check your email for an OTP has been sent!! OTP IS VALID FOR 15 MINUTES ONLY!!")
-    setOtpReady("verify")
+    setOtpReady("verify");
+    handleAfterVerified("email", formData?.email)
   }
 
   const handleGetOtp = () => {
@@ -141,6 +244,7 @@ const GetOtpFromServer = ({ setOtpReady }) => {
       alert("nope, no cant do, No Email Address Has Been Provided!!")
     } else {
       // to do
+      setDisableEmail(true);
       console.log("otp sent to email")
       sendDataToServer(url, formData, () => null, afterOtpBeenSent)
       // performProtectedUpdateOperation(formData, refreshToken, url, null, null, navigate)
@@ -153,12 +257,18 @@ const GetOtpFromServer = ({ setOtpReady }) => {
       labelText: "*Email Address: ",
       type: "email",
       placeholder: "Enter Your Already Registered Email Address",
-      required: true
+      required: true,
+      // disabled: disableEmail,
+      // value: formData?.email
     },
   ];
 
+  useEffect(() => {
+    setDisableEmail(false)
+  }, [])
+
   return (
-    <Stack>
+    <Stack sx={{pointerEvents: disableEmail ? "none" : "auto"}}>
       <ReusableFormView
         handleFormData={handleFormData}
         primaryAction={handleGetOtp}
