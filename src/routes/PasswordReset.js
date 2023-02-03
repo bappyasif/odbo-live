@@ -40,6 +40,11 @@ function PasswordReset() {
         navigate("/")
     }
 
+    const buttons = [
+        { name: "Reset", icon: null, fullWidth: true, variant: "contained" },
+        { name: "Cancel", icon: null, fullWidth: true, variant: "contained" }
+    ];
+
     useEffect(() => {
         setShowDialog(true);
         appCtx.handleLastVisitedRouteBeforeSessionExpired("/reset-password")
@@ -53,6 +58,8 @@ function PasswordReset() {
         >
             <DialogContent>
                 <ReusableFormView 
+                    formButtons={buttons}
+                    checkCondition={"Reset"}
                     handleFormData={handleFormData} 
                     primaryAction={handleReset} 
                     secondaryAction={handleCancel} 
@@ -64,7 +71,7 @@ function PasswordReset() {
     )
 }
 
-export const ReusableFormView = ({ handleFormData, primaryAction, secondaryAction, legendText, formControls }) => {
+export const ReusableFormView = ({ handleFormData, primaryAction, secondaryAction, legendText, formControls, formButtons, checkCondition }) => {
     // const [formData, setFormData] = useState({})
 
     // const handleFormData = evt => console.log("form data!!")
@@ -79,7 +86,8 @@ export const ReusableFormView = ({ handleFormData, primaryAction, secondaryActio
             <Stack>
                 {renderFormControls()}
             </Stack>
-            <PasswordResetFormButtons primaryAction={primaryAction} secondaryAction={secondaryAction} checkCondition={"Reset"} />
+            {/* <PasswordResetFormButtons primaryAction={primaryAction} secondaryAction={secondaryAction} checkCondition={"Reset"} /> */}
+            <ReUsableFormButtons formButtons={formButtons} primaryAction={primaryAction} secondaryAction={secondaryAction} checkCondition={checkCondition} />
         </form>
     )
 }
@@ -99,6 +107,16 @@ export const RenderingFormControl = ({ item, handleFormData }) => {
                 defaultValue={item?.value ? item.value : null}
             />
         </FormControl>
+    )
+}
+
+const ReUsableFormButtons = ({ formButtons, primaryAction, secondaryAction, checkCondition }) => {
+    const renderButtons = () => formButtons.map(item => <ReusableFormActionButtons key={item.name} buttonItem={item} actionMethod={item.name === checkCondition ? primaryAction : secondaryAction} forSubmit={item.name === checkCondition} />)
+
+    return (
+        <Stack sx={{flexDirection: "row", justifyContent: "center", gap: 4, mt: 2}}>
+            {renderButtons()}
+        </Stack>
     )
 }
 
