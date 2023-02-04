@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, formLabelClasses, LinearProgress, Stack, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -14,7 +14,35 @@ function RecoverPassword() {
 
   let [errors, setErrors] = useState([]);
 
+  let [showLoading, setShowLoading] = useState(false);
+
   const handleAfterVerified = (elem, value) => setAfterVerified(prev => ({ ...prev, [elem]: value }));
+
+  const handleErrorsList = (result) => {
+    if (result?.errors?.length) {
+      setErrors(result.errors)
+    } else {
+      result?.msg && setErrors([{ msg: result.msg }])
+    }
+  }
+
+  const removeErrorsAfterTimeout = () => {
+    const timer = setTimeout(() => {
+      setErrors([]);
+    }, 4000)
+
+    return () => clearTimeout(timer)
+  }
+
+  useEffect(() => {
+    errors?.length && removeErrorsAfterTimeout()
+    // !errors?.length && setShowLoading(false)
+  }, [errors])
+
+  useEffect(() => {
+    setErrors([]);
+    setShowLoading(false);
+  }, [otpReady])
 
   useEffect(() => {
     setOtpReady("send");
@@ -24,28 +52,48 @@ function RecoverPassword() {
     <Container>
       <Typography variant='h2'>Recover Your Password With An OTP</Typography>
       {
-        errors?.length
-          ?
-          <Box sx={{ my: 2 }}>
-            <Typography variant='h4'>{errors[0]?.msg ? "Error Occured!!" : "Validaation Failed!!"}</Typography>
-            <ShowErrors styles={{ position: "relative" }} errors={errors} />
-          </Box>
-          : null
-      }
-      {
         otpReady === "send"
-          ? <BeginOtpResetPassword errors={errors} setErrors={setErrors} setOtpReady={setOtpReady} handleAfterVerified={handleAfterVerified} />
+          ? <BeginOtpResetPassword handleErrorsList={handleErrorsList} setShowLoading={setShowLoading} setErrors={setErrors} setOtpReady={setOtpReady} handleAfterVerified={handleAfterVerified} />
           : otpReady === "verify"
-            ? <VerifyOtpAfterReceiving errors={errors} setErrors={setErrors} setOtpReady={setOtpReady} handleAfterVerified={handleAfterVerified} />
+            ? <VerifyOtpAfterReceiving handleErrorsList={handleErrorsList} setShowLoading={setShowLoading} setErrors={setErrors} setOtpReady={setOtpReady} handleAfterVerified={handleAfterVerified} />
             : otpReady === "reset"
-              ? <ResetPasswordWithOtp errors={errors} setErrors={setErrors} setOtpReady={setOtpReady} afterVerified={afterVerified} />
+              ? <ResetPasswordWithOtp handleErrorsList={handleErrorsList} setShowLoading={setShowLoading} setErrors={setErrors} afterVerified={afterVerified} />
               : null
       }
+
+      <HandleLoading showLoading={showLoading} />
+
+      <HandleErrors errors={errors} />
+
     </Container>
   )
 }
 
-const BeginOtpResetPassword = ({ errors, setErrors, setOtpReady, handleAfterVerified }) => {
+const HandleLoading = ({showLoading}) => {
+  console.log(showLoading, "showLoading!!")
+  return (
+    showLoading
+    ?
+    <LinearProgress 
+      color="secondary"
+    />
+    : null
+  )
+}
+
+const HandleErrors = ({errors}) => {
+  return (
+    errors?.length
+      ?
+      <Box sx={{ my: 2 }}>
+        <Typography variant='h4'>{errors[0]?.msg ? "Error Occured!!" : "Validaation Failed!!"}</Typography>
+        <ShowErrors styles={{ position: "relative" }} errors={errors} />
+      </Box>
+      : null
+  )
+}
+
+const BeginOtpResetPassword = ({ handleErrorsList, setShowLoading, setErrors, setOtpReady, handleAfterVerified }) => {
   let [disableClick, setDisableClick] = useState(false);
 
   // let [errors, setErrors] = useState([]);
@@ -57,32 +105,33 @@ const BeginOtpResetPassword = ({ errors, setErrors, setOtpReady, handleAfterVeri
   const afterOtpBeenSent = (result) => {
     alert("check your email for an OTP has been sent!! OTP IS VALID FOR 15 MINUTES ONLY!!")
     setOtpReady("verify");
+    // setShowLoading(false)
   }
 
   const handleFailedSendingOtp = (result) => {
-    console.log(result, "SEND!!")
+    // console.log(result, "SEND!!")
     setDisableClick(false)
-    if (result?.errors?.length) {
-      setErrors(result.errors)
-    } else {
-      result?.msg && setErrors([{ msg: result.msg }])
-    }
+    handleErrorsList(result)
+    // setShowLoading(false)
   }
 
   const handleGetOtp = (formData) => {
     const url = `${appCtx.baseUrl}/users/send-otp-code`
+    // setShowLoading(true);
 
     if (checkGuestUserPresence(formData?.email)) {
       alert("nope, no cant do, protected account!!")
       navigate("/")
     } else if (!formData?.email) {
       alert("nope, no cant do, No Email Address Has Been Provided!!")
+      // setShowLoading(false)
     } else {
       setDisableClick(true);
       setErrors([])
       sendDataToServer(url, formData, handleFailedSendingOtp, afterOtpBeenSent)
       handleAfterVerified("email", formData?.email)
     }
+    // setShowLoading(false)
   }
 
   const formControls = [
@@ -96,8 +145,13 @@ const BeginOtpResetPassword = ({ errors, setErrors, setOtpReady, handleAfterVeri
   ];
 
   useEffect(() => {
+    setShowLoading(disableClick)
+    disableClick && console.log(disableClick, "disableclick")
+  }, [disableClick])
+
+  useEffect(() => {
     setDisableClick(false)
-    setErrors([]);
+    // setErrors([]);
   }, [])
 
   return (
@@ -108,13 +162,14 @@ const BeginOtpResetPassword = ({ errors, setErrors, setOtpReady, handleAfterVeri
         checkCondition={"Send OTP"}
         primaryAction={handleGetOtp}
         formControls={formControls}
-        legendText={errors?.length ? null : "Provide your already registered Account email with OdBo, to get an OTP sent to your email address"}
+        legendText={"Provide your already registered Account email with OdBo, to get an OTP sent to your email address"}
+        // legendText={errors?.length ? null : "Provide your already registered Account email with OdBo, to get an OTP sent to your email address"}
       />
     </Stack>
   )
 }
 
-const VerifyOtpAfterReceiving = ({ errors, setErrors, setOtpReady, handleAfterVerified }) => {
+const VerifyOtpAfterReceiving = ({ handleErrorsList, setShowLoading, setErrors, setOtpReady, handleAfterVerified }) => {
   let [disableClick, setDisableClick] = useState(false);
 
   const appCtx = useContext(AppContexts);
@@ -124,22 +179,19 @@ const VerifyOtpAfterReceiving = ({ errors, setErrors, setOtpReady, handleAfterVe
     setOtpReady("reset");
     // console.log(result, "VERFIED")
     handleAfterVerified("otpCode", result?.otpCode)
+    // setShowLoading(false)
   }
 
   const handleVerificationFailed = (result) => {
-    console.log(result?.msg, result, "at verification!!")
-    if (result?.errors?.length) {
-      alert("verification failed")
-      setErrors(result.errors)
-      // setOtpReady("send")
-    } else {
-      setErrors([{ msg: result?.msg }])
-    }
+    // console.log(result?.msg, result, "at verification!!")
+    handleErrorsList(result)
     setDisableClick(false)
+    // setShowLoading(false)
   }
 
   const handleVerify = (data) => {
     const url = `${appCtx.baseUrl}/users/verify-otp-code`
+    // setShowLoading(true)
 
     if (!data?.otpCode) {
       alert("nope, no cant do, No OTP Code Has Been Provided!!")
@@ -161,8 +213,12 @@ const VerifyOtpAfterReceiving = ({ errors, setErrors, setOtpReady, handleAfterVe
   ];
 
   useEffect(() => {
+    setShowLoading(disableClick)
+  }, [disableClick])
+
+  useEffect(() => {
     setDisableClick(false)
-    setErrors([]);
+    // setErrors([]);
   }, [])
 
   return (
@@ -173,13 +229,13 @@ const VerifyOtpAfterReceiving = ({ errors, setErrors, setOtpReady, handleAfterVe
         checkCondition={"Verify OTP"}
         primaryAction={handleVerify}
         formControls={formControls}
-        legendText={errors?.length ? null : "Enter Your OTP Below For Verification"}
+        legendText={"Enter Your OTP Below For Verification"}
       />
     </Stack>
   )
 }
 
-const ResetPasswordWithOtp = ({ errors, setErrors, afterVerified, setOtpReady }) => {
+const ResetPasswordWithOtp = ({ handleErrorsList, setShowLoading, setErrors, afterVerified }) => {
 
   let [disableClick, setDisableClick] = useState(false);
 
@@ -229,19 +285,14 @@ const ResetPasswordWithOtp = ({ errors, setErrors, afterVerified, setOtpReady })
 
   const handleVerificationFailed = (result) => {
     console.log(result?.msg, result)
-    if (result?.errors?.length) {
-      setErrors(result.errors);
-      // alert("verification failed")
-      // setOtpReady("verify")
-    } else {
-      result?.msg && setErrors([{ msg: result?.msg }])
-      // setOtpReady("send")
-    }
+    handleErrorsList(result)
     setDisableClick(false);
+    // setShowLoading(false)
   }
 
   const handleResetPassword = (formData) => {
     const url = `${appCtx.baseUrl}/users/reset-password-with-otp`
+    // setShowLoading(true)
 
     if (checkGuestUserPresence(formData?.email)) {
       alert("nope, no cant do, protected account!!")
@@ -258,8 +309,12 @@ const ResetPasswordWithOtp = ({ errors, setErrors, afterVerified, setOtpReady })
   }
 
   useEffect(() => {
+    setShowLoading(disableClick)
+  }, [disableClick])
+
+  useEffect(() => {
     setDisableClick(false)
-    setErrors([]);
+    // setErrors([]);
   }, [])
 
   return (
@@ -270,7 +325,7 @@ const ResetPasswordWithOtp = ({ errors, setErrors, afterVerified, setOtpReady })
         checkCondition={"Reset Password"}
         primaryAction={handleResetPassword}
         formControls={formControls}
-        legendText={errors?.length ? null : "Fillup all these informations to complete your Password Reset Process"}
+        legendText={"Fillup all these informations to complete your Password Reset Process"}
       />
     </Stack>
   )
