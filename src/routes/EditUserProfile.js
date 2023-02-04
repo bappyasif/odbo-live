@@ -10,6 +10,7 @@ import { ButtonToIndicateHelp, HowToUseEditUserProfilePage } from '../components
 import { fakeDataModel } from '../components/UserProfileInfoSection'
 import { performProtectedUpdateOperation, updateDataInDatabase } from '../utils'
 import ChooseTopics from './ChooseTopics'
+import DOMPurify from 'dompurify'
 
 function EditUserProfile() {
     let [userData, setUserData] = useState({})
@@ -104,6 +105,7 @@ let RenderActionButton = ({ item, userData, appCtx }) => {
         appCtx.updateUserProfileDataInApp("topics", topics)
         appCtx.updateUserProfileDataInApp("cpUrl", cpUrl)
         appCtx.updateUserProfileDataInApp("ppUrl", ppUrl)
+        appCtx.updateUserProfileDataInApp("bio", bio)
     }
 
     let updateDataInServer = () => {
@@ -143,7 +145,7 @@ let RenderFormWithData = ({ handleData, data, updateTopicsDataFromChooser }) => 
 
     for (let key in data) {
 
-        if (key !== "__v" && key !== "_id" && key !== "salt" && key !== "hash" && key !== "albums" && key !== "userJwt" && key !== "password" ) {
+        if (key !== "__v" && key !== "_id" && key !== "salt" && key !== "hash" && key !== "albums" && key !== "userJwt" && key !== "password") {
             let elem = key;
             let initialValue = data[key]
 
@@ -280,10 +282,9 @@ let RenderFormControlItem = ({ handleData, dataVal, elem, updateTopicsDataFromCh
         <FormControl sx={{ m: 2, position: "relative" }} disabled={check} value>
 
             {
-                elem === "bio"
-                    ||
-                    elem === "fullName"
-                    ? <VisualizeWordCountProgress textContent={editableText ? editableText : dataVal} maxLimit={elem === "bio" ? 220 : 72} smallerSize={true} topPlacingUnits={elem === "fullName" ? "-13.9px" : "4.11px"} />
+                (elem === "bio" || elem === "fullName")
+                    // ? <VisualizeWordCountProgress textContent={editableText ? editableText : dataVal} maxLimit={elem === "bio" ? 220 : 72} smallerSize={true} topPlacingUnits={elem === "fullName" ? "-13.9px" : "4.11px"} />
+                    ? <VisualizeWordCountProgress textContent={editableText ? editableText : DOMPurify.sanitize(dataVal)} maxLimit={elem === "bio" ? 220 : 72} smallerSize={true} topPlacingUnits={elem === "fullName" ? "-13.9px" : "4.11px"} />
                     : null
             }
 
@@ -293,11 +294,13 @@ let RenderFormControlItem = ({ handleData, dataVal, elem, updateTopicsDataFromCh
                     ?
                     <>
                         <Typography sx={{ textAlign: "justify", pl: "17px", fontSize: "26px" }}>{formatElemLabel()}</Typography>
-                        <TextareaAutosize placeholder='e.g. your bio text should go here, tell everybody how aweeesomeee you are :-)' style={{ backgroundColor: "transparent", border: "none", borderBottom: "solid .1px silver", marginLeft: "15px", fontSize: "20px", outline: "1.1px solid skyblue" }} minRows={8} maxRows={4} cols={40} defaultValue={dataVal} maxLength={220} onChange={handleEditableText} />
+                        {/* <TextareaAutosize placeholder='e.g. your bio text should go here, tell everybody how aweeesomeee you are :-)' style={{ backgroundColor: "transparent", border: "none", borderBottom: "solid .1px silver", marginLeft: "15px", fontSize: "20px", outline: "1.1px solid skyblue" }} minRows={8} maxRows={4} cols={40} defaultValue={dataVal} maxLength={220} onChange={handleEditableText} /> */}
+                        <TextareaAutosize placeholder='e.g. your bio text should go here, tell everybody how aweeesomeee you are :-)' style={{ backgroundColor: "transparent", border: "none", borderBottom: "solid .1px silver", marginLeft: "15px", fontSize: "20px", outline: "1.1px solid skyblue" }} minRows={8} maxRows={4} cols={40} defaultValue={DOMPurify.sanitize(dataVal)} maxLength={220} onChange={handleEditableText} />
                     </>
                     :
                     <>
-                        <Input required={true} sx={{ fontSize: 29, pl: 2 }} type={elem === "email" ? "email" : "text"} defaultValue={dataVal} onChange={handleEditableText} />
+                        {/* <Input required={true} sx={{ fontSize: 29, pl: 2 }} type={elem === "email" ? "email" : "text"} defaultValue={dataVal} onChange={handleEditableText} /> */}
+                        <Input required={true} sx={{ fontSize: 29, pl: 2 }} type={elem === "email" ? "email" : "text"} defaultValue={DOMPurify.sanitize(dataVal)} onChange={handleEditableText} />
                     </>
             }
             <Typography variant="subtitle1" sx={{ color: "text", textAlign: "left", pl: 2, position: "relative" }}>{showHelperText()} {showClickableIframeLink()}</Typography>

@@ -1,6 +1,7 @@
 import { CommentTwoTone } from '@mui/icons-material'
 import { Box, Button, Modal, Stack, Tooltip, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
+import DOMPurify from 'dompurify'
 import { AppContexts } from '../App'
 import { ButtonToIndicateHelp, HowToUsePostListItems } from './HowToUseApp'
 import { DislikeIconElement, LikeIconElement, LoveIconElement, ShareIconElement } from './MuiElements'
@@ -125,7 +126,9 @@ export let UserEngagementWithPost = ({ postData, appCtx, setShowCreatePost, hand
     let url = `${appCtx.baseUrl}/comments/create/new`
 
     let data = {
-      text: commentText,
+      text: commentText, // we are sanitizing it on serever side foir safety keeping and before rendering also using sanitize to be safe
+      // if we do this it will throw error for incomplete html elements notations as a safety mechanism
+      // text: DOMPurify.sanitize(commentText),
       userId: appCtx.user._id,
       postId: postData._id
     }
