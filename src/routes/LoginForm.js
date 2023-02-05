@@ -336,7 +336,8 @@ let RenderGuestUser = ({ item, handleSubmit, setFormData }) => {
     let [dataReady, setDataReady] = useState(false);
 
     let handleClick = (e) => {
-        setFormData({ email: `guest@${item.name === "Guest Een" ? "een" : "twee"}.com`, password: `g${item.name === "Guest Een" ? "een" : "twee"}` })
+        // setFormData({ email: `guest@${item.name === "Guest Een" ? "een" : "twee"}.com`, password: `g${item.name === "Guest Een" ? "een" : "twee"}` })
+        setFormData({ email: item.name === "Guest Een" ? process.env.REACT_APP_GUEST_EEN_EMAIL : process.env.REACT_APP_GUEST_TWEE_EMAIL, password: item.name === "Guest Een" ? process.env.REACT_APP_GUEST_EEN_PASSWORD : process.env.REACT_APP_GUEST_TWEE_PASSWORD })
         setDataReady(e);
     }
 

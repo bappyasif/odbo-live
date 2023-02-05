@@ -182,7 +182,7 @@ const logoutUserFromApp = (url, clearOutUserData) => {
         .then(res => res.json())
         .catch(err => console.log("response error!!", err))
         .then(data => {
-            console.log("logged out!!", data.success)
+            // console.log("logged out!!", data.success)
             removeJwtDataFromLocalStorage()
             clearOutUserData && clearOutUserData()
         })
@@ -245,12 +245,11 @@ const getProtectedDataAfterJwtVerification = (url, accessToken, dataUpdater, ref
             return resp.json()
         } else {
             removeJwtDataFromLocalStorage()
-            // navigate("/login")
         }
     })
         .catch(err => console.log(err, "response error!!"))
         .then(result => {
-            console.log(result, "RESULT!!")
+            // console.log(result, "RESULT!!")
             dataUpdater && dataUpdater(result)
         })
         .catch(err => console.error(err))

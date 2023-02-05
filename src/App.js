@@ -191,6 +191,7 @@ function App() {
     } else {
       clearCurrentUserData();
       setJwtExists(false);
+      // alert("unauthorization is required for this action, redirecting to login page")
       navigate("/login");
     }
 
@@ -275,6 +276,11 @@ function App() {
     if (user?._id && user?.topics) {
       setTopics([])
     }
+
+    // making protected route requests to login route to get authorized
+    // user?._id && !localStorage.getItem("token") && navigate("/login")
+    // (user?._id && !localStorage.getItem("token") && routeBeforeSessionExpired) && setJwtExists(false);
+    // (user?._id && !localStorage.getItem("token") && routeBeforeSessionExpired) && alert("running!!")
   }, [user?._id])
 
   useEffect(() => {
@@ -287,6 +293,9 @@ function App() {
     fetchUserDataWithValidAccessToken();
 
     getSystemPreferenceTheme();
+
+    // (user?._id && !localStorage.getItem("token") && routeBeforeSessionExpired) && setJwtExists(false);
+    // (user?._id && !localStorage.getItem("token") && routeBeforeSessionExpired) && alert("running!!")
   }, [])
 
   useEffect(() => {
@@ -294,6 +303,10 @@ function App() {
   }, [jwtExists])
 
   const theme = createTheme(getDesignTokens(darkMode ? "dark" : "light"))
+
+  // routeBeforeSessionExpired && alert("running02!!")
+  // !localStorage.getItem("token") && routeBeforeSessionExpired && alert("running02!!")
+  // user?._id && !localStorage.getItem("token") && routeBeforeSessionExpired && alert("running02!!")
 
   // user && console.log(user, "user!!", jwtUser, process.env, process.env.REACT_APP_NY_TIMES_API_KEY, process.env.REACT_APP_NY_TIMES_API_SECRET)
 
@@ -303,6 +316,8 @@ function App() {
         <MainNavigation />
 
         {routeBeforeSessionExpired && !jwtExists ? <ShowSessionExpiredDialog /> : null}
+
+        {(!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null}
 
         <ThemeProvider theme={theme}>
           <Paper>

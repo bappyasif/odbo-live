@@ -225,7 +225,12 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
     const getConsent = prompt("Continue to delete your account? This process is irreversible!! Press Y to Delete Your Account", "N")
 
     if (["Y", "y"].includes(getConsent)) {
-      deleteCurrentlyLoggedInUserAccount()
+      if(["guest@een.com", "guest@twee.com"].includes(appCtx.user.email)) {
+        alert("nope!! no cant do, its a protected accounted")
+      } else {
+        // console.log("delete!!")
+        deleteCurrentlyLoggedInUserAccount()
+      }
     } else {
       alert("Its nice to have you here, keep enjoying what you like :)")
     }
