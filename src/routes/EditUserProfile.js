@@ -121,16 +121,30 @@ let RenderActionButton = ({ item, userData, appCtx }) => {
         performProtectedUpdateOperation(data, refreshToken, url, updateDataInApp)
     }
 
+    // let handleClick = () => {
+    //     if (item.name === "Save") {
+    //         if (!userData.fullName) {
+    //             alert("can not be empty")
+    //         } else {
+    //             updateDataInServer();
+    //         }
+    //     }
+
+    //     navigate(`/users/${_id}/profile/`)
+    // }
+
     let handleClick = () => {
-        if (item.name === "Save") {
-            if (!userData.fullName) {
-                alert("can not be empty")
-            } else {
+        // console.log(!(userData.fullName && userData.cpUrl && userData.ppUrl && userData.topics.length), userData.fullName, userData.cpUrl, userData.ppUrl, userData.topics.length > 1)
+        if (!(userData.fullName && userData.cpUrl && userData.ppUrl && userData.topics.length > 1)) {
+            alert("User FullName Profile Or Cover Photo and Topics can not be left empty")
+            navigate(`/edit-user-profile`)
+        } else {
+            if (item.name === "Save") {
                 updateDataInServer();
             }
-        }
 
-        navigate(`/users/${_id}/profile/`)
+            navigate(`/users/${_id}/profile/`)
+        }
     }
 
     return (
@@ -283,8 +297,8 @@ let RenderFormControlItem = ({ handleData, dataVal, elem, updateTopicsDataFromCh
 
             {
                 (elem === "bio" || elem === "fullName")
-                    // ? <VisualizeWordCountProgress textContent={editableText ? editableText : dataVal} maxLimit={elem === "bio" ? 220 : 72} smallerSize={true} topPlacingUnits={elem === "fullName" ? "-13.9px" : "4.11px"} />
-                    ? <VisualizeWordCountProgress textContent={editableText ? editableText : DOMPurify.sanitize(dataVal)} maxLimit={elem === "bio" ? 220 : 72} smallerSize={true} topPlacingUnits={elem === "fullName" ? "-13.9px" : "4.11px"} />
+                    ? <VisualizeWordCountProgress textContent={editableText ? editableText : dataVal} maxLimit={elem === "bio" ? 220 : 72} smallerSize={true} topPlacingUnits={elem === "fullName" ? "-13.9px" : "4.11px"} />
+                    // ? <VisualizeWordCountProgress textContent={editableText ? editableText : DOMPurify.sanitize(dataVal)} maxLimit={elem === "bio" ? 220 : 72} smallerSize={true} topPlacingUnits={elem === "fullName" ? "-13.9px" : "4.11px"} />
                     : null
             }
 
@@ -294,13 +308,13 @@ let RenderFormControlItem = ({ handleData, dataVal, elem, updateTopicsDataFromCh
                     ?
                     <>
                         <Typography sx={{ textAlign: "justify", pl: "17px", fontSize: "26px" }}>{formatElemLabel()}</Typography>
-                        {/* <TextareaAutosize placeholder='e.g. your bio text should go here, tell everybody how aweeesomeee you are :-)' style={{ backgroundColor: "transparent", border: "none", borderBottom: "solid .1px silver", marginLeft: "15px", fontSize: "20px", outline: "1.1px solid skyblue" }} minRows={8} maxRows={4} cols={40} defaultValue={dataVal} maxLength={220} onChange={handleEditableText} /> */}
-                        <TextareaAutosize placeholder='e.g. your bio text should go here, tell everybody how aweeesomeee you are :-)' style={{ backgroundColor: "transparent", border: "none", borderBottom: "solid .1px silver", marginLeft: "15px", fontSize: "20px", outline: "1.1px solid skyblue" }} minRows={8} maxRows={4} cols={40} defaultValue={DOMPurify.sanitize(dataVal)} maxLength={220} onChange={handleEditableText} />
+                        <TextareaAutosize placeholder='e.g. your bio text should go here, tell everybody how aweeesomeee you are :-)' style={{ backgroundColor: "transparent", border: "none", borderBottom: "solid .1px silver", marginLeft: "15px", fontSize: "20px", outline: "1.1px solid skyblue" }} minRows={8} maxRows={4} cols={40} defaultValue={dataVal} maxLength={220} onChange={handleEditableText} />
+                        {/* <TextareaAutosize placeholder='e.g. your bio text should go here, tell everybody how aweeesomeee you are :-)' style={{ backgroundColor: "transparent", border: "none", borderBottom: "solid .1px silver", marginLeft: "15px", fontSize: "20px", outline: "1.1px solid skyblue" }} minRows={8} maxRows={4} cols={40} defaultValue={DOMPurify.sanitize(dataVal)} maxLength={220} onChange={handleEditableText} /> */}
                     </>
                     :
                     <>
-                        {/* <Input required={true} sx={{ fontSize: 29, pl: 2 }} type={elem === "email" ? "email" : "text"} defaultValue={dataVal} onChange={handleEditableText} /> */}
-                        <Input required={true} sx={{ fontSize: 29, pl: 2 }} type={elem === "email" ? "email" : "text"} defaultValue={DOMPurify.sanitize(dataVal)} onChange={handleEditableText} />
+                        <Input required={true} sx={{ fontSize: 29, pl: 2 }} type={elem === "email" ? "email" : "text"} defaultValue={dataVal} onChange={handleEditableText} />
+                        {/* <Input required={true} sx={{ fontSize: 29, pl: 2 }} type={elem === "email" ? "email" : "text"} defaultValue={DOMPurify.sanitize(dataVal)} onChange={handleEditableText} /> */}
                     </>
             }
             <Typography variant="subtitle1" sx={{ color: "text", textAlign: "left", pl: 2, position: "relative" }}>{showHelperText()} {showClickableIframeLink()}</Typography>
