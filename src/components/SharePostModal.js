@@ -5,7 +5,7 @@ import { AppContexts } from '../App';
 import CreatePost from './CreatePost';
 import RenderPostDataEssentials from './RenderPostData';
 import { actions } from './UserCreatedPost';
-import { performProtectedUpdateOperation, updateDataInDatabase } from '../utils';
+import { afterDataUpdateOperationHandleError, performProtectedUpdateOperation, updateDataInDatabase } from '../utils';
 
 function SharePostModal({ counts, postData, showModal, setShowModal, setShowCreatePost, handleCounts, setShareFlag, shareFlag }) {
     let appCtx = useContext(AppContexts);
@@ -32,11 +32,17 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
         Share: counts.Share || shareCount
     }
 
+    const afterDataUpdateOperation = (result) => {
+        afterDataUpdateOperationHandleError(result, appCtx)
+        // update this informationm in app state as well
+    }
+
     let updateNewlyCreatedPostWithSharedPostId = (newPostId) => {
         let url = `${appCtx.baseUrl}/posts/update/shared/${newPostId}/`
         const data = { propKey: "includedSharedPostId", propValue: _id }
         // it needs an updater to reflect shared post included at initial post rendering
-        performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url)
+        performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, afterDataUpdateOperation)
+        // performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url)
         // performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, () => null, null, null)
     }
 

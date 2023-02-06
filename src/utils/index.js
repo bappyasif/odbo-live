@@ -111,7 +111,7 @@ const updateProtectedUserData = (endpoint, dataObj, dataUpdater, navigate, navig
             let data = null
             if (resp.status >= 200 && resp.status <= 299) {
                 data = resp.json();
-                data.then(() => {
+                data.then((result) => {
                     let key = Object.keys(dataObj)[0]
                     let value = Object.values(dataObj)[0]
                     if(key && value) {
@@ -122,6 +122,12 @@ const updateProtectedUserData = (endpoint, dataObj, dataUpdater, navigate, navig
                     // key && value && dataUpdater && dataUpdater(key, value)
                         (navigate !== null && navigateTo) ? navigate(`/${navigateTo}`) : navigate && navigate("/")
                 }).catch(err => console.log(err))
+            } else if(resp.status >= 400 && resp.status < 500) {
+                alert("your session has expired, and no longer authenticated, log back in to get full access, thank you for your patience, its for your safety and data integrity")
+                // navigate("/")
+                // console.log(resp.status, "resp.status")
+                // dataUpdater && dataUpdater()
+                // dataUpdater && dataUpdater(result)
             }
         }).catch(err => console.log(err));
 }
@@ -293,6 +299,17 @@ const removeJwtDataFromLocalStorage = () => {
     localStorage.removeItem("token")
 }
 
+// this could be used to make way for re-authorization for users, when their session or access token is expired
+const afterDataUpdateOperationHandleError = (result, appCtx) => {
+    if(result === undefined) {
+      // navigate("/login", {replace: true})
+      appCtx.handleLastVisitedRouteBeforeSessionExpired("/");
+      removeJwtDataFromLocalStorage()
+      appCtx.getUserDataFromJwtTokenStoredInLocalStorage();
+    }
+    console.log(result, "DATA UPDATER!!")
+  }
+
 export {
     sendDataToServer,
     readDataFromServer,
@@ -308,5 +325,6 @@ export {
     getProtectedDataFromServer,
     performProtectedUpdateOperation,
     sendDataWithProtectionToServer,
-    deleteProtectedDataFromServer
+    deleteProtectedDataFromServer,
+    afterDataUpdateOperationHandleError
 }

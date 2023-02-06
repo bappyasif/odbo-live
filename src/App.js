@@ -22,6 +22,7 @@ import { createTheme, Paper } from '@mui/material';
 import { getDesignTokens } from './utils/customTheme';
 import PasswordReset from './routes/PasswordReset';
 import RecoverPassword from "./routes/RecoverPassword"
+import UserSessionValidityChecks from './components/UserSessionValidityChecks';
 
 export const AppContexts = createContext()
 
@@ -326,6 +327,8 @@ function App() {
         {/* { !jwtExists && (!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
         {/* { (!user?._id && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
         {/* { (location.pathname !== "/" && !localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
+
+        {user?._id ? <UserSessionValidityChecks /> : null}
 
         <ThemeProvider theme={theme}>
           <Paper>

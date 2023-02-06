@@ -1,7 +1,6 @@
 import { CommentTwoTone } from '@mui/icons-material'
 import { Box, Button, Modal, Stack, Tooltip, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
-import DOMPurify from 'dompurify'
 import { AppContexts } from '../App'
 import { ButtonToIndicateHelp, HowToUsePostListItems } from './HowToUseApp'
 import { DislikeIconElement, LikeIconElement, LoveIconElement, ShareIconElement } from './MuiElements'
@@ -11,7 +10,7 @@ import RenderPostComments from './RenderPostComments'
 import RenderPostDataEssentials from './RenderPostData'
 import LoginForm from '../routes/LoginForm'
 import SharePostModal, { ShowPostUserEngagementsDetails } from './SharePostModal'
-import { performProtectedUpdateOperation, readDataFromServer, sendDataToServer, sendDataWithProtectionToServer, updateDataInDatabase } from '../utils'
+import { afterDataUpdateOperationHandleError, performProtectedUpdateOperation, readDataFromServer, removeJwtDataFromLocalStorage, sendDataToServer, sendDataWithProtectionToServer, updateDataInDatabase } from '../utils'
 
 function ShowUserCreatedPost({ postData, setShowCreatePost }) {
   let [commentsData, setCommentsData] = useState([])
@@ -111,6 +110,18 @@ export let UserEngagementWithPost = ({ postData, appCtx, setShowCreatePost, hand
     time && timer();
   }, [time])
 
+  // this will usually run when update operations failed for authorization
+  const afterDataUpdateOperation = (result) => {
+    afterDataUpdateOperationHandleError(result, appCtx)
+    // if(result === undefined) {
+    //   // navigate("/login", {replace: true})
+    //   appCtx.handleLastVisitedRouteBeforeSessionExpired("/");
+    //   removeJwtDataFromLocalStorage()
+    //   appCtx.getUserDataFromJwtTokenStoredInLocalStorage();
+    // }
+    // console.log(result, "DATA UPDATER!!")
+  }
+
   let updateThisPostCountsInDatabase = () => {
     let url = `${appCtx.baseUrl}/posts/${postData._id}/${appCtx.user._id}`
 
@@ -119,7 +130,9 @@ export let UserEngagementWithPost = ({ postData, appCtx, setShowCreatePost, hand
 
     // updateDataInDatabase(url, counts)
     // performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url, () => null, null, null)
+    // performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url, afterDataUpdateOperation)
     performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url)
+    // performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url, afterDataUpdateOperationHandleError)
   }
 
   let handleCreateNewComment = () => {
