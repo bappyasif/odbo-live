@@ -41,6 +41,8 @@ function App() {
 
   const navigate = useNavigate();
 
+  const removeStoredRouteAfterLogout = () => setRouteBeforeSessionExpired(null);
+
   const handleLastVisitedRouteBeforeSessionExpired = endpoint => setRouteBeforeSessionExpired(endpoint)
 
   const handleToggleDarkMode = () => {
@@ -146,6 +148,7 @@ function App() {
     setUser({})
     setJwtUser({})
     setUserAccessiblePostsDataset({})
+    // setRouteBeforeSessionExpired(null);
   }
 
   function getUser() {
@@ -254,6 +257,7 @@ function App() {
     getUserDataFromJwtTokenStoredInLocalStorage: getUserDataFromJwtTokenStoredInLocalStorage,
     routeBeforeSessionExpired: routeBeforeSessionExpired,
     handleLastVisitedRouteBeforeSessionExpired: handleLastVisitedRouteBeforeSessionExpired,
+    removeStoredRouteAfterLogout: removeStoredRouteAfterLogout
   }
 
   useEffect(() => {
@@ -315,9 +319,13 @@ function App() {
       <div className="App" style={{ backgroundColor: "grey[400]", height: "100vh" }}>
         <MainNavigation />
 
-        {routeBeforeSessionExpired && !jwtExists ? <ShowSessionExpiredDialog /> : null}
+        {/* {routeBeforeSessionExpired && !jwtExists ? <ShowSessionExpiredDialog /> : null} */}
 
-        {(!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null}
+        {/* { user?._id && (!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
+        { (!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null}
+        {/* { !jwtExists && (!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
+        {/* { (!user?._id && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
+        {/* { (location.pathname !== "/" && !localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
 
         <ThemeProvider theme={theme}>
           <Paper>

@@ -2,7 +2,7 @@ import { Button, Stack, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from "react-router-dom"
 import { AppContexts } from '../App'
-import { updateUserInDatabase } from '../utils'
+import { performProtectedUpdateOperation, updateUserInDatabase } from '../utils'
 
 import { ButtonIconElement, RenderTopic, topicCategories } from './ChooseTopics'
 
@@ -29,7 +29,8 @@ function TopicCategory() {
         let url = `${appCtx.baseUrl}/users/${appCtx.user._id}`
         // updateUserInDatabase(url, {topics: selectedTopics}, appCtx.updateData, navigate)
         // console.log(selectedTopics, "seletedTopics!!")
-        updateUserInDatabase(url, {topics: selectedTopics}, updateDataInApp, navigate, "edit-user-profile")
+        performProtectedUpdateOperation({topics: selectedTopics}, appCtx.user?.userJwt?.refreshToken, url, updateDataInApp, "edit-user-profile", navigate)
+        // updateUserInDatabase(url, {topics: selectedTopics}, updateDataInApp, navigate, "edit-user-profile")
     }
 
     let renderTopics = () => topics[0]?.map(name => <RenderTopic key={name} topic={name} setSelectedTopics={setSelectedTopics} list={selectedTopics} />)

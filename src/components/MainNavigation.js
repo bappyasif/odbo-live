@@ -200,6 +200,7 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
 
   const clearOutUserData = () => {
     appCtx.clearCurrentUserData()
+    appCtx.removeStoredRouteAfterLogout()
     navigate("/");
   }
 

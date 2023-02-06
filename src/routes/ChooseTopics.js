@@ -27,7 +27,7 @@ function ChooseTopics({closeTopicChooserModal}) {
         // updateUserInDatabase(url, {topics: selectedTopics}, appCtx.updateData, closeTopicChooserModal ? closeTopicChooserModal() : navigate)
         const refreshToken = appCtx.user?.userJwt?.refreshToken;
 
-        console.log(refreshToken, "refreshToken!!")
+        // console.log(refreshToken, "refreshToken!!")
 
         performProtectedUpdateOperation({topics: selectedTopics}, refreshToken, url, dataUpdateForUserEditModule, "edit-user-profile", navigate)
 
