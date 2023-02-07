@@ -32,9 +32,15 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
         Share: counts.Share || shareCount
     }
 
-    const afterDataUpdateOperation = (result) => {
-        afterDataUpdateOperationHandleError(result, appCtx)
+    const afterDataUpdateOperation = (key, value, result) => {
+        // afterDataUpdateOperationHandleError(key, appCtx)
         // update this informationm in app state as well
+        // console.log(key, value, result, postData, "AFTER UPDATE POST DATA?!", postData?.body)
+        if(result.success) {
+            appCtx.updateSpecificPostData(result.updatedPost, "includedSharedPostId", postData._id)
+        } else {
+            afterDataUpdateOperationHandleError(key, appCtx)
+        }
     }
 
     let updateNewlyCreatedPostWithSharedPostId = (newPostId) => {

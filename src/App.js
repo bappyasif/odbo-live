@@ -143,6 +143,19 @@ function App() {
     setUserAccessiblePostsDataset(filteredPosts)
   }
 
+  const updateSpecificPostData = (createdPost, dataKey, dataValue) => {
+    // console.log(createdPost._id, dataValue, createdPost)
+
+      createdPost[dataKey] = dataValue;
+
+      const newDataset = [createdPost, ...userAccessiblePostsDataset]
+
+      handleAvailablePostsFeeds(newDataset);
+
+      // setUserAccessiblePostsDataset(newDataset);
+      // console.log(userAccessiblePostsDataset, "DATASET!!!!", newDataset)
+  }
+
   // console.log(userAccessiblePostsDataset, "userPostsDataset!!")
 
   const clearCurrentUserData = () => {
@@ -167,7 +180,7 @@ function App() {
 
   const updateUserStateForProtectiveRoutes = result => {
     if (result?.userJwt) {
-      console.log("!!JWT Block!!")
+      console.log("!!JWT Block!!", result)
       // setJwtUser(prev => ({ ...prev, userJwt: result.userJwt }))
       setUser(prev => ({ ...prev, userJwt: result.userJwt }))
       const data = result.userJwt;
@@ -258,7 +271,8 @@ function App() {
     getUserDataFromJwtTokenStoredInLocalStorage: getUserDataFromJwtTokenStoredInLocalStorage,
     routeBeforeSessionExpired: routeBeforeSessionExpired,
     handleLastVisitedRouteBeforeSessionExpired: handleLastVisitedRouteBeforeSessionExpired,
-    removeStoredRouteAfterLogout: removeStoredRouteAfterLogout
+    removeStoredRouteAfterLogout: removeStoredRouteAfterLogout,
+    updateSpecificPostData: updateSpecificPostData
   }
 
   useEffect(() => {
@@ -328,7 +342,8 @@ function App() {
         {/* { (!user?._id && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
         {/* { (location.pathname !== "/" && !localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
 
-        {user?._id ? <UserSessionValidityChecks /> : null}
+        {/* for overall token validity checks prompt to user, to avoid getting un authorized response on protected resources */}
+        {/* {user?._id ? <UserSessionValidityChecks /> : null} */}
 
         <ThemeProvider theme={theme}>
           <Paper>

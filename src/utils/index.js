@@ -115,7 +115,7 @@ const updateProtectedUserData = (endpoint, dataObj, dataUpdater, navigate, navig
                     let key = Object.keys(dataObj)[0]
                     let value = Object.values(dataObj)[0]
                     if(key && value) {
-                        dataUpdater && dataUpdater(key, value)
+                        dataUpdater && dataUpdater(key, value, result)
                     } else {
                         dataUpdater && dataUpdater()
                     }
