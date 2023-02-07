@@ -182,7 +182,8 @@ export const RenderComment = ({ fromThread, postOwner, commentData, deleteCommen
                     editCommentFlag
                         ? <EditComment body={body} commentId={commentData._id} doneEditing={() => setEditCommentFlag(false)} updateCommentText={updateCommentText} updateCommentTextFromThread={updateCommentTextFromThread} />
                         // : <Typography variant='body1' sx={{ fontWeight: "bolder", color: "primary.light", p: .1, textAlign: "justify", margin: "0 36px 0 91.1px", fontSize: "20px" }} dangerouslySetInnerHTML={{ __html: body }}></Typography>
-                        : <Typography variant='body1' sx={{ fontWeight: "bolder", color: "primary.light", p: .1, textAlign: "justify", margin: "0 36px 0 91.1px", fontSize: "20px" }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(body) }}></Typography>
+                        // : <Typography variant='body1' sx={{ fontWeight: "bolder", color: "primary.light", p: .1, textAlign: "justify", margin: "0 36px 0 91.1px", fontSize: "20px" }} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(body) }}></Typography>
+                        : <Typography variant='body1' sx={{ fontWeight: "bolder", color: "primary.light", p: .1, textAlign: "justify", margin: "0 36px 0 91.1px", fontSize: "20px" }}>{body}</Typography>
                 }
             </Stack>
 

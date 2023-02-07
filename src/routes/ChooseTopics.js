@@ -12,12 +12,14 @@ function ChooseTopics({closeTopicChooserModal}) {
 
     let navigate = useNavigate()
 
-    let dataUpdateForUserEditModule = () => {
+    let dataUpdateForUserEditModule = (result) => {
         appCtx.updateUserProfileDataInApp("topics", selectedTopics)
         // console.log("topicscheckit", selectedTopics)
         // closeTopicChooserModal(selectedTopics)
         closeTopicChooserModal && closeTopicChooserModal()
         // !closeTopicChooserModal && navigate("/edit-user-profile")
+
+        console.log("HERE HERE!! -- 02", result, selectedTopics)
     }
 
     let handleClickAndSave = () => {
@@ -28,6 +30,8 @@ function ChooseTopics({closeTopicChooserModal}) {
         const refreshToken = appCtx.user?.userJwt?.refreshToken;
 
         // console.log(refreshToken, "refreshToken!!")
+
+        console.log("HERE HERE!! -- 01")
 
         performProtectedUpdateOperation({topics: selectedTopics}, refreshToken, url, dataUpdateForUserEditModule, "edit-user-profile", navigate)
 

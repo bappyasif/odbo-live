@@ -209,10 +209,16 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
     logoutUserFromApp(url, clearOutUserData)
   }
 
-  const afterDelete = () => {
+  const afterDelete = (result) => {
+    console.log(result, "DELETE!!", result?.success)
+    if (result?.success) {
+      alert("so sorry to see you go :( you can always choose to comeback again, see ya soon, tot ziens, tot zo :)")
+    } else {
+      alert("your token has expired, re-authorize first by loging in again to complete this action")
+    }
     removeJwtDataFromLocalStorage();
     appCtx.clearCurrentUserData();
-    alert("so sorry to see you go :( you can always choose to comeback again, see ya soon, tot ziens, tot zo :)")
+    navigate("/login");
   }
 
   const deleteCurrentlyLoggedInUserAccount = () => {
@@ -226,7 +232,7 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
     const getConsent = prompt("Continue to delete your account? This process is irreversible!! Press Y to Delete Your Account", "N")
 
     if (["Y", "y"].includes(getConsent)) {
-      if(["guest@een.com", "guest@twee.com"].includes(appCtx.user.email)) {
+      if (["guest@een.com", "guest@twee.com"].includes(appCtx.user.email)) {
         alert("nope!! no cant do, its a protected accounted")
       } else {
         // console.log("delete!!")
