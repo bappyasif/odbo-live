@@ -153,7 +153,7 @@ let RenderUser = ({ userData }) => {
   )
 }
 
-export const MutualFriends = ({ friends, variantType, forProfile }) => {
+export const MutualFriends = ({ friends, variantType, forProfile, actions }) => {
   let [mutualFriends, setMutualFriends] = useState([])
 
   let appCtx = useContext(AppContexts);
@@ -185,9 +185,10 @@ export const MutualFriends = ({ friends, variantType, forProfile }) => {
   return (
     <Stack
       sx={{
-        flexDirection: forProfile ? "row" : "row",
-        alignItems: forProfile ? "baseline" : "baseline",
+        flexDirection: forProfile ? "row" : actions?.length === 2 ? "column" : "row",
+        alignItems: forProfile ? "baseline" : actions?.length === 2 ? "center" : "baseline",
         gap: forProfile ? 3 : 1.3,
+        minWidth: forProfile ? "auto" : actions?.length === 1 ? "45%" : "29%"
       }}
     >
       <Typography variant={variantType ? variantType : 'h5'}>Mutual Friends</Typography>

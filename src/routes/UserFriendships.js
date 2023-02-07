@@ -1,4 +1,4 @@
-import { AccountCircleTwoTone, HowToRegRounded, MoreVertTwoTone, PersonOffRounded, PersonOffTwoTone } from '@mui/icons-material';
+import { AccountCircleTwoTone, HowToRegRounded, MoreVertTwoTone, PersonOffRounded, PersonOffTwoTone, UndoTwoTone } from '@mui/icons-material';
 import { Avatar, Box, Card, CardActions, CardContent, CardHeader, ClickAwayListener, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Popper, Stack, Tooltip, Typography } from '@mui/material'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +15,7 @@ let UserFriendships = () => {
         appCtx.handleLastVisitedRouteBeforeSessionExpired("/user-friendships")
         appCtx.getUserDataFromJwtTokenStoredInLocalStorage();
     }, [])
-    
+
     return (
 
         <Paper
@@ -34,7 +34,8 @@ let UserFriendships = () => {
             }}
         >
             <ExistingFriendList />
-            <FriendsRequests />
+            {/* <FriendsRequests /> */}
+            <RenderAllFriendReuests />
         </Paper>
     )
 }
@@ -262,27 +263,77 @@ let RenderActionListOption = ({ item, toggleShowActionOptions, friendId }) => {
     )
 }
 
-function FriendsRequests() {
-    let appCtx = useContext(AppContexts);
+// function FriendsRequests() {
+//     let appCtx = useContext(AppContexts);
 
-    let renderFriendRequests = () => appCtx?.user?.frRecieved?.map(friendId => <ShowFriendRequest key={friendId} friendId={friendId} baseUrl={appCtx.baseUrl} />)
+//     let renderFriendRequests = () => appCtx?.user?.frRecieved?.map(friendId => <ShowFriendRequest key={friendId} friendId={friendId} baseUrl={appCtx.baseUrl} />)
+
+//     return (
+//         <Paper
+//             sx={{
+//                 minWidth: "29vw",
+//                 width: { xs: "100%", lg: "50%" },
+//                 backgroundColor: "lightsteelblue",
+//                 color: "primary.light"
+//             }}
+//         >
+//             <Typography variant={'h4'}>Friend Requests Recieved</Typography>
+//             <Divider />
+//             <Box
+//                 sx={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}
+//             >
+//                 {
+//                     appCtx?.user?.frRecieved?.length
+//                         ?
+//                         renderFriendRequests()
+//                         :
+//                         <Typography variant='h6'>All Requests been caught up!!</Typography>
+//                 }
+//                 {/* {renderFriendRequests()} */}
+//             </Box>
+//         </Paper>
+//     )
+// }
+
+const RenderAllFriendReuests = () => {
+    let appCtx = useContext(AppContexts);
+    const requestTypes = [
+        { list: appCtx?.user?.frRecieved, type: "Recieved", actions: listAssets },
+        { list: appCtx?.user?.frSent, type: "Sent", actions: sentRequestListAssets }
+    ];
+
+    const renderRequestTypes = () => requestTypes.map(item => <ReuseableFriendRequestsList key={item.type} friendsList={item.list} requestType={item.type} listAssets={item.actions} />)
+
+    return (
+        <Stack sx={{ gap: 6 }}>
+            {renderRequestTypes()}
+        </Stack>
+    )
+}
+
+
+const ReuseableFriendRequestsList = ({ friendsList, requestType, listAssets }) => {
+
+    let renderFriendRequests = () => friendsList?.map(friendId => <ShowFriendRequest key={friendId} friendId={friendId} actions={listAssets} />)
 
     return (
         <Paper
             sx={{
                 minWidth: "29vw",
+                minHeight: "20vh",
                 width: { xs: "100%", lg: "50%" },
                 backgroundColor: "lightsteelblue",
-                color: "primary.light"
+                color: "primary.light",
+                p: .9
             }}
         >
-            <Typography variant={'h4'}>Friend Requests Recieved</Typography>
-            <Divider />
+            <Typography variant={'h4'}>Friend Requests {requestType}</Typography>
+            <Divider sx={{ height: 2, my: .8, backgroundColor: "darkslategray" }} />
             <Box
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}
             >
                 {
-                    appCtx?.user?.frRecieved?.length
+                    friendsList?.length
                         ?
                         renderFriendRequests()
                         :
@@ -294,14 +345,13 @@ function FriendsRequests() {
     )
 }
 
-let ShowFriendRequest = ({ friendId, baseUrl }) => {
+let ShowFriendRequest = ({ friendId, actions }) => {
     let [data, setData] = useState({})
 
     // let url = `${baseUrl}/users/${friendId}`
-
-    let url = `${baseUrl}/users/${friendId}/publicPayload`
-
     const appCtx = useContext(AppContexts);
+
+    let url = `${appCtx.baseUrl}/users/${friendId}/publicPayload`
 
     let dataHandler = dataset => setData(dataset.data.data)
 
@@ -309,7 +359,8 @@ let ShowFriendRequest = ({ friendId, baseUrl }) => {
         readDataFromServer(url, dataHandler)
     }, [url])
 
-    let renderListAssets = () => listAssets.map(elem => <RenderListIconElement key={elem.tooltip} elem={elem} friendId={friendId} />)
+    // let renderListAssets = () => listAssets.map(elem => <RenderListIconElement key={elem.tooltip} elem={elem} friendId={friendId} />)
+    let renderListAssets = () => actions.map(elem => <RenderListIconElement key={elem.tooltip} elem={elem} friendId={friendId} />)
 
     return (
         <Stack sx={{ width: "100%", }}>
@@ -321,17 +372,19 @@ let ShowFriendRequest = ({ friendId, baseUrl }) => {
                 <ListItem
                     sx={{
                         outline: "solid .6px red", borderRadius: 2, justifyContent: "space-around",
-                        flexDirection: { xs: "column", md: "row" }
+                        flexDirection: { xs: "column", md: "row" }, pl: 0
                     }}
                 >
-                    <Avatar
-                        alt='user profile picture'
-                        src={data?.ppUrl || 'https://random.imagecdn.app/76/56'}
-                        sx={{ width: 76, height: 56 }}
-                    />
+                    <Stack sx={{gap: .4, alignItems: "center", minWidth: "42%", justifyContent: "center"}}>
+                        <Avatar
+                            alt='user profile picture'
+                            src={data?.ppUrl || 'https://random.imagecdn.app/76/56'}
+                            sx={{ width: 110, height: 47 }}
+                        />
 
-                    <Typography sx={{ ml: 2, mr: 2 }} variant="h4">{data?.fullName}</Typography>
-                    <MutualFriends friends={data?.friends} variantType="p" />
+                        <Typography sx={{ mx: .6 }} variant="h6">{data?.fullName}</Typography>
+                    </Stack>
+                    <MutualFriends friends={data?.friends} variantType="p" actions={actions} />
                     <Stack
                         sx={{
                             flexDirection: "row",
@@ -365,6 +418,10 @@ let RenderListIconElement = ({ elem, friendId }) => {
             // todo
             // updateUserInDatabase(`${url}/reject`, data, appCtx.acceptOrRejectFriendRequestUpdater, navigate, "user-friendships")
             performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, `${url}/reject`, appCtx.acceptOrRejectFriendRequestUpdater, "user-friendships", navigate)
+        } else if (elem.tooltip === "Undo Request") {
+            // when undoing existing data will be removed, in this case this friednID will be removed from frSent array
+            let data = { frSent: friendId }
+            performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, appCtx.updateData, "user-friendships", navigate)
         }
     }
 
@@ -390,6 +447,13 @@ let listAssets = [
     {
         tooltip: "Reject",
         icon: <PersonOffRounded />
+    }
+]
+
+const sentRequestListAssets = [
+    {
+        tooltip: "Undo Request",
+        icon: <UndoTwoTone />
     }
 ]
 
