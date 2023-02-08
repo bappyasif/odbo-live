@@ -301,9 +301,9 @@ let RenderLoginOutlet = ({ item }) => {
         }
 
 
-        alert("would have been available if this was hosted in a custom domain!! try using any of these guest accounts or (email / password) based login option, thanks for your interest :)")
+        // alert("would have been available if this was hosted in a custom domain!! try using any of these guest accounts or (email / password) based login option, thanks for your interest :)")
 
-        // loginPrompt(url, getAuthenticatedUserData)
+        loginPrompt(url, getAuthenticatedUserData)
     }
 
     return (
@@ -353,20 +353,20 @@ let RenderGuestUser = ({ item, handleSubmit, setFormData }) => {
     )
 }
 
-// let loginPrompt = (url, getData) => {
-//     const newWindow = window.open(url, "_blank", "width=500, height=500")
+let loginPrompt = (url, getData) => {
+    const newWindow = window.open(url, "_blank", "width=500, height=500")
 
-//     let timer = 0;
+    let timer = 0;
 
-//     if (newWindow) {
-//         timer = setInterval(() => {
-//             if (newWindow.closed) {
-//                 if (timer) clearInterval(timer)
-//                 getData()
-//             }
-//         }, 1001)
-//     }
-// }
+    if (newWindow) {
+        timer = setInterval(() => {
+            if (newWindow.closed) {
+                if (timer) clearInterval(timer)
+                getData()
+            }
+        }, 1001)
+    }
+}
 
 let loginOutlets = [
     {

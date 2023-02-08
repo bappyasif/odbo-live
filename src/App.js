@@ -169,6 +169,10 @@ function App() {
     // let url = `http://localhost:3000/login/success`
     const url = `${contexts.baseUrl}/login/success`
     getAuthenticatedUserDataFromServer(url, handleData)
+    // const accessToken = user.userJwt?.token;
+    // const refreshToken = user.userJwt?.refreshToken;
+    // getProtectedDataAfterJwtVerification(url, accessToken, handleData, refreshToken);
+    // console.log("running from app scope!!", accessToken, refreshToken)
     console.log("running from app scope!!")
   }
 
@@ -242,8 +246,8 @@ function App() {
   }
 
   const contexts = {
-    baseUrl: "http://localhost:3000",
-    // baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
+    // baseUrl: "http://localhost:3000",
+    baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
     user: user,
     handleData: handleData,
     updateData: updateData,
