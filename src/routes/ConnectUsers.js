@@ -98,26 +98,26 @@ let RenderUser = ({ userData }) => {
         className="card-wrapper"
       styles={{ backgroundColor: "primary.light", position: "relative" }}
       >
-        <CardHeaderElement styles={{ backgroundColor: "primary.dark", color: "info.contrastText" }} avatarUrl={ppUrl || test} altText={fullName} title={fullName} joined={created} forConnect={true} />
+        <CardHeaderElement styles={{ backgroundColor: "primary.dark", color: "text.primary" }} avatarUrl={ppUrl || test} altText={fullName} title={fullName} joined={created} forConnect={true} />
         <CardContentElement>
           <TypographyElement
             text={friendAlready ? email : "Email: be a friend to see that"}
             type={"p"}
             forConnect={true}
-            styles={{ mb: 2, color: "info.contrastText", fontSize: "20px" }}
+            styles={{ mb: 2, color: "text.primary", fontSize: "20px" }}
           />
           <TypographyElement
             text={bio ? bio : "This user has yet to write a bio"}
             type={"h6"}
             forConnect={true}
-            styles={{ textAlign: "justify", backgroundColor: "info.dark", color: "info.contrastText", p: 1.1, borderRadius: 1.1 }}
+            styles={{ textAlign: "justify", backgroundColor: "info.dark", color: "text.primary", p: 1.1, borderRadius: 1.1 }}
           />
           <StackElement
-            styles={{ backgroundColor: "info.dark", color: "info.contrastText" }}
+            styles={{ backgroundColor: "info.dark", color: "text.primary" }}
             className="af-wrapper"
           >
             <MutualFriends friends={friends} />
-            <Stack sx={{ flexDirection: "row", gap: 1.3, alignItems: "baseline" }}>
+            <Stack sx={{ flexDirection: "row", gap: 1.3, alignItems: "baseline", px: .9 }}>
               <TypographyElement text={"Friends "} type={"h5"} />
               <TypographyElement text={friends.length} type={"h6"} />
             </Stack>
@@ -188,7 +188,8 @@ export const MutualFriends = ({ friends, variantType, forProfile, actions }) => 
         flexDirection: forProfile ? "row" : actions?.length === 2 ? "column" : "row",
         alignItems: forProfile ? "baseline" : actions?.length === 2 ? "center" : "baseline",
         gap: forProfile ? 3 : 1.3,
-        minWidth: forProfile ? "auto" : actions?.length === 1 ? "45%" : "29%"
+        minWidth: forProfile ? "auto" : actions?.length === 1 ? "45%" : "29%",
+        px: .9
       }}
     >
       <Typography variant={variantType ? variantType : 'h5'}>Mutual Friends</Typography>

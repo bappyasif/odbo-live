@@ -17,7 +17,9 @@ export const getDesignTokens = (mode) => ({
                 main: "#4A4E69",
             }),
             ...(mode === 'light' && {
-                main: "#C9ADA7",
+                // main: "#C9ADA7",
+                // main: "#d6ccc2",
+                main: "#e5e5e5",
             }),
         },
         ...(mode === 'dark' && {
@@ -32,6 +34,9 @@ export const getDesignTokens = (mode) => ({
         ...(mode === 'light' && {
             background: {
                 default: "#F2E9E4",
+                // default: "#edede9",
+                // paper: "#edede9"
+                paper: "#ced4da"
             },
             info: {
                 main: "#FEFAE0"
@@ -44,7 +49,8 @@ export const getDesignTokens = (mode) => ({
                     secondary: grey[800],
                 }
                 : {
-                    primary: grey[400],
+                    // primary: grey[400],
+                    primary: "#edede9",
                     secondary: grey[200],
                 }),
         },

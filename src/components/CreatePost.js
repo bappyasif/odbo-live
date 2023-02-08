@@ -364,7 +364,7 @@ let ShowUrlGrabbingForm = ({ handleValue, currentElement }) => {
 let ShowIconBtns = ({ item, handleAddedOptions }) => {
 
   return (
-    <Button onClick={e => handleAddedOptions(e, item.name, '')} variant='outlined' startIcon={item.elem} sx={{ m: 1.3, mt: 0, backgroundColor: "info.light", width: { xs: "100%", md: "auto" } }}>
+    <Button onClick={e => handleAddedOptions(e, item.name, '')} variant='outlined' startIcon={item.elem} sx={{ m: 1.3, mt: 0, backgroundColor: "secondary.light", width: { xs: "100%", md: "auto" } }}>
       <TypographyElement styles={{ color: "text.primary" }} text={item.name} type={"span"} />
     </Button>
   )

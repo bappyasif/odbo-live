@@ -115,7 +115,8 @@ const ButtonElement = ({ text, type, fontSize, action, disable, variant }) => {
                     pointerEvents: disable ? "none" : "auto",
                     '&:hover': {
                         backgroundColor: 'secondary.main',
-                        color: "primary.contrastText",
+                        // color: "primary.contrastText",
+                        color: "text.secondary",
                         opacity: 0.9,
                     },
                 }}

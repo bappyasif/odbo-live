@@ -79,11 +79,12 @@ function App() {
     // console.log(result, "result!!", jwtUser)
     result?.user ? setJwtUser(result?.user) : setUser(result?.data?.data)
 
-    console.log(result, "RESUKLLTTTT!!!!")
+    // console.log(result, "RESUKLLTTTT!!!!")
 
     // this is for user authentication via third party passwport jwt startegy
     if (result?.data?.userJwt) {
       console.log("SSO Block")
+      alert("sorry free hosting is not fully cors friendly thus passport strategy authentication is not taking effect on subsequent successful requests for user info!!")
       setUser(prev => ({ ...prev, userJwt: result.data.userJwt }))
       const data = result.data.userJwt;
       storeJwtAuthDataInLocalstorage(data.token, data.expiresIn)
@@ -184,7 +185,8 @@ function App() {
 
   const updateUserStateForProtectiveRoutes = result => {
     if (result?.userJwt) {
-      console.log("!!JWT Block!!", result)
+      // console.log("!!JWT Block!!", result)
+      console.log("!!JWT Block!!")
       // setJwtUser(prev => ({ ...prev, userJwt: result.userJwt }))
       setUser(prev => ({ ...prev, userJwt: result.userJwt }))
       const data = result.userJwt;

@@ -3,6 +3,13 @@
   height: 100vh;
 }
 
+/* body.mceContentBody,
+.tox .tox-editor-container { 
+  background: #6c757d !important; 
+  color:#000;
+  font-size: xx-large !important;
+} */
+
 .wrapper-div.nav-wrapper,
 .wrapper-div.fl-wrapper {
   display: flex;

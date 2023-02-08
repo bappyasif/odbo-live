@@ -322,8 +322,8 @@ const ReuseableFriendRequestsList = ({ friendsList, requestType, listAssets }) =
                 minWidth: "29vw",
                 minHeight: "20vh",
                 width: { xs: "100%", lg: "50%" },
-                backgroundColor: "lightsteelblue",
-                color: "primary.light",
+                backgroundColor: "secondary.light",
+                color: "text.primary",
                 p: .9
             }}
         >
