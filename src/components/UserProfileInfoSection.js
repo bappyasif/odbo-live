@@ -38,7 +38,7 @@ function UserProfileInfoSection({ appCtx, userId }) {
     }, [appCtx.user])
 
     return (
-        <Box sx={{ mb: 2, backgroundColor: "primary.light" }}>
+        <Box sx={{ mb: 2, backgroundColor: "text.secondary" }}>
             <RenderUserProfilePhoto userData={userProfileData._id ? userProfileData : appCtx.user} fromPP={false} forVisitingProfile={userId} />
 
             <Box

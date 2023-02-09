@@ -224,6 +224,9 @@ let ShowRichTextEditor = ({ handleChange, setPostText }) => {
         init={{
           selector: 'textarea',  // change this value according to your HTML
           init_instance_callback: function (editor) {
+            editor.getWin().document.body.style.backgroundColor='#6c757d'
+            // editor.getWin().document.body.style.backgroundColor='rgb(78, 78, 98)'
+            // editor.getWin().document.body.style.backgroundColor='honeydew'
             editor.on("keyup change", (e) => {
               let regExp = /<[^>]*>/g
               setPostText(editor.getContent().replace(regExp, ''))
@@ -364,7 +367,7 @@ let ShowUrlGrabbingForm = ({ handleValue, currentElement }) => {
 let ShowIconBtns = ({ item, handleAddedOptions }) => {
 
   return (
-    <Button onClick={e => handleAddedOptions(e, item.name, '')} variant='outlined' startIcon={item.elem} sx={{ m: 1.3, mt: 0, backgroundColor: "secondary.light", width: { xs: "100%", md: "auto" } }}>
+    <Button onClick={e => handleAddedOptions(e, item.name, '')} variant='outlined' startIcon={item.elem} sx={{ m: 1.3, mt: 0, backgroundColor: "secondary.light", color: "text.primary", width: { xs: "100%", md: "auto" } }}>
       <TypographyElement styles={{ color: "text.primary" }} text={item.name} type={"span"} />
     </Button>
   )

@@ -1,4 +1,4 @@
-import { CommentTwoTone } from '@mui/icons-material'
+import { CommentTwoTone, FavoriteTwoTone, VolunteerActivismTwoTone } from '@mui/icons-material'
 import { Box, Button, Modal, Stack, Tooltip, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContexts } from '../App'
@@ -29,10 +29,10 @@ function ShowUserCreatedPost({ postData, setShowCreatePost }) {
   return (
     <Box
       sx={{
-        width: { xs: 450, sm: 690, md: 990, lg: 1340 },
+        width: { xs: 450, sm: 690, md: 990, lg: 1340 }, borderColor: "text.secondary"
       }}
       margin="auto"
-      border={"dotted .4px blue"}
+      border={"dotted .4px"}
       marginBottom={1.5}
       marginTop={1.3}
       borderRadius={1.1}
@@ -321,7 +321,9 @@ export let ShowIncludedSharedPost = ({ includedPostId, appCtx }) => {
       sx={{
         p: 2,
         transform: "scale(.6, 0.8)",
-        outline: "solid .4px red"
+        outline: "solid .4px",
+        borderColor: "secondary.dark",
+        borderRadius: 6
       }}
     >
       <Typography>Shared Post</Typography>
@@ -335,7 +337,7 @@ export let actions = [
   { name: "Comment", count: 0, icon: <CommentTwoTone /> },
   { name: "Like", count: 0, icon: <LikeIconElement /> },
   { name: "Dislike", count: 0, icon: <DislikeIconElement /> },
-  { name: "Love", count: 0, icon: <LoveIconElement /> },
+  { name: "Love", count: 0, icon: <FavoriteTwoTone /> },
   { name: "Share", count: 0, icon: <ShareIconElement /> },
 ]
 

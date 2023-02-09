@@ -46,7 +46,7 @@ let ExistingFriendList = () => {
     let renderFriends = () => appCtx?.user?.friends?.map(frnd => <RenderFriend key={frnd} friendID={frnd} baseUrl={appCtx.baseUrl} />)
 
     return (
-        <Paper sx={{ backgroundColor: "info.light", color: "info.contrastText", width: { xs: "100%", lg: "50%" } }}>
+        <Paper sx={{ backgroundColor: "secondary.dark", color: "text.primary", width: { xs: "100%", lg: "50%" } }}>
             <Typography variant="h4">Friends Listings:</Typography>
             <Stack sx={{ gap: 1.1 }}>
                 {renderFriends()}
@@ -322,7 +322,7 @@ const ReuseableFriendRequestsList = ({ friendsList, requestType, listAssets }) =
                 minWidth: "29vw",
                 minHeight: "20vh",
                 width: { xs: "100%", lg: "50%" },
-                backgroundColor: "secondary.light",
+                backgroundColor: "secondary.dark",
                 color: "text.primary",
                 p: .9
             }}
@@ -371,7 +371,7 @@ let ShowFriendRequest = ({ friendId, actions }) => {
 
                 <ListItem
                     sx={{
-                        outline: "solid .6px red", borderRadius: 2, justifyContent: "space-around",
+                        outline: "solid .6px", outlineColor: "primary.dark", borderRadius: 2, justifyContent: "space-around",
                         flexDirection: { xs: "column", md: "row" }, pl: 0
                     }}
                 >

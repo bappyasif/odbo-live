@@ -21,7 +21,7 @@ function UserProfile() {
 
     return (
         <Paper
-            sx={{ backgroundColor: "secondary", color: "info", fontSize: { xs: "small", md: "large", lg: "larger" }, }}
+            sx={{ backgroundColor: "secondary.dark", color: "info", fontSize: { xs: "small", md: "large", lg: "larger" }, }}
         >
             <UserProfileInfoSection appCtx={appCtx} />
             <Typography variant="h2">User Profile</Typography>

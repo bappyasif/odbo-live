@@ -33,7 +33,11 @@ function MainNavigation() {
       sx={{
         flexDirection: "row",
         justifyContent: "space-around",
-        backgroundColor: "info.light"
+        // backgroundColor: "info"
+        // backgroundColor: "palette.special.dark"
+        // backgroundColor: "palette.primary.special"
+        // backgroundColor: "secondary.dark"
+        backgroundColor: "#6c757d"
       }}
     >
       <H1Element value={"OdBo"} />
@@ -349,7 +353,7 @@ const ButtonElement = ({ item }) => {
           height: "fit-content",
           color: "text.primary",
           '&:hover': {
-            backgroundColor: 'primary.main',
+            backgroundColor: 'text.secondary',
             opacity: .8,
             borderRadius: "11px",
             color: "gainsboro"

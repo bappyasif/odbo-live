@@ -64,7 +64,7 @@ function PostCommentsThread() {
                 margin="auto"
                 border={"dotted .4px blue"}
                 marginBottom={1.5}
-                marginTop={1.3}
+                marginTop={.11}
                 borderRadius={1.1}
                 position={"relative"}
             >

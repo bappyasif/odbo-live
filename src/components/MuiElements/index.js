@@ -90,7 +90,7 @@ const CardHeaderElement = ({ styles, avatarUrl, title, joined, altText, forPost,
             title={<Typography marginLeft={forPost ? 0 : forConnect ? 0 : 2} textAlign={"left"} variant={forPost ? "h4" : forComment ? "subtitle2" : forConnect ? "h5" : "h2"}>{title}</Typography>}
             subheader={<Typography sx={{ textAlign: "left" }} variant={forPost ? "subtitle1" : forComment ? "subtitle2" : forConnect ? "p" : "h6"}>{`Member Since: ${moment(joined).fromNow()}`}</Typography>}
         // sx={{fontSize: "33px"}}
-            sx={{...styles, backgroundColor: forConnect ? "info.dark" : "inherit",  borderRadius: 2, p: 0}}
+            sx={{backgroundColor: forConnect ? "info.dark" : "inherit", borderRadius: 2, p: 0, ...styles}}
         />
     )
 }
@@ -110,8 +110,8 @@ const ButtonElement = ({ text, type, fontSize, action, disable, variant }) => {
                     fontSize: fontSize || "20px",
                     borderRadius: 4,
                     width: "100%",
-                    backgroundColor: disable ? "info.light" : "info.dark",
-                    color: "info.contrastText",
+                    backgroundColor: disable ? "primary.light" : "secondary.dark",
+                    color: "text.primary",
                     pointerEvents: disable ? "none" : "auto",
                     '&:hover': {
                         backgroundColor: 'secondary.main',

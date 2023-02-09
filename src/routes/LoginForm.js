@@ -75,7 +75,7 @@ function LoginForm() {
             <Stack>
                 <ShowWarningAboutSecurity />
 
-                <Container sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                <Container sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                     <GuestUsers setFormData={setFormData} handleSubmit={handleSubmit} />
 
                     <WrapperDiv className="login-form">
@@ -90,8 +90,8 @@ function LoginForm() {
                                 <Typography variant='h6'>Login</Typography>
                             </Button>
 
-                            <Divider sx={{my: 1.1}} />
-                            <Link style={{display: "flex"}} to="/recover-password">Forgot Password</Link>
+                            <Divider sx={{ my: 1.1 }} />
+                            <Link style={{ display: "flex" }} to="/recover-password">Forgot Password</Link>
                         </FormElement>
 
                         {errors?.length ? <ShowErrors errors={errors} /> : null}
@@ -107,7 +107,7 @@ function LoginForm() {
 
 export const ShowWarningAboutSecurity = () => {
     return (
-        <Stack sx={{py: 6}}>
+        <Stack sx={{ py: 6 }}>
             <Typography variant='h2'>This is not a fully tested site by any Security Experts</Typography>
             <Typography variant='h4'>Please be advised before using any of your personal data</Typography>
         </Stack>
@@ -303,7 +303,17 @@ let RenderLoginOutlet = ({ item }) => {
 
         // alert("would have been available if this was hosted in a custom domain!! try using any of these guest accounts or (email / password) based login option, thanks for your interest :)")
 
-        loginPrompt(url, getAuthenticatedUserData)
+        let consent = prompt("currently this wont fully log you into this app but you will be registered noetheless but wont be logged in due to CORS issue but if this was hosted on a proprieratory server the it would have, if you still want to proceed, press Y", "N");
+
+        // console.log(consent, ["Y", "y"].includes(consent))
+
+        if (["Y", "y"].includes(consent)) {
+            loginPrompt(url, getAuthenticatedUserData)
+        } else {
+            alert("try using guest accounts for an user experience or perhaps consider registering with your email for Full Access, thank you :)")
+        }
+
+        // loginPrompt(url, getAuthenticatedUserData)
     }
 
     return (

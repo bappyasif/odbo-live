@@ -98,7 +98,7 @@ let RenderUser = ({ userData }) => {
         className="card-wrapper"
       styles={{ backgroundColor: "primary.light", position: "relative" }}
       >
-        <CardHeaderElement styles={{ backgroundColor: "primary.dark", color: "text.primary" }} avatarUrl={ppUrl || test} altText={fullName} title={fullName} joined={created} forConnect={true} />
+        <CardHeaderElement styles={{ backgroundColor: "secondary.dark", color: "text.primary" }} avatarUrl={ppUrl || test} altText={fullName} title={fullName} joined={created} forConnect={true} />
         <CardContentElement>
           <TypographyElement
             text={friendAlready ? email : "Email: be a friend to see that"}
@@ -110,10 +110,10 @@ let RenderUser = ({ userData }) => {
             text={bio ? bio : "This user has yet to write a bio"}
             type={"h6"}
             forConnect={true}
-            styles={{ textAlign: "justify", backgroundColor: "info.dark", color: "text.primary", p: 1.1, borderRadius: 1.1 }}
+            styles={{ textAlign: "justify", backgroundColor: "secondary.dark", color: "text.primary", p: 1.1, borderRadius: 1.1 }}
           />
           <StackElement
-            styles={{ backgroundColor: "info.dark", color: "text.primary" }}
+            styles={{ backgroundColor: "secondary.dark", color: "text.primary" }}
             className="af-wrapper"
           >
             <MutualFriends friends={friends} />
