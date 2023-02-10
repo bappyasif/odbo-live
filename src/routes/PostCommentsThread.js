@@ -112,7 +112,7 @@ let RenderThisPostComments = (props) => {
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: .6, position: "relative" }}
             >
                 {
-                    (props.commentsData && renderComments()?.length) === 0
+                    (props?.commentsData && renderComments()?.length) === 0
                         ?
                         <Box>
                             <Divider />

@@ -43,7 +43,7 @@ export const PostOrCommentOptions = ({ postOwner, postId, commentId, deleteComme
         >
             <Tooltip title="click to open menu">
                 <IconButton
-                    sx={{ color: "info.contrastText" }}
+                    sx={{ color: "text.primary" }}
                     id='lock-button'
                     onClick={handleClick}>{postId ? <MoreVertTwoTone /> : <SettingsSuggestTwoTone />}</IconButton>
             </Tooltip>
