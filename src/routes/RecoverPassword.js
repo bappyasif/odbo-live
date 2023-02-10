@@ -1,4 +1,4 @@
-import { Box, formLabelClasses, LinearProgress, Stack, Typography } from '@mui/material'
+import { Box, LinearProgress, Stack, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -36,7 +36,6 @@ function RecoverPassword() {
 
   useEffect(() => {
     errors?.length && removeErrorsAfterTimeout()
-    // !errors?.length && setShowLoading(false)
   }, [errors])
 
   useEffect(() => {
@@ -70,7 +69,6 @@ function RecoverPassword() {
 }
 
 const HandleLoading = ({showLoading}) => {
-  console.log(showLoading, "showLoading!!")
   return (
     showLoading
     ?
@@ -96,8 +94,6 @@ const HandleErrors = ({errors}) => {
 const BeginOtpResetPassword = ({ handleErrorsList, setShowLoading, setErrors, setOtpReady, handleAfterVerified }) => {
   let [disableClick, setDisableClick] = useState(false);
 
-  // let [errors, setErrors] = useState([]);
-
   const appCtx = useContext(AppContexts);
 
   const navigate = useNavigate();
@@ -105,33 +101,27 @@ const BeginOtpResetPassword = ({ handleErrorsList, setShowLoading, setErrors, se
   const afterOtpBeenSent = (result) => {
     alert("check your email for an OTP has been sent!! OTP IS VALID FOR 15 MINUTES ONLY!!")
     setOtpReady("verify");
-    // setShowLoading(false)
   }
 
   const handleFailedSendingOtp = (result) => {
-    // console.log(result, "SEND!!")
     setDisableClick(false)
     handleErrorsList(result)
-    // setShowLoading(false)
   }
 
   const handleGetOtp = (formData) => {
     const url = `${appCtx.baseUrl}/users/send-otp-code`
-    // setShowLoading(true);
 
     if (checkGuestUserPresence(formData?.email)) {
       alert("nope, no cant do, protected account!!")
       navigate("/")
     } else if (!formData?.email) {
       alert("nope, no cant do, No Email Address Has Been Provided!!")
-      // setShowLoading(false)
     } else {
       setDisableClick(true);
       setErrors([])
       sendDataToServer(url, formData, handleFailedSendingOtp, afterOtpBeenSent)
       handleAfterVerified("email", formData?.email)
     }
-    // setShowLoading(false)
   }
 
   const formControls = [
@@ -146,12 +136,10 @@ const BeginOtpResetPassword = ({ handleErrorsList, setShowLoading, setErrors, se
 
   useEffect(() => {
     setShowLoading(disableClick)
-    disableClick && console.log(disableClick, "disableclick")
   }, [disableClick])
 
   useEffect(() => {
     setDisableClick(false)
-    // setErrors([]);
   }, [])
 
   return (
@@ -163,7 +151,6 @@ const BeginOtpResetPassword = ({ handleErrorsList, setShowLoading, setErrors, se
         primaryAction={handleGetOtp}
         formControls={formControls}
         legendText={"Provide your already registered Account email with OdBo, to get an OTP sent to your email address"}
-        // legendText={errors?.length ? null : "Provide your already registered Account email with OdBo, to get an OTP sent to your email address"}
       />
     </Stack>
   )
@@ -177,21 +164,16 @@ const VerifyOtpAfterReceiving = ({ handleErrorsList, setShowLoading, setErrors, 
   const afterOtpBeenVerified = (result) => {
     alert("otp verified!!")
     setOtpReady("reset");
-    // console.log(result, "VERFIED")
     handleAfterVerified("otpCode", result?.otpCode)
-    // setShowLoading(false)
   }
 
   const handleVerificationFailed = (result) => {
-    // console.log(result?.msg, result, "at verification!!")
     handleErrorsList(result)
     setDisableClick(false)
-    // setShowLoading(false)
   }
 
   const handleVerify = (data) => {
     const url = `${appCtx.baseUrl}/users/verify-otp-code`
-    // setShowLoading(true)
 
     if (!data?.otpCode) {
       alert("nope, no cant do, No OTP Code Has Been Provided!!")
@@ -218,7 +200,6 @@ const VerifyOtpAfterReceiving = ({ handleErrorsList, setShowLoading, setErrors, 
 
   useEffect(() => {
     setDisableClick(false)
-    // setErrors([]);
   }, [])
 
   return (
@@ -287,12 +268,10 @@ const ResetPasswordWithOtp = ({ handleErrorsList, setShowLoading, setErrors, aft
     console.log(result?.msg, result)
     handleErrorsList(result)
     setDisableClick(false);
-    // setShowLoading(false)
   }
 
   const handleResetPassword = (formData) => {
     const url = `${appCtx.baseUrl}/users/reset-password-with-otp`
-    // setShowLoading(true)
 
     if (checkGuestUserPresence(formData?.email)) {
       alert("nope, no cant do, protected account!!")
@@ -300,7 +279,6 @@ const ResetPasswordWithOtp = ({ handleErrorsList, setShowLoading, setErrors, aft
     } else if (!formData?.password || !formData?.confirm) {
       alert("nope, no cant do, No Password or Confirm Password Has Been Provided!!")
     } else {
-      // console.log("password reset request sent")
       setDisableClick(true);
       setErrors([])
       const newFormData = { email: afterVerified.email, otpCode: afterVerified.otpCode, ...formData }
@@ -314,7 +292,6 @@ const ResetPasswordWithOtp = ({ handleErrorsList, setShowLoading, setErrors, aft
 
   useEffect(() => {
     setDisableClick(false)
-    // setErrors([]);
   }, [])
 
   return (
@@ -350,7 +327,6 @@ const ReusableFormComponent = ({ primaryAction, formControls, legendText, action
   }
 
   const handleCancel = () => {
-    // console.log("cancel")
     navigate("/")
   }
 

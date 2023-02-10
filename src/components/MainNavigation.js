@@ -33,10 +33,6 @@ function MainNavigation() {
       sx={{
         flexDirection: "row",
         justifyContent: "space-around",
-        // backgroundColor: "info"
-        // backgroundColor: "palette.special.dark"
-        // backgroundColor: "palette.primary.special"
-        // backgroundColor: "secondary.dark"
         backgroundColor: "#6c757d"
       }}
     >
@@ -214,7 +210,6 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
   }
 
   const afterDelete = (result) => {
-    console.log(result, "DELETE!!", result?.success)
     if (result?.success) {
       alert("so sorry to see you go :( you can always choose to comeback again, see ya soon, tot ziens, tot zo :)")
     } else {
@@ -229,7 +224,6 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
     const url = `${appCtx.baseUrl}/users/${appCtx.user._id}`
     const refreshToken = appCtx.user?.userJwt?.refreshToken;
     deleteProtectedDataFromServer(url, {}, afterDelete, refreshToken)
-    console.log(url, "delete account!!")
   }
 
   const handleDelete = () => {
@@ -239,7 +233,6 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
       if (["guest@een.com", "guest@twee.com"].includes(appCtx.user.email)) {
         alert("nope!! no cant do, its a protected accounted")
       } else {
-        // console.log("delete!!")
         deleteCurrentlyLoggedInUserAccount()
       }
     } else {
@@ -248,7 +241,6 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
   }
 
   const handleReset = () => {
-    console.log("reset password!!")
     navigate("/reset-password");
   }
 

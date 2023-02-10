@@ -20,7 +20,6 @@ function ShowUserPostMedias({ mediaContents }) {
                 content.push(<video key={"Video"} height={200} src={mediaContents[key]} controls style={{ order: 2 }} />)
             } else if (key === "Gif" && mediaContents[key]) {
                 content.push(<ShowGif key={"Gif"} id={mediaContents[key]} />)
-                // content.push(<Gif key={"Gif"} gif={mediaContents[key]} height={{ lg: "100%" }} width={"100%"} style={{ order: 3 }} />)
             } else if (key === "Poll" && mediaContents[key]) {
                 content.push(<ShowPoll key={"Poll"} pollData={mediaContents[key]} postId={mediaContents.Id} order={4} />)
             } else if (key === "Privacy") {
@@ -49,11 +48,9 @@ const ShowGif = (idObj) => {
     const gf = new GiphyFetch(process.env.REACT_APP_GIPHY_FETCH_API_KEY)
 
     const beginGifFetch = () => {
-        console.log(idObj, "fetching!!")
         gf.gif(idObj.id)
             .then(data => {
                 if (data) {
-                    console.log(data, "data!!!!")
                     setGifData(data.data)
                 }
             }).catch(err => console.log("gif fetching has failed", err))
@@ -67,8 +64,6 @@ const ShowGif = (idObj) => {
         gifData
             ? <Gif
                 gif={gifData}
-                // height={{ lg: "60%" }}
-                // overlay={VideoOverlay}
                 width={510}
                 style={{ order: 3, pointerEvents: "none", alignSelf: "center"}}
             />
@@ -106,13 +101,7 @@ const ShowPoll = ({ pollData, order, postId }) => {
 
         const url = `${appCtx.baseUrl}/posts/update/shared/${postId}`
 
-        // updateDataInDatabase(url, data, dataUpdater)
-
-        // performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url, dataUpdater, null, null)
-
         performProtectedUpdateOperation(data, appCtx.user?.userJwt?.refreshToken, url)
-
-        // console.log(data, 'ready!!', updatedList, [].push(appCtx.user._id))
     }
 
     const updatePostPollDataInDatabase = (optionCountObj) => {

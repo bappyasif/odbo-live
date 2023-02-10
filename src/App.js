@@ -6,7 +6,6 @@ import LoginForm, { ShowSessionExpiredDialog } from './routes/LoginForm';
 import RegisterUser from './routes/RegisterUser';
 import ErrorPage from './components/ErrorPage';
 import ConnectUsers from './routes/ConnectUsers';
-import NewsFeeds from './routes/NewsFeeds';
 import ChooseTopics from './routes/ChooseTopics';
 import EditUserProfile from './routes/EditUserProfile';
 import TopicCategory from './routes/TopicCategory';
@@ -76,14 +75,11 @@ function App() {
   }
 
   let handleData = result => {
-    // console.log(result, "result!!", jwtUser)
     result?.user ? setJwtUser(result?.user) : setUser(result?.data?.data)
-
-    // console.log(result, "RESUKLLTTTT!!!!")
 
     // this is for user authentication via third party passwport jwt startegy
     if (result?.data?.userJwt) {
-      console.log("SSO Block")
+      // console.log("SSO Block")
       alert("sorry free hosting is not fully cors friendly thus passport strategy authentication is not taking effect on subsequent successful requests for user info!!")
       setUser(prev => ({ ...prev, userJwt: result.data.userJwt }))
       const data = result.data.userJwt;
@@ -92,7 +88,7 @@ function App() {
 
     // this is for jwt based passport authentication
     if (result?.userJwt !== undefined) {
-      console.log("JWT Block")
+      // console.log("JWT Block")
       setJwtUser(prev => ({ ...prev, userJwt: result.userJwt }))
       const data = result.userJwt;
       storeJwtAuthDataInLocalstorage(data.token, data.expiresIn)
@@ -145,36 +141,24 @@ function App() {
   }
 
   const updateSpecificPostData = (createdPost, dataKey, dataValue) => {
-    // console.log(createdPost._id, dataValue, createdPost)
 
       createdPost[dataKey] = dataValue;
 
       const newDataset = [createdPost, ...userAccessiblePostsDataset]
 
       handleAvailablePostsFeeds(newDataset);
-
-      // setUserAccessiblePostsDataset(newDataset);
-      // console.log(userAccessiblePostsDataset, "DATASET!!!!", newDataset)
   }
-
-  // console.log(userAccessiblePostsDataset, "userPostsDataset!!")
 
   const clearCurrentUserData = () => {
     setUser({})
     setJwtUser({})
     setUserAccessiblePostsDataset({})
-    // setRouteBeforeSessionExpired(null);
   }
 
   function getUser() {
-    // let url = `http://localhost:3000/login/success`
     const url = `${contexts.baseUrl}/login/success`
     getAuthenticatedUserDataFromServer(url, handleData)
-    // const accessToken = user.userJwt?.token;
-    // const refreshToken = user.userJwt?.refreshToken;
-    // getProtectedDataAfterJwtVerification(url, accessToken, handleData, refreshToken);
-    // console.log("running from app scope!!", accessToken, refreshToken)
-    console.log("running from app scope!!")
+    // console.log("running from app scope!!")
   }
 
   const getSystemPreferenceTheme = () => {
@@ -185,9 +169,7 @@ function App() {
 
   const updateUserStateForProtectiveRoutes = result => {
     if (result?.userJwt) {
-      // console.log("!!JWT Block!!", result)
-      console.log("!!JWT Block!!")
-      // setJwtUser(prev => ({ ...prev, userJwt: result.userJwt }))
+      // console.log("!!JWT Block!!")
       setUser(prev => ({ ...prev, userJwt: result.userJwt }))
       const data = result.userJwt;
       storeJwtAuthDataInLocalstorage(data.token, data.expiresIn)
@@ -200,13 +182,7 @@ function App() {
   function getUserDataFromJwtTokenStoredInLocalStorage() {
     const token = localStorage.getItem("token");
 
-    // const url = `http://localhost:3000/protected`
-
     const url = `${contexts.baseUrl}/protected`
-    // getUserDataAfterJwtVerification(url, token, updateUserStateForProtectiveRoutes, user?.userJwt?.refreshToken)
-    // getUserDataAfterJwtVerification(url, token, handleData, user?.userJwt?.refreshToken)
-
-    console.log(user, jwtUser)
 
     if (token) {
       setJwtExists(true);
@@ -217,18 +193,6 @@ function App() {
       // alert("unauthorization is required for this action, redirecting to login page")
       navigate("/login");
     }
-
-    // if (userStillLoggedIn() && token) {
-    //   // getUserDataAfterJwtVerification(url, token, handleData)
-    //   console.log(user?.userJwt?.refreshToken, "user?.userJwt?.refreshToken", user)
-    //   getUserDataAfterJwtVerification(url, token, updateUserStateForProtectiveRoutes, user?.userJwt?.refreshToken)
-    //   // getUserDataAfterJwtVerification(url, token, handleData, user?.userJwt?.refreshToken)
-    //   setJwtExists(true);
-    // } else if (!userStillLoggedIn() && token) {
-    //   clearCurrentUserData();
-    //   setJwtExists(false);
-    //   navigate("/login");
-    // }
   }
 
   const previouslyExistingAppDataOnLocalstorage = () => {
@@ -248,8 +212,8 @@ function App() {
   }
 
   const contexts = {
-    baseUrl: "http://localhost:3000",
-    // baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
+    // baseUrl: "http://localhost:3000",
+    baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
     user: user,
     handleData: handleData,
     updateData: updateData,
@@ -301,11 +265,6 @@ function App() {
     if (user?._id && user?.topics) {
       setTopics([])
     }
-
-    // making protected route requests to login route to get authorized
-    // user?._id && !localStorage.getItem("token") && navigate("/login")
-    // (user?._id && !localStorage.getItem("token") && routeBeforeSessionExpired) && setJwtExists(false);
-    // (user?._id && !localStorage.getItem("token") && routeBeforeSessionExpired) && alert("running!!")
   }, [user?._id])
 
   useEffect(() => {
@@ -318,9 +277,6 @@ function App() {
     fetchUserDataWithValidAccessToken();
 
     getSystemPreferenceTheme();
-
-    // (user?._id && !localStorage.getItem("token") && routeBeforeSessionExpired) && setJwtExists(false);
-    // (user?._id && !localStorage.getItem("token") && routeBeforeSessionExpired) && alert("running!!")
   }, [])
 
   useEffect(() => {
@@ -329,27 +285,15 @@ function App() {
 
   const theme = createTheme(getDesignTokens(darkMode ? "dark" : "light"))
 
-  // routeBeforeSessionExpired && alert("running02!!")
-  // !localStorage.getItem("token") && routeBeforeSessionExpired && alert("running02!!")
-  // user?._id && !localStorage.getItem("token") && routeBeforeSessionExpired && alert("running02!!")
-
-  // user && console.log(user, "user!!", jwtUser, process.env, process.env.REACT_APP_NY_TIMES_API_KEY, process.env.REACT_APP_NY_TIMES_API_SECRET)
-
   return (
     <AppContexts.Provider value={contexts}>
       <div className="App" style={{ backgroundColor: "grey[400]", height: "100vh" }}>
         <MainNavigation />
 
-        {/* {routeBeforeSessionExpired && !jwtExists ? <ShowSessionExpiredDialog /> : null} */}
-
-        {/* { user?._id && (!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
         { (!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null}
-        {/* { !jwtExists && (!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
-        {/* { (!user?._id && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
-        {/* { (location.pathname !== "/" && !localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null} */}
 
         {/* for overall token validity checks prompt to user, to avoid getting un authorized response on protected resources */}
-        {/* {user?._id ? <UserSessionValidityChecks /> : null} */}
+        {user?._id ? <UserSessionValidityChecks /> : null}
 
         <ThemeProvider theme={theme}>
           <Paper>
@@ -358,57 +302,30 @@ function App() {
                 !user?._id
                   ?
                   <>
-                    {/* <Route path='/' element={<UserSpecificNewsFeeds />} /> */}
                     <Route path="/recover-password" element={<RecoverPassword />} />
                     <Route path='/login' element={<LoginForm handleData={handleData} />} />
                     <Route path='/login/success' element={<LoginSuccess />} />
                     <Route path='/register' element={<RegisterUser handleData={handleData} />} />
-                    {/* <Route path='/posts/:postId/comments' element={<PostCommentsThread />} />
-                    <Route path='/users/:userID/visit/profile' element={<VisitAnotherUserProfile />} /> */}
                   </>
                   :
                   <>
                     <Route path='/reset-password' element={<PasswordReset />} />
-                    {/* <Route path='/' element={<UserSpecificNewsFeeds />} /> */}
                     <Route path='/user-friendships' element={<UserFriendships />} />
                     <Route path='/connect' element={<ConnectUsers />} />
-                    {/* <Route path='/posts/:postId/comments' element={<PostCommentsThread />} /> */}
                     <Route path='/edit-user-profile' element={<EditUserProfile />} />
                     <Route path='/users/:userID/profile' element={<UserProfile />} />
-                    {/* <Route path='/users/:userID/profile' element={<UserProfile />} />
-                    <Route path='/users/:userID/visit/profile' element={<VisitAnotherUserProfile />} /> */}
                     <Route path='/choose-topics' element={<ChooseTopics />} />
-
                     <Route path='/choose-topics/:category' element={<TopicCategory />} errorElement={<ErrorPage />} />
                   </>
               }
 
               <Route path='/' element={<UserSpecificNewsFeeds />} />
 
-              {/* <Route path='/choose-topics' element={<ChooseTopics />} />
-
-              <Route path='/choose-topics/:category' element={<TopicCategory />} errorElement={<ErrorPage />} /> */}
-
               <Route path='/posts/:postId/comments' element={<PostCommentsThread />} />
 
               <Route path='/users/:userID/visit/profile' element={<VisitAnotherUserProfile />} />
 
               <Route path='*' element={<ErrorPage />} />
-
-              {/* <Route path='/' element={<UserSpecificNewsFeeds />} />
-              <Route path='/login' element={<LoginForm handleData={handleData} />} />
-              <Route path='/login/success' element={<LoginSuccess />} />
-              <Route path='/register' element={<RegisterUser handleData={handleData} />} />
-              <Route path='/user-friendships' element={<UserFriendships />} />
-              <Route path='/choose-topics' element={<ChooseTopics />} />
-              <Route path='/choose-topics/:category' element={<TopicCategory />} errorElement={<ErrorPage />} />
-              <Route path='/connect' element={<ConnectUsers />} />
-              <Route path='/news-feeds' element={<NewsFeeds />} />
-              <Route path='/posts/:postId/comments' element={<PostCommentsThread />} />
-              <Route path='/edit-user-profile' element={<EditUserProfile />} />
-              <Route path='/users/:userID/profile' element={<UserProfile />} />
-              <Route path='/users/:userID/visit/profile' element={<VisitAnotherUserProfile />} />
-              <Route path='*' element={<ErrorPage />} /> */}
             </Routes>
           </Paper>
         </ThemeProvider>

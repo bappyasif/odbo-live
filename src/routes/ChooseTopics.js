@@ -14,36 +14,13 @@ function ChooseTopics({closeTopicChooserModal}) {
 
     let dataUpdateForUserEditModule = (result) => {
         appCtx.updateUserProfileDataInApp("topics", selectedTopics)
-        // console.log("topicscheckit", selectedTopics)
-        // closeTopicChooserModal(selectedTopics)
         closeTopicChooserModal && closeTopicChooserModal()
-        // !closeTopicChooserModal && navigate("/edit-user-profile")
-
-        console.log("HERE HERE!! -- 02", result, selectedTopics)
     }
 
     let handleClickAndSave = () => {
         let url = `${appCtx.baseUrl}/users/${appCtx.user._id}`
-        // updateUserInDatabase(url, {topics: selectedTopics}, appCtx.updateData, navigate)
-
-        // updateUserInDatabase(url, {topics: selectedTopics}, appCtx.updateData, closeTopicChooserModal ? closeTopicChooserModal() : navigate)
         const refreshToken = appCtx.user?.userJwt?.refreshToken;
-
-        // console.log(refreshToken, "refreshToken!!")
-
-        console.log("HERE HERE!! -- 01")
-
         performProtectedUpdateOperation({topics: selectedTopics}, refreshToken, url, dataUpdateForUserEditModule, "edit-user-profile", navigate)
-
-        // if(closeTopicChooserModal) {
-        //     performProtectedUpdateOperation({topics: selectedTopics}, refreshToken, url, dataUpdateForUserEditModule)
-        //     // updateUserInDatabase(url, {topics: selectedTopics}, dataUpdateForUserEditModule, closeTopicChooserModal)
-        //     // updateUserInDatabase(url, {topics: selectedTopics}, dataUpdateForUserEditModule, () => null)
-        // } else {
-        //     performProtectedUpdateOperation({topics: selectedTopics}, refreshToken, url, dataUpdateForUserEditModule, "edit-user-profile", navigate)
-        //     // updateUserInDatabase(url, {topics: selectedTopics}, dataUpdateForUserEditModule, navigate, "edit-user-profile")
-        //     // updateUserInDatabase(url, {topics: selectedTopics}, appCtx.updateData, navigate)
-        // }
     }
 
     useEffect(() => {
@@ -51,8 +28,6 @@ function ChooseTopics({closeTopicChooserModal}) {
             setSelectedTopics(appCtx.user.topics)
         }
     }, [])
-
-    console.log(selectedTopics, "selected topics")
 
     return (
         <Paper sx={{ color: "blueviolet" }}>
@@ -93,7 +68,7 @@ let ShowTopics = ({ list, setSelectedTopics, closeTopicChooserModal }) => {
 
 let ShowCategoryTopics = ({ category, list, setSelectedTopics, closeTopicChooserModal }) => {
     let renderCategoryTopics = () => Object.values(category).map(name => <RenderTopics key={name} topics={name} categoryName={Object.keys(category)} list={list} setSelectedTopics={setSelectedTopics} />)
-    // console.log(list, "list!!")
+
     return (
         <>
             <Link 
@@ -107,7 +82,6 @@ let ShowCategoryTopics = ({ category, list, setSelectedTopics, closeTopicChooser
                     }}
                     variant='h4'
                     component={"h2"}
-                // onClick={() => redirect(`/choose-topics/${Object.keys(category)[0]}`)}
                 >
                     {Object.keys(category)[0]}
                 </Typography>
@@ -120,8 +94,6 @@ let ShowCategoryTopics = ({ category, list, setSelectedTopics, closeTopicChooser
 let RenderTopics = ({ topics, categoryName, list, setSelectedTopics }) => {
     let [scrollInfo, setScrollInfo] = useState({});
     let [currentScroll, setCurrentScroll] = useState(0);
-
-    // console.log(list, "!!")
 
     let renderTopics = () => topics.map(topic => <RenderTopic key={topic} topic={topic} list={list} setSelectedTopics={setSelectedTopics} />)
 
@@ -171,8 +143,6 @@ let RenderTopics = ({ topics, categoryName, list, setSelectedTopics }) => {
     useEffect(() => {
         settingUpMaxMinScrollWidth()
     }, [])
-
-    // console.log(currentScroll, "currentScroll", scrollInfo)
 
     return (
         <Paper sx={{ position: "relative" }}>
@@ -251,10 +221,8 @@ export let RenderTopic = ({ topic, list, setSelectedTopics }) => {
 
     useEffect(() => {
         const idx = list?.findIndex(elem => elem === topic);
-        // console.log(list, topic, "outside", idx)
         if(idx !== -1 && !clicked) {
             setClicked(true)
-            // console.log("here here", topic, "inside", list)
         } 
     }, [list])
 

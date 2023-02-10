@@ -37,9 +37,7 @@ function CreatePost({ handleSuccessfullPostShared }) {
   }
 
   let handleAddedOptions = (evt, elm, val) => {
-    // console.log(elm, "ELEM!!")
     if (elm === "Gif") {
-      console.log(elm, "ELEM!!", val?.id)
       setAddedOptions(prev => ({ ...prev, [elm]: val?.id, current: elm }))
     } else if (elm !== "body") {
       val
@@ -60,7 +58,6 @@ function CreatePost({ handleSuccessfullPostShared }) {
       if (addedOptions.body) {
         if (addedOptions.body.length < 220) {
           let url = `${appCtx.baseUrl}/posts/post/create/${appCtx.user._id}`
-          // sendDataToServer(url, addedOptions, handleErrors, handlePostData)
           sendDataWithProtectionToServer(url, addedOptions, handlePostData, handleErrors, appCtx?.user?.userJwt?.refreshToken)
         } else {
           alert("more than characters limit count found, maximum word count is 220")
@@ -76,10 +73,6 @@ function CreatePost({ handleSuccessfullPostShared }) {
       }
     }
   }
-
-  console.log(addedOptions, "addedOptions!!")
-
-  // console.log(appCtx.dialogTextFor, "dialogTextFor")
 
   return (
     <ContainerElement width={"md"}>
@@ -225,8 +218,6 @@ let ShowRichTextEditor = ({ handleChange, setPostText }) => {
           selector: 'textarea',  // change this value according to your HTML
           init_instance_callback: function (editor) {
             editor.getWin().document.body.style.backgroundColor='#6c757d'
-            // editor.getWin().document.body.style.backgroundColor='rgb(78, 78, 98)'
-            // editor.getWin().document.body.style.backgroundColor='honeydew'
             editor.on("keyup change", (e) => {
               let regExp = /<[^>]*>/g
               setPostText(editor.getContent().replace(regExp, ''))
@@ -281,17 +272,14 @@ let ShowGifSelectingElement = ({ handleValue, currentElement }) => {
   let [searchText, setSearchText] = useState(null);
   let [gifData, setGifData] = useState(null);
 
-  // let giphyFetch = new GiphyFetch("TpnE8CtDArV0DqW17cilRKXCIptJJ621");
   let giphyFetch = new GiphyFetch(process.env.REACT_APP_GIPHY_FETCH_API_KEY);
 
   let fetchGifs = (offset) => searchText ? giphyFetch.search(searchText, { offset, limit: 10 }) : giphyFetch.trending({ offset, limit: 10 });
 
   let handleOnGifClicked = (gif, e) => {
     e.preventDefault();
-    // console.log(gif, "gif!!")
     setGifData(gif)
     handleValue(e, currentElement, gif);
-    // handleValue(e, currentElement, gif?.id);
     handleValue(e, "choose again", "");
   }
 
@@ -335,8 +323,6 @@ let ShowUrlGrabbingForm = ({ handleValue, currentElement }) => {
     handleValue(event, currentElement, value);
     // changing current elemnt to something which has no actionable components attached to it
     handleValue(event, "choose again", "");
-    // reseting form value, but didnt have to as we're closing this functionable components
-    // ref.current.reset();
   }
 
   const handleCancelClick = evt => {

@@ -91,7 +91,9 @@ function LoginForm() {
                             </Button>
 
                             <Divider sx={{ my: 1.1 }} />
-                            <Link style={{ display: "flex" }} to="/recover-password">Forgot Password</Link>
+                            <Stack sx={{backgroundColor: "secondary.main", width: "fit-content"}}>
+                                <Link style={{ display: "flex", fontSize: "x-large", width: "fit-content" }} to="/recover-password">Forgot Password</Link>
+                            </Stack>
                         </FormElement>
 
                         {errors?.length ? <ShowErrors errors={errors} /> : null}

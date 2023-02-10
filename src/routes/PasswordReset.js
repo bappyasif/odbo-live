@@ -24,7 +24,6 @@ function PasswordReset() {
     }
 
     const handleReset = () => {
-        console.log("reset!!", formData)
         const url = `${appCtx.baseUrl}/users/${appCtx.user._id}/reset-password`
         const refreshToken = appCtx.user?.userJwt?.refreshToken;
         if(checkGuestUserPresence(appCtx?.user?.fullName)) {
@@ -48,7 +47,6 @@ function PasswordReset() {
     useEffect(() => {
         setShowDialog(true);
         appCtx.handleLastVisitedRouteBeforeSessionExpired("/reset-password")
-        // appCtx.handleLastVisitedRouteBeforeSessionExpired(`/users/${appCtx?.user?._id}/profile`)
         appCtx.getUserDataFromJwtTokenStoredInLocalStorage()
     }, [])
 
@@ -72,10 +70,6 @@ function PasswordReset() {
 }
 
 export const ReusableFormView = ({ handleFormData, primaryAction, secondaryAction, legendText, formControls, formButtons, checkCondition }) => {
-    // const [formData, setFormData] = useState({})
-
-    // const handleFormData = evt => console.log("form data!!")
-
     const renderFormControls = () => formControls.map(item => <RenderingFormControl key={item.id} item={item} handleFormData={handleFormData} />)
 
     return (
@@ -86,7 +80,6 @@ export const ReusableFormView = ({ handleFormData, primaryAction, secondaryActio
             <Stack>
                 {renderFormControls()}
             </Stack>
-            {/* <PasswordResetFormButtons primaryAction={primaryAction} secondaryAction={secondaryAction} checkCondition={"Reset"} /> */}
             <ReUsableFormButtons formButtons={formButtons} primaryAction={primaryAction} secondaryAction={secondaryAction} checkCondition={checkCondition} />
         </form>
     )
@@ -126,12 +119,6 @@ const PasswordResetFormButtons = ({ primaryAction, secondaryAction, checkConditi
         { name: "Cancel", icon: null, fullWidth: true, variant: "contained" }
     ];
 
-    // const handleReset = () => console.log("reset!!")
-
-    // const handleCancel = () => console.log("cancel!!")
-
-    // const renderButtons = buttons.map(item => <ReusableFormActionButtons key={item.name} buttonItem={item} actionMethod={item.name === "Reset" ? primaryAction : secondaryAction} forSubmit={item.name === "Reset"} />)
-
     const renderButtons = () => buttons.map(item => <ReusableFormActionButtons key={item.name} buttonItem={item} actionMethod={item.name === checkCondition ? primaryAction : secondaryAction} forSubmit={item.name === checkCondition} />)
 
     return (
@@ -158,8 +145,6 @@ export const ReusableFormActionButtons = ({ actionMethod, buttonItem, forSubmit 
 const checkGuestUserPresence = (userFullname) => {
     const restrictedUsers = ["Guest Een", "Guest Twee"];
     return restrictedUsers.includes(userFullname)
-    // return restrictedUsers.includes(appCtx?.user?.fullName)
-    // return restrictedUsers.find(name => name === appCtx?.user?.fullName)
 }
 
 const formControls = [
