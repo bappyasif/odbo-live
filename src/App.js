@@ -22,6 +22,7 @@ import { getDesignTokens } from './utils/customTheme';
 import PasswordReset from './routes/PasswordReset';
 import RecoverPassword from "./routes/RecoverPassword"
 import UserSessionValidityChecks from './components/UserSessionValidityChecks';
+import LoadingPage from './components/LoadingPage';
 
 export const AppContexts = createContext()
 
@@ -42,11 +43,21 @@ function App() {
 
   const navigate = useNavigate();
 
-  const toggleLoading = () => setLoading(prev => !prev)
+  // const turnOffLoading = () => {
+  //   setLoading(false)
+  //   console.log("toggled Off!!")
+  // }
+
+  // const turnOnLoading = () => {
+  //   setLoading(true)
+  //   console.log("toggled On!!")
+  // }
+
+  const toggleLoading = () => setLoading(prev => !prev);
 
   const toggleSsoLogin = () => {
     const ssoStatus = localStorage.getItem("ssoLogin");
-    if(ssoStatus !== undefined) {
+    if (ssoStatus !== undefined) {
       localStorage.setItem("ssoLogin", !ssoStatus)
     } else {
       localStorage.setItem("ssoLogin", true)
@@ -155,11 +166,11 @@ function App() {
 
   const updateSpecificPostData = (createdPost, dataKey, dataValue) => {
 
-      createdPost[dataKey] = dataValue;
+    createdPost[dataKey] = dataValue;
 
-      const newDataset = [createdPost, ...userAccessiblePostsDataset]
+    const newDataset = [createdPost, ...userAccessiblePostsDataset]
 
-      handleAvailablePostsFeeds(newDataset);
+    handleAvailablePostsFeeds(newDataset);
   }
 
   const clearCurrentUserData = () => {
@@ -227,8 +238,8 @@ function App() {
   }
 
   const contexts = {
-    // baseUrl: "http://localhost:3000",
-    baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
+    baseUrl: "http://localhost:3000",
+    // baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
     user: user,
     handleData: handleData,
     updateData: updateData,
@@ -260,6 +271,8 @@ function App() {
     updateSpecificPostData: updateSpecificPostData,
     toggleSsoLoginStatus: toggleSsoLogin,
     toggleLoadingStatus: toggleLoading
+    // turnOffLoading: turnOffLoading,
+    // turnOnLoading: turnOnLoading
   }
 
   useEffect(() => {
@@ -307,19 +320,21 @@ function App() {
       <div className="App" style={{ backgroundColor: "grey[400]", height: "100vh" }}>
         <MainNavigation />
 
-        { (!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null}
+        {(!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null}
 
         {/* for overall token validity checks prompt to user, to avoid getting un authorized response on protected resources */}
         {user?._id ? <UserSessionValidityChecks /> : null}
 
+        {/* {loading ? <LoadingPage /> : null} */}
+
         <ThemeProvider theme={theme}>
           <Paper>
             <Routes>
-            <Route path='/success/login' element={<LoginSuccess />} />
               {
                 !user?._id
                   ?
                   <>
+                    <Route path='/success/login' element={<LoginSuccess />} />
                     <Route path="/recover-password" element={<RecoverPassword />} />
                     <Route path='/login' element={<LoginForm handleData={handleData} />} />
                     {/* <Route path='/login/success' element={<LoginSuccess />} /> */}
@@ -343,7 +358,12 @@ function App() {
 
               <Route path='/users/:userID/visit/profile' element={<VisitAnotherUserProfile />} />
 
-              <Route path='*' element={<ErrorPage />} />
+              {/* <Route path='*' element={<ErrorPage />} /> */}
+              {
+                loading
+                ? <Route path='*' element={<LoadingPage />} />
+                : <Route path='*' element={<ErrorPage />} />
+              }
             </Routes>
           </Paper>
         </ThemeProvider>

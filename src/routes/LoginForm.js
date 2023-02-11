@@ -51,6 +51,8 @@ function LoginForm() {
     let handleSubmit = evt => {
         evt.preventDefault();
         setProcessingRequest("loading");
+        appCtx.toggleLoadingStatus();
+        // appCtx.turnOnLoading();
 
         let timer = setTimeout(() => {
             sendDataToServer(appCtx.baseUrl + "/login", formData, handleError, updateData)
