@@ -310,6 +310,7 @@ let RenderLoginOutlet = ({ item }) => {
         // console.log(consent, ["Y", "y"].includes(consent))
 
         if (["Y", "y"].includes(consent)) {
+            appCtx.toggleSsoLoginStatus();
             loginPrompt(url, getAuthenticatedUserData)
         } else {
             alert("try using guest accounts for an user experience or perhaps consider registering with your email for Full Access, thank you :)")

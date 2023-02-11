@@ -36,10 +36,23 @@ function App() {
   let [darkMode, setDarkMode] = useState(false);
   let [jwtExists, setJwtExists] = useState(false);
   let [routeBeforeSessionExpired, setRouteBeforeSessionExpired] = useState(false);
+  let [loading, setLoading] = useState(false);
 
   const location = useLocation();
 
   const navigate = useNavigate();
+
+  const toggleLoading = () => setLoading(prev => !prev)
+
+  const toggleSsoLogin = () => {
+    const ssoStatus = localStorage.getItem("ssoLogin");
+    if(ssoStatus !== undefined) {
+      localStorage.setItem("ssoLogin", !ssoStatus)
+    } else {
+      localStorage.setItem("ssoLogin", true)
+    }
+    // setSsoLogin(prev => !prev)
+  }
 
   const removeStoredRouteAfterLogout = () => setRouteBeforeSessionExpired(null);
 
@@ -191,18 +204,20 @@ function App() {
       clearCurrentUserData();
       setJwtExists(false);
       // alert("unauthorization is required for this action, redirecting to login page")
+      // console.log(ssoLogin, "ssoLogin!!")
       navigate("/login");
     }
   }
 
   const previouslyExistingAppDataOnLocalstorage = () => {
     const isDarkMode = localStorage.getItem("odbo-dark-mode");
+    const ssoLoginStatus = localStorage.getItem("ssoLogin");
 
     if (isDarkMode !== null) {
       setDarkMode(isDarkMode)
     }
 
-    getUserDataFromJwtTokenStoredInLocalStorage()
+    !ssoLoginStatus && getUserDataFromJwtTokenStoredInLocalStorage()
   }
 
   const fetchUserDataWithValidAccessToken = () => {
@@ -242,7 +257,9 @@ function App() {
     routeBeforeSessionExpired: routeBeforeSessionExpired,
     handleLastVisitedRouteBeforeSessionExpired: handleLastVisitedRouteBeforeSessionExpired,
     removeStoredRouteAfterLogout: removeStoredRouteAfterLogout,
-    updateSpecificPostData: updateSpecificPostData
+    updateSpecificPostData: updateSpecificPostData,
+    toggleSsoLoginStatus: toggleSsoLogin,
+    toggleLoadingStatus: toggleLoading
   }
 
   useEffect(() => {
@@ -298,13 +315,14 @@ function App() {
         <ThemeProvider theme={theme}>
           <Paper>
             <Routes>
+            <Route path='/success/login' element={<LoginSuccess />} />
               {
                 !user?._id
                   ?
                   <>
                     <Route path="/recover-password" element={<RecoverPassword />} />
                     <Route path='/login' element={<LoginForm handleData={handleData} />} />
-                    <Route path='/login/success' element={<LoginSuccess />} />
+                    {/* <Route path='/login/success' element={<LoginSuccess />} /> */}
                     <Route path='/register' element={<RegisterUser handleData={handleData} />} />
                   </>
                   :

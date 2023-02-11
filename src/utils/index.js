@@ -275,6 +275,7 @@ const userStillLoggedIn = () => {
 const removeJwtDataFromLocalStorage = () => {
     localStorage.removeItem("expires")
     localStorage.removeItem("token")
+    localStorage.removeItem("ssoLogin")
 }
 
 // this could be used to make way for re-authorization for users, when their session or access token is expired
