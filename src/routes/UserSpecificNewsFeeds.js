@@ -7,6 +7,7 @@ import { AppContexts } from '../App'
 import { CurateKeywordBasedPostsFromNyTimes, RenderMostSharedPostsFromNyTimes, RenderPopularPostsFromNyTimes } from '../components/ContentsFromNyTimes';
 import CreatePost from '../components/CreatePost';
 import { ButtonToIndicateHelp, HowToUseShowMorePostsListings } from '../components/HowToUseApp';
+import LoadingPage from '../components/LoadingPage';
 import ShowPostsFromTwitter, { RenderPost } from '../components/ShowPostsFromTwitter';
 import ShowUserCreatedPost from '../components/UserCreatedPost';
 import { getProtectedDataFromServer, readDataFromServer } from '../utils';
@@ -105,7 +106,7 @@ function UserSpecificNewsFeeds(props) {
     // console.log(showPostsUntilIndex, "untilIndex", appCtx.availablePostsFeeds.length)
 
     return (
-        <Paper sx={{minHeight: "100vh"}}>
+        <Paper sx={{ minHeight: "100vh" }}>
 
             {showCreatePost ? <CreatePost /> : null}
 
@@ -119,7 +120,9 @@ function UserSpecificNewsFeeds(props) {
                     : null
             }
 
-            {appCtx.availablePostsFeeds.length ? renderAllAccessiblePosts() : null}
+            {/* {appCtx.availablePostsFeeds.length ? renderAllAccessiblePosts() : null} */}
+
+            {appCtx.availablePostsFeeds.length ? renderAllAccessiblePosts() : <LoadingPage />}
 
             {/* <TweetEmbed tweetsDataset={tweetPostsDataset} /> */}
 
@@ -130,26 +133,31 @@ function UserSpecificNewsFeeds(props) {
                     : null
             }
 
-            <Button
-                startIcon={<AllOutTwoTone sx={{ fontSize: "29px !important" }} />}
-                variant='contained'
-                sx={{
-                    width: "fit-content",
-                    margin: "auto",
-                    position: "relative",
-                    backgroundColor: "primary.light"
-                }}
-            >
-                <Typography
-                    onClick={handleShowMore}
-                    variant="h6"
-                >
-                    Show More
-                </Typography>
+            {
+                renderAllAccessiblePosts()?.length > 11
+                    ?
+                    <Button
+                        startIcon={<AllOutTwoTone sx={{ fontSize: "29px !important" }} />}
+                        variant='contained'
+                        sx={{
+                            width: "fit-content",
+                            margin: "auto",
+                            position: "relative",
+                            backgroundColor: "primary.light"
+                        }}
+                    >
+                        <Typography
+                            onClick={handleShowMore}
+                            variant="h6"
+                        >
+                            Show More
+                        </Typography>
 
-                <ButtonToIndicateHelp hoverPosition={{ left: "-185px", top: "-110px" }} alertPosition={{ left: 0 }} forWhichItem={"Show More Listings"} />
-                {appCtx.dialogTextFor === "Show More Listings" ? <HowToUseShowMorePostsListings /> : null}
-            </Button>
+                        <ButtonToIndicateHelp hoverPosition={{ left: "-185px", top: "-110px" }} alertPosition={{ left: 0 }} forWhichItem={"Show More Listings"} />
+                        {appCtx.dialogTextFor === "Show More Listings" ? <HowToUseShowMorePostsListings /> : null}
+                    </Button>
+                    : null
+            }
 
             <ScrollToTop {...props}>
                 <Fab size="small" aria-label="scroll back to top">
@@ -176,11 +184,11 @@ const ShowApiContentsToggler = ({ toggle, handleToggle, dataReady }) => {
                 color="secondary"
             />
             <Button
-                sx={{color: "text.primary"}}
+                sx={{ color: "text.primary" }}
                 onClick={handleToggle}
                 startIcon={toggle ? <CheckCircleTwoTone /> : <DownloadingTwoTone />}
             >
-                <Typography sx={{color: "text.primary"}}>{`${toggle ? "Hide" : "Show"} Third Party Api Contents`}</Typography>
+                <Typography sx={{ color: "text.primary" }}>{`${toggle ? "Hide" : "Show"} Third Party Api Contents`}</Typography>
             </Button>
         </Stack>
     )

@@ -43,17 +43,15 @@ function App() {
 
   const navigate = useNavigate();
 
-  // const turnOffLoading = () => {
-  //   setLoading(false)
-  //   console.log("toggled Off!!")
-  // }
+  const turnOffLoading = () => {
+    setLoading(false)
+    console.log("toggled Off!!")
+  }
 
-  // const turnOnLoading = () => {
-  //   setLoading(true)
-  //   console.log("toggled On!!")
-  // }
-
-  const toggleLoading = () => setLoading(prev => !prev);
+  const turnOnLoading = () => {
+    setLoading(true)
+    console.log("toggled On!!")
+  }
 
   const toggleSsoLogin = () => {
     const ssoStatus = localStorage.getItem("ssoLogin");
@@ -118,6 +116,7 @@ function App() {
       storeJwtAuthDataInLocalstorage(data.token, data.expiresIn)
     }
 
+    turnOnLoading();
   }
 
   let updateData = (key, value) => setUser(prev => {
@@ -176,7 +175,7 @@ function App() {
   const clearCurrentUserData = () => {
     setUser({})
     setJwtUser({})
-    setUserAccessiblePostsDataset({})
+    setUserAccessiblePostsDataset([])
   }
 
   function getUser() {
@@ -214,8 +213,7 @@ function App() {
     } else {
       clearCurrentUserData();
       setJwtExists(false);
-      // alert("unauthorization is required for this action, redirecting to login page")
-      // console.log(ssoLogin, "ssoLogin!!")
+      turnOnLoading();
       navigate("/login");
     }
   }
@@ -270,9 +268,8 @@ function App() {
     removeStoredRouteAfterLogout: removeStoredRouteAfterLogout,
     updateSpecificPostData: updateSpecificPostData,
     toggleSsoLoginStatus: toggleSsoLogin,
-    toggleLoadingStatus: toggleLoading
-    // turnOffLoading: turnOffLoading,
-    // turnOnLoading: turnOnLoading
+    turnOffLoading: turnOffLoading,
+    turnOnLoading: turnOnLoading
   }
 
   useEffect(() => {
@@ -317,7 +314,7 @@ function App() {
 
   return (
     <AppContexts.Provider value={contexts}>
-      <div className="App" style={{ backgroundColor: "grey[400]", height: "100vh" }}>
+      <div className="App" style={{ backgroundColor: "grey[400]", minHeight: "100vh" }}>
         <MainNavigation />
 
         {(!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null}
