@@ -45,12 +45,10 @@ function App() {
 
   const turnOffLoading = () => {
     setLoading(false)
-    console.log("toggled Off!!")
   }
 
   const turnOnLoading = () => {
     setLoading(true)
-    console.log("toggled On!!")
   }
 
   const toggleSsoLogin = () => {
@@ -116,6 +114,7 @@ function App() {
       storeJwtAuthDataInLocalstorage(data.token, data.expiresIn)
     }
 
+    // begin showing loading page
     turnOnLoading();
   }
 
@@ -209,12 +208,12 @@ function App() {
 
     if (token) {
       setJwtExists(true);
+      turnOnLoading();
       getProtectedDataAfterJwtVerification(url, token, updateUserStateForProtectiveRoutes, user?.userJwt?.refreshToken)
     } else {
       clearCurrentUserData();
       setJwtExists(false);
-      turnOnLoading();
-      navigate("/login");
+      checkIfRoutesExists()
     }
   }
 
@@ -226,7 +225,7 @@ function App() {
       setDarkMode(isDarkMode)
     }
 
-    !ssoLoginStatus && getUserDataFromJwtTokenStoredInLocalStorage()
+    !loading && !ssoLoginStatus && getUserDataFromJwtTokenStoredInLocalStorage()
   }
 
   const fetchUserDataWithValidAccessToken = () => {
@@ -235,9 +234,16 @@ function App() {
     token && getProtectedDataAfterJwtVerification(url, token, handleData, null)
   }
 
+  const checkIfRoutesExists = () => {
+    const protectedRoutes = ["/reset-password", "/user-friendships", "/connect", "/edit-user-profile", "/users/", "/choose-topics/"];
+    if (protectedRoutes.includes(location.pathname)) {
+      setLoading(true);
+    }
+  }
+
   const contexts = {
-    baseUrl: "http://localhost:3000",
-    // baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
+    // baseUrl: "http://localhost:3000",
+    baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
     user: user,
     handleData: handleData,
     updateData: updateData,
@@ -304,6 +310,9 @@ function App() {
     fetchUserDataWithValidAccessToken();
 
     getSystemPreferenceTheme();
+
+    // when a repload takes place this should make loading page to show up
+    checkIfRoutesExists();
   }, [])
 
   useEffect(() => {
@@ -322,8 +331,6 @@ function App() {
         {/* for overall token validity checks prompt to user, to avoid getting un authorized response on protected resources */}
         {user?._id ? <UserSessionValidityChecks /> : null}
 
-        {/* {loading ? <LoadingPage /> : null} */}
-
         <ThemeProvider theme={theme}>
           <Paper>
             <Routes>
@@ -334,7 +341,6 @@ function App() {
                     <Route path='/success/login' element={<LoginSuccess />} />
                     <Route path="/recover-password" element={<RecoverPassword />} />
                     <Route path='/login' element={<LoginForm handleData={handleData} />} />
-                    {/* <Route path='/login/success' element={<LoginSuccess />} /> */}
                     <Route path='/register' element={<RegisterUser handleData={handleData} />} />
                   </>
                   :
@@ -355,12 +361,13 @@ function App() {
 
               <Route path='/users/:userID/visit/profile' element={<VisitAnotherUserProfile />} />
 
-              {/* <Route path='*' element={<ErrorPage />} /> */}
               {
                 loading
-                ? <Route path='*' element={<LoadingPage />} />
-                : <Route path='*' element={<ErrorPage />} />
+                  ? <Route path='*' element={<LoadingPage />} />
+                  : null
               }
+
+              <Route path='*' element={<ErrorPage />} />
             </Routes>
           </Paper>
         </ThemeProvider>

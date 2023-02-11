@@ -60,7 +60,6 @@ function UserSpecificNewsFeeds(props) {
     let handleAllPrivatePosts = (result) => {
         // creating a new dataset from already available posts data and then adding on found Private Posts from fetch request
         let newPosts = [...appCtx.availablePostsFeeds, ...result.data]
-        // let newPosts = [...appCtx.availablePostsFeeds, ...result.data.data]
         // after curating a modified posts dataset, updating app posts data with this new dataset
         appCtx.handleAvailablePostsFeeds(newPosts)
         // once done, resetting private posts fetch request flag to false
@@ -119,8 +118,6 @@ function UserSpecificNewsFeeds(props) {
                     <ShowPostsFromThirdPartyApisTopBunk />
                     : null
             }
-
-            {/* {appCtx.availablePostsFeeds.length ? renderAllAccessiblePosts() : null} */}
 
             {appCtx.availablePostsFeeds.length ? renderAllAccessiblePosts() : <LoadingPage />}
 
