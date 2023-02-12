@@ -97,7 +97,8 @@ function LoginForm() {
                 >
                     <Stack
                         sx={{
-                            display: {md: "flex", lg: "auto", gap: 2}
+                            display: {md: "flex", lg: "auto"},
+                            gap: 2, width: "fit-content", margin: "auto", justifyContent: ""
                         }}
                     >
                         <GuestUsers setFormData={setFormData} handleSubmit={handleSubmit} />
@@ -322,6 +323,7 @@ let ThirdPartyLoginOutlets = () => {
                     flexDirection: { xs: "row", lg: "column" },
                     flexWrap: "wrap",
                     justifyContent: "center",
+                    alignItems: "center"
                     // width: "fit-content"
                     // m: 1, p: 1, pl: 4, pr: 4,
                 }}

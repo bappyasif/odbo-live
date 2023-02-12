@@ -100,7 +100,8 @@ let RenderThisPostComments = (props) => {
             sx={{
                 alignItems: "center",
                 // gap: .6 
-                maxHeight: "400px",
+                // maxHeight: "400px",
+                minHeight: "100vh",
                 overflowY: renderComments()?.length > 4 ? "scroll" : "auto"
             }}
         >
@@ -112,7 +113,7 @@ let RenderThisPostComments = (props) => {
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: .6, position: "relative" }}
             >
                 {
-                    (props?.commentsData && renderComments()?.length) === 0
+                    (props?.commentsData?.length) === 0
                         ?
                         <Box>
                             <Divider />

@@ -110,29 +110,13 @@ export let UserEngagementWithPost = ({ postData, appCtx, setShowCreatePost, hand
     time && timer();
   }, [time])
 
-  // this will usually run when update operations failed for authorization
-  const afterDataUpdateOperation = (result) => {
-    afterDataUpdateOperationHandleError(result, appCtx)
-    // if(result === undefined) {
-    //   // navigate("/login", {replace: true})
-    //   appCtx.handleLastVisitedRouteBeforeSessionExpired("/");
-    //   removeJwtDataFromLocalStorage()
-    //   appCtx.getUserDataFromJwtTokenStoredInLocalStorage();
-    // }
-    // console.log(result, "DATA UPDATER!!")
-  }
-
   let updateThisPostCountsInDatabase = () => {
     let url = `${appCtx.baseUrl}/posts/${postData._id}/${appCtx.user._id}`
 
     // console.log(counts, onlyUserCounts, "server")
     counts.currentUserCounts = onlyUserCounts;
 
-    // updateDataInDatabase(url, counts)
-    // performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url, () => null, null, null)
-    // performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url, afterDataUpdateOperation)
     performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url)
-    // performProtectedUpdateOperation(counts, appCtx.user?.userJwt?.refreshToken, url, afterDataUpdateOperationHandleError)
   }
 
   let handleCreateNewComment = () => {
@@ -243,13 +227,16 @@ let RenderActionableIcon = ({ item, appCtx, handleCounts, counts, setShowModal, 
           sx={{
             backgroundColor: (flag && counts[item.name]) ? "secondary.light" : "info.light",
             position: "relative",
-            width: { xs: 51, md: 69 },
+            // width: { xs: 51, md: 69 },
             borderRadius: 6,
             py: .6,
             my: .6
           }}
         >
-          <Button sx={{ color: "info.contrastText" }} startIcon={counts[item.name] ? item.icon : null}>
+          <Button
+            sx={{ color: "info.contrastText" }}
+            startIcon={counts[item.name] ? item.icon : null}
+          >
             {counts[item.name] ? null : item.icon}
             <Typography variant={"subtitle2"}>{counts[item.name] ? counts[item.name] : null}</Typography>
           </Button>
@@ -281,7 +268,7 @@ export const ShowUserAuthenticationOptions = ({ promptLogin, setPromptLogin, ite
       open={promptLogin}
       onClose={() => setPromptLogin(false)}
     >
-      <Box style={style}>
+      <Box sx={style}>
         <LoginForm />
         <Button fullWidth={true} variant='contained' onClick={() => setPromptLogin(false)}>Cancel</Button>
       </Box>

@@ -401,73 +401,78 @@ let FloatingLogin = () => {
   useEffect(() => handleError([]), [formData])
 
   return (
-    <WrapperDiv className="fl-wrapper">
-      <Typography
+    // <WrapperDiv className="fl-wrapper">
+      <Stack
         sx={{
-          display: { xs: "none", xl: "block" },
-          fontSize: { lg: "1.1rem", xl: "1.5rem" }
+          display: { xs: "none", md: "auto" },
         }}
-        variant='h5'
       >
-        Login to your profile from here
-      </Typography>
-      <form
-        ref={ref} method={"post"} onSubmit={handleSubmit}
-        style={{ position: "relative", marginLeft: "11px" }}
-      >
-        {errors?.length ? <Typography variant='body2' sx={{ position: "absolute", color: "maroon", bottom: "-13px", left: "10.1px" }}>User email and password does not match!!</Typography> : null}
-
-        <Stack
+        <Typography
           sx={{
-            display: { xs: "none", md: "flex" },
-            flexDirection: "row",
-            alignItems: "baseline"
+            display: { xs: "none", xl: "block" },
+            fontSize: { lg: "1.1rem", xl: "1.5rem" }
           }}
+          variant='h5'
         >
-          <FormControl
-            sx={{}}
+          Login to your profile from here
+        </Typography>
+        <form
+          ref={ref} method={"post"} onSubmit={handleSubmit}
+          style={{ position: "relative", marginLeft: "11px" }}
+        >
+          {errors?.length ? <Typography variant='body2' sx={{ position: "absolute", color: "maroon", bottom: "-13px", left: "10.1px" }}>User email and password does not match!!</Typography> : null}
+
+          <Stack
+            sx={{
+              display: { xs: "none", md: "flex" },
+              flexDirection: "row",
+              alignItems: "baseline"
+            }}
           >
-            <MuiInputElement
-              type={"email"}
-              id={"email"}
-              handleChange={handleChange}
-              text="enter email (e.g. t@e.st)"
-              required={true}
-              color={errors?.length ? "error" : "success"}
-              error={errors?.length ? true : false}
-              fontSize={{ xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }}
-            />
-          </FormControl>
-          <FormControl>
-            <MuiInputElement
-              type={"password"}
-              id={"password"}
-              handleChange={handleChange}
-              text="enter password"
-              required={true}
-              color={errors?.length ? "error" : "success"}
-              error={errors?.length ? true : false}
-              fontSize={{ xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }}
-            />
-          </FormControl>
-          <Button
-            color={"primary"}
-            variant="contained"
-            sx={{ height: "fit-content" }}
-            type={"submit"}
-          >
-            <Typography
-              sx={{
-                fontSize: { xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }
-              }}
-              variant='h6'
+            <FormControl
+              sx={{}}
             >
-              Login
-            </Typography>
-          </Button>
-        </Stack>
-      </form>
-    </WrapperDiv>
+              <MuiInputElement
+                type={"email"}
+                id={"email"}
+                handleChange={handleChange}
+                text="enter email (e.g. t@e.st)"
+                required={true}
+                color={errors?.length ? "error" : "success"}
+                error={errors?.length ? true : false}
+                fontSize={{ xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }}
+              />
+            </FormControl>
+            <FormControl>
+              <MuiInputElement
+                type={"password"}
+                id={"password"}
+                handleChange={handleChange}
+                text="enter password"
+                required={true}
+                color={errors?.length ? "error" : "success"}
+                error={errors?.length ? true : false}
+                fontSize={{ xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }}
+              />
+            </FormControl>
+            <Button
+              color={"primary"}
+              variant="contained"
+              sx={{ height: "fit-content" }}
+              type={"submit"}
+            >
+              <Typography
+                sx={{
+                  fontSize: { xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }
+                }}
+                variant='h6'
+              >
+                Login
+              </Typography>
+            </Button>
+          </Stack>
+        </form>
+      </Stack>
   )
 }
 
