@@ -8,7 +8,7 @@ import { BoxElement, ButtonElement, CardElement, ContainerElement, FormControlEl
 import ChoosePrivacy from './ChoosePrivacy'
 import CreatePoll from './CreatePoll'
 import ShowUserPostMedias from './ShowUserPostMedias'
-import { Avatar, Box, Button, CardContent, CircularProgress, Paper, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Button, CardContent, CircularProgress, Icon, Paper, Stack, Typography } from '@mui/material'
 import { PostAddTwoTone } from '@mui/icons-material'
 import { sendDataToServer, sendDataWithProtectionToServer } from '../utils'
 import { AppContexts } from '../App'
@@ -119,7 +119,7 @@ const PostCreatingModalUi = ({ appCtx, handleAddedOptions, setPostText, postText
           />
           <Stack
             sx={{
-              width: { xs: "459px", md: "620px", lg: "100%" },
+              // width: { xs: "459px", md: "620px", lg: "100%" },
             }}
           >
             <form ref={ref} style={{ position: "relative", width: "100%" }}>
@@ -129,7 +129,7 @@ const PostCreatingModalUi = ({ appCtx, handleAddedOptions, setPostText, postText
             <Stack
               sx={{
                 flexDirection: "row",
-                justifyContent: "space-between",
+                justifyContent: { xs: "center", lg: "space-between" },
                 flexWrap: { xs: "wrap", lg: "nowrap" },
                 mt: .6
               }}
@@ -217,7 +217,7 @@ let ShowRichTextEditor = ({ handleChange, setPostText }) => {
         init={{
           selector: 'textarea',  // change this value according to your HTML
           init_instance_callback: function (editor) {
-            editor.getWin().document.body.style.backgroundColor='#6c757d'
+            editor.getWin().document.body.style.backgroundColor = '#6c757d'
             editor.on("keyup change", (e) => {
               let regExp = /<[^>]*>/g
               setPostText(editor.getContent().replace(regExp, ''))
@@ -353,8 +353,30 @@ let ShowUrlGrabbingForm = ({ handleValue, currentElement }) => {
 let ShowIconBtns = ({ item, handleAddedOptions }) => {
 
   return (
-    <Button onClick={e => handleAddedOptions(e, item.name, '')} variant='outlined' startIcon={item.elem} sx={{ m: 1.3, mt: 0, backgroundColor: "secondary.light", color: "text.primary", width: { xs: "100%", md: "auto" } }}>
-      <TypographyElement styles={{ color: "text.primary" }} text={item.name} type={"span"} />
+    <Button
+      onClick={e => handleAddedOptions(e, item.name, '')}
+      variant='outlined'
+      // startIcon={item.elem}
+      sx={{
+        mx: .2, mt: 0, 
+        backgroundColor: "secondary.light", color: "text.primary",
+        // minWidth: { xs: "auto", md: "auto" },
+        minWidth: "fit-content",
+        display: "flex", alignItems: "center", 
+        // p: 0,
+      }}
+    >
+      <Icon
+        sx={{ 
+          display: "flex",
+          width: "fit-content"
+          // p: {xs: .1, md: "auto"}
+        }}
+      >
+        {item.elem}
+      </Icon>
+      <Typography variant='h6' sx={{ color: "text.primary", display: {xs: "none", lg: "block"} }}>{item.name}</Typography>
+      {/* <TypographyElement styles={{ color: "text.primary", fontSize: "large" }} text={item.name} type={"span"} /> */}
     </Button>
   )
 }

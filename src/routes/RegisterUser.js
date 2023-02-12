@@ -53,15 +53,20 @@ function RegisterUser({ handleData }) {
     let renderFieldsets = () => createFormWithThese.map(data => <RenderFieldset key={data.id} data={data} handleChange={handleChange} />)
 
     return (
-        <WrapperDiv className={"register-user"} styles={{height: "100vh"}}>
+        <WrapperDiv className={"register-user"} styles={{minHeight: "100vh"}}>
             <ShowDataProcessingLoaders processingRequest={processingRequest} />
 
             <ShowWarningAboutSecurity />
             
             <H1Element value={"Register User"} />
 
+            {/* {errors?.length ? <ShowErrors errors={errors} /> : null} */}
+
             <FormElement handleSubmit={handleSubmit}>
-                <LegendElement text={"Please enter all required fileds data(denoted by * next to them)"} />
+                <LegendElement styles={{textAlign: "center"}} text={"Please enter all required fileds data(denoted by * next to them)"} />
+                
+                {errors?.length ? <ShowErrors errors={errors} /> : null}
+                
                 <Stack
                     sx={{
                         mt: 1.5,
@@ -78,7 +83,7 @@ function RegisterUser({ handleData }) {
                 </Button>
             </FormElement>
             
-            {errors?.length ? <ShowErrors errors={errors} /> : null}
+            {/* {errors?.length ? <ShowErrors errors={errors} /> : null} */}
         </WrapperDiv>
     )
 }

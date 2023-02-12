@@ -323,7 +323,7 @@ function App() {
 
   return (
     <AppContexts.Provider value={contexts}>
-      <div className="App" style={{ backgroundColor: "grey[400]", minHeight: "100vh" }}>
+      <div className="App" style={{ backgroundColor: "grey[400]", minHeight: "100vh", minWidth: "fit-content" }}>
         <MainNavigation />
 
         {(!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null}

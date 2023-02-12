@@ -108,6 +108,8 @@ function LoginForm() {
                             <WrapperDiv className="login-form">
                                 <Typography fontWeight={"bold"} fontSize={"42px"} variant='h3'>Login Form</Typography>
 
+                                {errors?.length ? <ShowErrors errors={errors} /> : null}
+
                                 <FormElement handleSubmit={handleSubmit}>
                                     <LegendElement text={"Enter your registered email and password"} />
                                     <LoginFromControlComponent handleChange={handleChange} />
@@ -123,7 +125,7 @@ function LoginForm() {
                                     </Stack>
                                 </FormElement>
 
-                                {errors?.length ? <ShowErrors errors={errors} /> : null}
+                                {/* {errors?.length ? <ShowErrors errors={errors} /> : null} */}
                             </WrapperDiv>
                         </Paper>
                     </Stack>

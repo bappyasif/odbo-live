@@ -6,8 +6,8 @@ const FormElement = (props) => {
 
 // const FormElementForwardedRef = React.forwardRef(FormElement)
 
-const LegendElement = ({text}) => {
-    return <legend style={{textAlign: "justify", fontSize: "large"}}>{text}</legend>
+const LegendElement = ({text, styles}) => {
+    return <legend style={{textAlign: "justify", fontSize: "large", ...styles}}>{text}</legend>
 }
 
 const FieldsetElement = (props) => {

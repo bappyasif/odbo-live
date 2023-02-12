@@ -38,7 +38,7 @@ body.mceContentBody,
 }
 
 .wrapper-div.show-errors {
-  position: absolute;
+  /* position: absolute; */
   text-align: justify;
 }
 
