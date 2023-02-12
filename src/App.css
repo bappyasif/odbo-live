@@ -28,6 +28,8 @@ body.mceContentBody,
 
 .wrapper-div.login-form {
   padding: 11px;
+  width: fit-content;
+  margin: auto;
 }
 
 /* .wrapper-div.login-form, */

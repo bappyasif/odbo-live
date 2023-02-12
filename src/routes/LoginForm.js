@@ -70,36 +70,63 @@ function LoginForm() {
 
     return (
         <Box
-            sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", position: "relative", gap: 6, height: "100vh" }}
+            sx={{
+                display: "flex", flexDirection: "row", justifyContent: "center",
+                alignItems: "center", position: "relative", minHeight: "100vh",
+                gap: 2, px: 2
+            }}
         >
             <ShowDataProcessingLoaders processingRequest={processingRequest} />
 
-            <Stack>
+            <Stack
+                sx={{
+
+                }}
+            >
                 <ShowWarningAboutSecurity />
 
-                <Container sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                    <GuestUsers setFormData={setFormData} handleSubmit={handleSubmit} />
+                <Container
+                    sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", lg: "row" },
+                        // justifyContent: "space-between",
+                        // justifyContent: "start",
+                        // alignItems: "center",
+                        gap: { xs: 1.1, lg: 2 }
+                    }}
+                >
+                    <Stack
+                        sx={{
+                            display: {md: "flex", lg: "auto", gap: 2}
+                        }}
+                    >
+                        <GuestUsers setFormData={setFormData} handleSubmit={handleSubmit} />
 
-                    <WrapperDiv className="login-form">
-                        <Typography fontWeight={"bold"} fontSize={"42px"} variant='h3'>Login Form</Typography>
+                        <Paper 
+                        // sx={{mb: 2}}
+                        >
+                            <WrapperDiv className="login-form">
+                                <Typography fontWeight={"bold"} fontSize={"42px"} variant='h3'>Login Form</Typography>
 
-                        <FormElement handleSubmit={handleSubmit}>
-                            <LegendElement text={"Enter your registered email and password"} />
-                            <LoginFromControlComponent handleChange={handleChange} />
-                            <Button
-                                type='submit' variant='contained' startIcon={<LoginTwoTone />}
-                            >
-                                <Typography variant='h6'>Login</Typography>
-                            </Button>
+                                <FormElement handleSubmit={handleSubmit}>
+                                    <LegendElement text={"Enter your registered email and password"} />
+                                    <LoginFromControlComponent handleChange={handleChange} />
+                                    <Button
+                                        type='submit' variant='contained' startIcon={<LoginTwoTone />}
+                                    >
+                                        <Typography variant='h6'>Login</Typography>
+                                    </Button>
 
-                            <Divider sx={{ my: 1.1 }} />
-                            <Stack sx={{backgroundColor: "secondary.main", width: "fit-content"}}>
-                                <Link style={{ display: "flex", fontSize: "x-large", width: "fit-content" }} to="/recover-password">Forgot Password</Link>
-                            </Stack>
-                        </FormElement>
+                                    <Divider sx={{ my: 1.1 }} />
+                                    <Stack sx={{ backgroundColor: "secondary.main", width: "fit-content" }}>
+                                        <Link style={{ display: "flex", fontSize: "x-large", width: "fit-content" }} to="/recover-password">Forgot Password</Link>
+                                    </Stack>
+                                </FormElement>
 
-                        {errors?.length ? <ShowErrors errors={errors} /> : null}
-                    </WrapperDiv>
+                                {errors?.length ? <ShowErrors errors={errors} /> : null}
+                            </WrapperDiv>
+                        </Paper>
+                    </Stack>
 
                     <ThirdPartyLoginOutlets />
                 </Container>
@@ -111,9 +138,9 @@ function LoginForm() {
 
 export const ShowWarningAboutSecurity = () => {
     return (
-        <Stack sx={{ py: 6 }}>
-            <Typography variant='h2'>This is not a fully tested site by any Security Experts</Typography>
-            <Typography variant='h4'>Please be advised before using any of your personal data</Typography>
+        <Stack sx={{ py: 6, px: 2 }}>
+            <Typography variant='h4'>This is not a fully tested site by any Security Experts</Typography>
+            <Typography variant='h6'>Please be advised before using any of your personal data</Typography>
         </Stack>
     )
 }
@@ -199,7 +226,9 @@ export const RenderFormControlElement = ({ item, handleChange }) => {
         <FormControl
             sx={{
                 mt: 2,
-                position: "relative"
+                position: "relative",
+                width: { xs: "341px", md: "440px" },
+                margin: "auto"
             }}
         >
             <Input
@@ -275,9 +304,28 @@ let ThirdPartyLoginOutlets = () => {
     let renderLoginOutlets = () => loginOutlets.map(item => <RenderLoginOutlet key={item.name} item={item} />)
 
     return (
-        <Paper sx={{ ml: 2, mt: 1, borderRadius: 2 }}>
+        <Paper
+            sx={{
+                // pl: 2, 
+                mt: 1, borderRadius: 2,
+                // pt: 2
+                // width: "fit-content",
+                // height: "max-content"
+            }}
+        >
             <Typography variant='h2'>Login With</Typography>
-            {renderLoginOutlets()}
+            <Stack
+                sx={{
+                    display: "flex",
+                    flexDirection: { xs: "row", lg: "column" },
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    // width: "fit-content"
+                    // m: 1, p: 1, pl: 4, pr: 4,
+                }}
+            >
+                {renderLoginOutlets()}
+            </Stack>
         </Paper>
     )
 }
@@ -324,7 +372,13 @@ let RenderLoginOutlet = ({ item }) => {
     return (
         <Stack
             onClick={handleClick}
-            sx={{ alignItems: "center", flexDirection: "row", justifyContent: "left", m: 1, p: 1, pl: 4, pr: 4, outline: "solid .2px", borderRadius: 11, cursor: "pointer" }}
+            sx={{
+                alignItems: "center", flexDirection: "row",
+                justifyContent: { xs: "space-between", lg: "left" },
+                width: { xs: "260px", lg: "auto" },
+                m: 1, p: 1, pl: 4, pr: 4, outline: "solid .2px",
+                borderRadius: 11, cursor: "pointer"
+            }}
         >
             <IconButton>
                 <Icon sx={{ m: .4, color: "skyblue", textAlign: "left" }}>
@@ -340,10 +394,16 @@ let GuestUsers = ({ handleSubmit, setFormData }) => {
     let guestUsers = [{ name: "Guest Een" }, { name: "Guest Twee" }]
     let renderUsers = () => guestUsers.map(user => <RenderGuestUser key={user.name} item={user} handleSubmit={handleSubmit} setFormData={setFormData} />)
     return (
-        <Box>
+        <Paper
+            sx={{
+                p: 1,
+                px: 2,
+                mb: 2
+            }}
+        >
             <Typography variant='h2'>Guest Accounts</Typography>
             {renderUsers()}
-        </Box>
+        </Paper>
     )
 }
 
@@ -362,7 +422,7 @@ let RenderGuestUser = ({ item, handleSubmit, setFormData }) => {
 
     return (
         <IconButton sx={{ px: 2, py: 1 }} onClick={handleClick}>
-            <AccountCircleTwoTone />
+            <AccountCircleTwoTone fontSize="large" />
             <Typography>{item.name}</Typography>
         </IconButton>
     )
