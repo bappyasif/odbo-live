@@ -42,6 +42,7 @@ function RenderPostDataEssentials({ postData, shareMode }) {
         <>
             <Card>
                 {shareMode ? <Typography variant="h6">Post Sharing</Typography> : null}
+                
                 <RenderCardHeader userData={userData} />
 
                 {shareMode ? null : <Typography sx={{ display: {xs: "none", sm: "block"}, position: "absolute", top: 29, right: 20, color: "text.secondary" }} variant="subtitle2">{`Live Since: ${moment(created).fromNow()}`}</Typography>}

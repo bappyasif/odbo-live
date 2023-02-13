@@ -380,17 +380,17 @@ let RenderLoginOutlet = ({ item }) => {
             onClick={handleClick}
             sx={{
                 alignItems: "center", flexDirection: "row",
-                justifyContent: { xs: "space-between", lg: "space-around" },
-                width: { xs: "260px", lg: "350px" },
+                justifyContent: { xs: "space-between" },
+                width: { xs: "260px", lg: "290px" },
                 m: 1, p: 1, pl: 4, pr: 4, outline: "solid .2px",
                 borderRadius: 11, cursor: "pointer"
             }}
         >
-            <IconButton>
+            <span>
                 <Icon sx={{ m: .4, color: "skyblue", textAlign: "left" }}>
                     {item.icon}
                 </Icon>
-            </IconButton>
+            </span>
             <Typography variant='h4' sx={{ textAlign: "center", ml: 4 }}>{item.name}</Typography>
         </Stack>
     )
