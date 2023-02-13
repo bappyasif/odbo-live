@@ -16,11 +16,12 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: 900,
-        bgcolor: 'background.paper',
+        bgcolor: '#6c757d',
         border: '2px solid #000',
         boxShadow: 24,
-        p: 4,
+        py: 2,
         zIndex: 2,
+        borderRadius: 6
     };
 
     let { likesCount, loveCount, dislikesCount, shareCount, _id } = { ...postData }
@@ -36,7 +37,7 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
         // afterDataUpdateOperationHandleError(key, appCtx)
         // update this informationm in app state as well
         // console.log(key, value, result, postData, "AFTER UPDATE POST DATA?!", postData?.body)
-        if(result.success) {
+        if (result.success) {
             appCtx.updateSpecificPostData(result.updatedPost, "includedSharedPostId", postData._id)
         } else {
             afterDataUpdateOperationHandleError(key, appCtx)
@@ -79,14 +80,17 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
     return (
         <Box sx={style}>
             <CreatePost handleSuccessfullPostShared={handleSuccessfullPostShared} />
-            <RenderPostDataEssentials postData={postData} shareMode={true} />
-            <ShowPostUserEngagementsDetails counts={preparingCounts} />
+            <Stack sx={{mx: 3.05}}>
+                <RenderPostDataEssentials postData={postData} shareMode={true} />
+                <ShowPostUserEngagementsDetails counts={preparingCounts} />
+            </Stack>
             <Button
-                sx={{ mt: 1.1, mb: 0, backgroundColor: "beige", fontWeight: "bold", padding: 1.1, borderRadius: 1.1 }}
+                sx={{ mt: 1.1, mb: 0, backgroundColor: "beige", fontWeight: "bold", px: .9, borderRadius: 1.1 }}
                 onClick={handleModalsVisibility}
-                startIcon={<CancelTwoTone />}
+                // startIcon={<CancelTwoTone />}
             >
-                <Typography variant='body2'>Cancel</Typography>
+                <CancelTwoTone sx={{display: "flex", fontSize: "36px", mr: 1.1}} />
+                <Typography variant='body2' sx={{fontSize: "x-large", fontWeight: "bolder"}}>Cancel</Typography>
             </Button>
         </Box>
     )
@@ -108,8 +112,8 @@ export let ShowPostUserEngagementsDetails = ({ counts, forComment, clickHandler,
                             : counts[item.name]
                                 ? `${item.name}d by ${counts[item.name]} people`
                                 : forSharedPost
-                                ? `${item.name}d by ${counts[item.name] || 0} people`
-                                : `Be first to ${item.name}`
+                                    ? `${item.name}d by ${counts[item.name] || 0} people`
+                                    : `Be first to ${item.name}`
                     }
                 >
                     <Stack

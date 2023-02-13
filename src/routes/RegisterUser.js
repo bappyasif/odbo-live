@@ -78,7 +78,7 @@ function RegisterUser({ handleData }) {
                     {renderFieldsets()}
                 </Stack>
                 
-                <Button type='submit' variant='contained' startIcon={<AppRegistrationTwoTone />}>
+                <Button sx={{mb: 2}} type='submit' variant='contained' startIcon={<AppRegistrationTwoTone />}>
                     <Typography variant='h6'>Register</Typography>
                 </Button>
             </FormElement>

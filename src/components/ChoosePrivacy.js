@@ -47,10 +47,12 @@ export let ShowRespectiveIcon = ({ privacy, order }) => {
     let text = "";
     if (privacy === "Everybody" || privacy === "") {
         icon = <EverybodyElement />
-        text = "Everybody Can Interact With This Post"
+        // text = "Everybody Can Interact With This Post"
+        text = "For Everybody"
     } else if (privacy === "Friends") {
         icon = <FriendsElement />
-        text = "Only Friends Can Interact With This Post"
+        // text = "Only Friends Can Interact With This Post"
+        text = "For Friends"
     } 
     // else if (privacy === "") {
     //     icon = <EverybodyElement />
@@ -64,14 +66,15 @@ export let ShowRespectiveIcon = ({ privacy, order }) => {
                 justifyContent: "center",
                 alignItems: "baseline",
                 gap: 2,
-                mt: .9,
+                // mt: .9,
                 outline: "solid .6px lightskyblue",
                 color: "text.secondary"
             }}
             order={order}
         >
-            <Typography sx={{ fontSize: { xs: "20px", md: "36px" } }} variant='h4'>{"Privacy Announcement : "}</Typography>
-            <Typography sx={{ fontSize: { xs: "11px", md: "29px" }, display: "flex", alignItems: "center", gap: .9 }} variant='h6'>{text || "Everybody"} <span style={{fontSize: { xs: "11px", md: "22px" }}}>{icon}</span></Typography>
+            {/* <Typography sx={{ fontSize: { xs: "20px", md: "36px" } }} variant='h4'>{"Privacy Announcement : "}</Typography> */}
+            <Typography sx={{ fontSize: { xs: "20px", md: "36px" } }} variant='h4'>{"Privacy : "}</Typography>
+            <Typography sx={{ fontSize: { xs: "11px", md: "29px" }, display: "flex", alignItems: "center", gap: .9 }} variant='h6'>{text || "Everybody"} <span style={{fontSize: { xs: "11px", md: "22px" }, display: "flex"}}>{icon}</span></Typography>
         </Stack>
     )
 }

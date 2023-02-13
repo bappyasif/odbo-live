@@ -228,10 +228,10 @@ export const RenderFormControlElement = ({ item, handleChange }) => {
     return (
         <FormControl
             sx={{
-                mt: 2,
                 position: "relative",
                 width: { xs: "341px", md: "440px" },
-                margin: "auto"
+                margin: "auto",
+                mt: 2,
             }}
         >
             <Input
@@ -310,7 +310,9 @@ let ThirdPartyLoginOutlets = () => {
         <Paper
             sx={{
                 // pl: 2, 
-                mt: 1, borderRadius: 2,
+                // mt: 1, 
+                borderRadius: 2,
+                marginTop: {xs: 1, lg: 0}
                 // pt: 2
                 // width: "fit-content",
                 // height: "max-content"
@@ -323,7 +325,7 @@ let ThirdPartyLoginOutlets = () => {
                     flexDirection: { xs: "row", lg: "column" },
                     flexWrap: "wrap",
                     justifyContent: "center",
-                    alignItems: "center"
+                    alignItems: "center",
                     // width: "fit-content"
                     // m: 1, p: 1, pl: 4, pr: 4,
                 }}
@@ -378,8 +380,8 @@ let RenderLoginOutlet = ({ item }) => {
             onClick={handleClick}
             sx={{
                 alignItems: "center", flexDirection: "row",
-                justifyContent: { xs: "space-between", lg: "left" },
-                width: { xs: "260px", lg: "auto" },
+                justifyContent: { xs: "space-between", lg: "space-around" },
+                width: { xs: "260px", lg: "350px" },
                 m: 1, p: 1, pl: 4, pr: 4, outline: "solid .2px",
                 borderRadius: 11, cursor: "pointer"
             }}
