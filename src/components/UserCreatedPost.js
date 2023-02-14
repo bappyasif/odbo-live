@@ -1,4 +1,4 @@
-import { CommentTwoTone, FavoriteTwoTone, VolunteerActivismTwoTone } from '@mui/icons-material'
+import { CommentTwoTone, FavoriteTwoTone, Height, VolunteerActivismTwoTone } from '@mui/icons-material'
 import { Box, Button, Modal, Stack, Tooltip, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContexts } from '../App'
@@ -260,17 +260,21 @@ export const ShowUserAuthenticationOptions = ({ promptLogin, setPromptLogin, ite
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-    backgroundColor: "gainsboro"
+    backgroundColor: "gainsboro",
+    // height: "71%"
   };
+
+  console.log(promptLogin, "PROMPT LOGIN")
 
   return (
     <Modal
+      // open={true}
       open={promptLogin}
       onClose={() => setPromptLogin(false)}
     >
       <Box sx={style}>
-        <LoginForm />
-        <Button fullWidth={true} variant='contained' onClick={() => setPromptLogin(false)}>Cancel</Button>
+        <LoginForm nonRoute={true} />
+        <Button fullWidth={true} sx={{ mb: 11 }} variant='contained' onClick={() => setPromptLogin(false)}>Cancel</Button>
       </Box>
     </Modal>
   )
@@ -314,8 +318,17 @@ export let ShowIncludedSharedPost = ({ includedPostId, appCtx }) => {
       }}
     >
       <Typography>Shared Post</Typography>
-      {_id ? <RenderPostDataEssentials postData={sharedPostData} shareMode={true} /> : null}
-      {_id ? <ShowPostUserEngagementsDetails forSharedPost={true} counts={counts} currentUser={appCtx?.user?._id} /> : null}
+      {
+        includedPostId !== "post deleted"
+          ?
+          <>
+            {_id ? <RenderPostDataEssentials postData={sharedPostData} shareMode={true} /> : null}
+            {_id ? <ShowPostUserEngagementsDetails forSharedPost={true} counts={counts} currentUser={appCtx?.user?._id} /> : null}
+          </>
+          : <Typography>Opps Post Is Deleted</Typography>
+      }
+      {/* {_id ? <RenderPostDataEssentials postData={sharedPostData} shareMode={true} /> : null}
+      {_id ? <ShowPostUserEngagementsDetails forSharedPost={true} counts={counts} currentUser={appCtx?.user?._id} /> : null} */}
     </Box>
   )
 }

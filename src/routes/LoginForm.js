@@ -10,7 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { VisualizeWordCountProgress } from '../components/CreatePost';
 import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside';
 
-function LoginForm() {
+function LoginForm({nonRoute}) {
     let [errors, setErrors] = useState([]);
     let [formData, setFormData] = useState({});
     let [processingRequest, setProcessingRequest] = useState(null);
@@ -61,7 +61,7 @@ function LoginForm() {
     }
 
     useEffect(() => {
-        appCtx.clearCurrentUserData();
+        !nonRoute && appCtx.clearCurrentUserData();
         removeJwtDataFromLocalStorage();
     }, [])
     // console.log(formData, "formData!!");
