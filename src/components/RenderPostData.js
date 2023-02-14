@@ -7,7 +7,7 @@ import ShowUserPostMedias from './ShowUserPostMedias'
 import { readDataFromServer } from '../utils'
 import { sanitize } from 'dompurify'
 
-function RenderPostDataEssentials({ postData, shareMode }) {
+function RenderPostDataEssentials({ postData, shareMode, forShareModal }) {
     let { body, created, gif, poll, privacy, imageUrl, videoUrl, _id } = { ...postData }
 
     let [userData, setUserData] = useState({})
@@ -41,7 +41,7 @@ function RenderPostDataEssentials({ postData, shareMode }) {
     return (
         <>
             <Card>
-                {shareMode ? <Typography variant="h6">Post Sharing</Typography> : null}
+                {forShareModal ? <Typography variant="h6">Post Sharing</Typography> : null}
                 
                 <RenderCardHeader userData={userData} />
 

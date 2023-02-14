@@ -1,5 +1,5 @@
 import { CancelTwoTone } from '@mui/icons-material';
-import { Box, Button, Stack, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Icon, Stack, Tooltip, Typography } from '@mui/material'
 import React, { useContext } from 'react'
 import { AppContexts } from '../App';
 import CreatePost from './CreatePost';
@@ -15,7 +15,7 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 900,
+        width: { xs: "391px", md: "auto", lg: 900 },
         bgcolor: '#6c757d',
         border: '2px solid #000',
         boxShadow: 24,
@@ -80,23 +80,26 @@ function SharePostModal({ counts, postData, showModal, setShowModal, setShowCrea
     return (
         <Box sx={style}>
             <CreatePost handleSuccessfullPostShared={handleSuccessfullPostShared} />
-            <Stack sx={{mx: 3.05}}>
-                <RenderPostDataEssentials postData={postData} shareMode={true} />
-                <ShowPostUserEngagementsDetails counts={preparingCounts} />
+            <Stack sx={{ mx: 3.05 }}>
+                <RenderPostDataEssentials postData={postData} forShareModal={true} />
+                <ShowPostUserEngagementsDetails counts={preparingCounts} forShareModal={true} />
+                {/* <span style={{width: "92%"}}>
+                    <ShowPostUserEngagementsDetails counts={preparingCounts} forShareModal={true} />
+                </span> */}
             </Stack>
             <Button
                 sx={{ mt: 1.1, mb: 0, backgroundColor: "beige", fontWeight: "bold", px: .9, borderRadius: 1.1 }}
                 onClick={handleModalsVisibility}
-                // startIcon={<CancelTwoTone />}
+            // startIcon={<CancelTwoTone />}
             >
-                <CancelTwoTone sx={{display: "flex", fontSize: "36px", mr: 1.1}} />
-                <Typography variant='body2' sx={{fontSize: "x-large", fontWeight: "bolder"}}>Cancel</Typography>
+                <CancelTwoTone sx={{ display: "flex", fontSize: "36px", mr: 1.1 }} />
+                <Typography variant='body2' sx={{ fontSize: "x-large", fontWeight: "bolder" }}>Cancel</Typography>
             </Button>
         </Box>
     )
 }
 
-export let ShowPostUserEngagementsDetails = ({ counts, forComment, clickHandler, currentUser, forSharedPost }) => {
+export let ShowPostUserEngagementsDetails = ({ forShareModal, counts, forComment, clickHandler, currentUser, forSharedPost }) => {
     return (
         <Stack
             className="post-actions-icons"
@@ -107,11 +110,11 @@ export let ShowPostUserEngagementsDetails = ({ counts, forComment, clickHandler,
                     key={item.name}
                     sx={{ cursor: "help" }}
                     title={
-                        (!currentUser)
+                        (!currentUser && !forShareModal)
                             ? `Login to ${item.name}`
                             : counts[item.name]
                                 ? `${item.name}d by ${counts[item.name]} people`
-                                : forSharedPost
+                                : (forSharedPost || forShareModal)
                                     ? `${item.name}d by ${counts[item.name] || 0} people`
                                     : `Be first to ${item.name}`
                     }
@@ -121,14 +124,19 @@ export let ShowPostUserEngagementsDetails = ({ counts, forComment, clickHandler,
                         sx={{
                             backgroundColor: counts[item.name] ? "secondary.light" : "info.light",
                             cursor: forComment && forSharedPost ? "auto" : forComment ? "pointer" : "auto",
-                            p: forComment && 0,
-                            my: .6,
-                            borderRadius: 4
+                            // p: forComment && 0,
+                            // p: (forComment && 0) || (forShareModal && 0),
+                            p: (forComment || forShareModal) && 0,
+                            my: (forShareModal) ? 0 : .6,
+                            borderRadius: 4,
+                            // fontSize: forShareModal && "11px"
                         }}
                     >
                         <Button
                             // sx={{ cursor: "auto", color: "info.contrastText" }}
+                            sx={{p: forShareModal && 0}}
                             startIcon={counts[item.name] ? item.icon : null}
+                            // startIcon={<Stack sx={{fontSize: forShareModal && "11px"}} >{counts[item.name] ? item.icon : null}</Stack>}
                         >
                             {counts[item.name] ? null : item.icon}
                             <Typography variant={"subtitle2"}>{counts[item.name] ? counts[item.name] : null}</Typography>

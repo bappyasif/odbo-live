@@ -151,6 +151,8 @@ export const ShowWarningAboutSecurity = () => {
 export const ShowSessionExpiredDialog = () => {
     const [show, setShow] = useState(false);
 
+    const navigate = useNavigate()
+
     const ref = useRef();
 
     useToCloseModalOnClickedOutside(ref, () => setShow(false))
@@ -158,9 +160,14 @@ export const ShowSessionExpiredDialog = () => {
     const closeModalAfterTwoSeconds = () => {
         let timer = setTimeout(() => {
             setShow(false);
-
-            return () => clearTimeout(timer)
+            // return () => clearTimeout(timer)
+            // navigate("/login")
         }, 2000)
+
+        return () => {
+            clearTimeout(timer)
+            // navigate("/login")
+        }
     }
 
     useEffect(() => {

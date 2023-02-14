@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, DialogContentText, DialogTitle, Paper, Stack, Typography } from '@mui/material';
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { AppContexts } from '../App'
 import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside';
 import { removeJwtDataFromLocalStorage } from '../utils';
@@ -7,6 +8,7 @@ import { removeJwtDataFromLocalStorage } from '../utils';
 function UserSessionValidityChecks() {
     let [showPrompt, setShowPrompt] = useState(false);
     const appCtx = useContext(AppContexts);
+    const navigate = useNavigate()
 
     const handleShowPrompt = () => {
         let timer = setTimeout(() => {
@@ -14,12 +16,16 @@ function UserSessionValidityChecks() {
             setShowPrompt(true);
         }, 198000)
 
-        return () => clearTimeout(timer)
+        return () => {
+            clearTimeout(timer)
+            // navigate("/login")
+        }
     }
 
     const precursoryProcesses = () => {
         removeJwtDataFromLocalStorage()
         appCtx.getUserDataFromJwtTokenStoredInLocalStorage();
+        navigate("/login");
     }
 
     const prepareForNewSession = () => {

@@ -66,7 +66,7 @@ export let ShowRespectiveIcon = ({ privacy, order }) => {
                 justifyContent: "center",
                 alignItems: "baseline",
                 gap: 2,
-                // mt: .9,
+                mt: 1.1,
                 outline: "solid .6px lightskyblue",
                 color: "text.secondary"
             }}
