@@ -72,6 +72,7 @@ export let UserEngagementWithPost = ({ postData, appCtx, setShowCreatePost, hand
   }
 
   let handleCounts = (elem, addFlag) => {
+    // console.log(elem, addFlag, "ADDFLAG!!")
     setCounts(prev => ({
       ...prev,
       [elem]:
@@ -193,31 +194,63 @@ export let UserEngagementWithPost = ({ postData, appCtx, setShowCreatePost, hand
 let RenderActionableIcon = ({ item, appCtx, handleCounts, counts, setShowModal, setShowCreatePost, handleShowCommentModal }) => {
   let [flag, setFlag] = useState(false);
   let [promptLogin, setPromptLogin] = useState(false);
+  let [showMarking, setShowMarking] = useState(false);
+
+  const toggleAddFlag = () => setFlag(prev => !prev)
 
   let handleClick = () => {
     if (appCtx.user._id) {
-      setFlag(!flag);
+      // setFlag(!flag);
+      toggleAddFlag();
       if (item.name === "Share") {
+        // setFlag(true);
+        // toggleAddFlag()
         setShowModal(true);
         setShowCreatePost(false);
       } else if (item.name === "Comment") {
+        // setFlag(!flag);
+        // toggleAddFlag()
         handleShowCommentModal()
       } else if (item.name !== "Share" || item.name !== "Comment") {
+        // setFlag(!flag);
+        // toggleAddFlag();
         handleCounts(item.name, !flag);
+        // console.log(item.name, "item.name")
       }
     } else {
       setPromptLogin(true);
     }
   }
 
-  // if user already had interacted with this post then turning flag on for indication for those
-  useEffect(() => {
+  const usingForEffects = () => {
+    console.log("RUNNING THIS", counts?.engaggedUser, counts?.engaggedUser && counts?.engaggedUser[item.name])
     if (counts?.engaggedUser && counts?.engaggedUser[item.name]) {
       setFlag(true)
+      // setShowMarking(true);
+      console.log(flag, "FLAG")
     }
+  }
+
+  // if user already had interacted with this post then turning flag on for indication for those
+  useEffect(() => {
+    usingForEffects()
+    // if (counts?.engaggedUser && counts?.engaggedUser[item.name]) {
+    //   setFlag(true)
+    //   console.log(flag, "FLAG")
+    // }
   }, [])
 
+  useEffect(() => {
+    usingForEffects()
+  }, [flag])
+
   // console.log(promptLogin, "promptLogin!!")
+
+  // console.log(flag, "FLAG")
+
+  // console.log(flag && counts[item.name], "COUNTS CHECK!!", flag, counts[item.name], item)
+
+  // flag && counts[item.name] && console.log(flag && counts[item.name], "CHECK IT", flag, counts[item.name])
 
   return (
     <>
@@ -226,6 +259,11 @@ let RenderActionableIcon = ({ item, appCtx, handleCounts, counts, setShowModal, 
           onClick={handleClick}
           sx={{
             backgroundColor: (flag && counts[item.name]) ? "secondary.light" : "info.light",
+            // backgroundColor: (flag || (flag && counts[item.name])) ? "secondary.light" : "info.light",
+            // backgroundColor: (flag) ? "secondary.light" : "info.light",
+            // backgroundColor: (showMarking) ? "secondary.light" : "info.light",
+            // backgroundColor: (counts?.engaggedUser && counts?.engaggedUser[item.name]) ? "secondary.light" : "info.light",
+            // backgroundColor: (counts?.engaggedUser && counts?.engaggedUser[item.name]) ? "secondary.light" : "info.light",
             position: "relative",
             // width: { xs: 51, md: 69 },
             borderRadius: 6,
