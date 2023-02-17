@@ -129,7 +129,7 @@ const ButtonElement = ({ text, type, fontSize, action, disable, variant }) => {
 }
 
 const BoxElement = (props) => {
-    return <Box sx={{ width: "100%", order: props.order, display: "flex", gap: 2, justifyContent: "center", mt: 2 }} className={props.className}>{props.children}</Box>
+    return <Box sx={{ width: "100%", order: props.order, display: "flex", gap: 2, justifyContent: "center", mt: 2, ...props.style }} className={props.className}>{props.children}</Box>
 }
 
 const StackElement = (props) => <Stack sx={{...props.styles}} className={props.className}>{props.children}</Stack>

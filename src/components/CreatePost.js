@@ -8,7 +8,7 @@ import { BoxElement, ButtonElement, CardElement, ContainerElement, FormControlEl
 import ChoosePrivacy from './ChoosePrivacy'
 import CreatePoll from './CreatePoll'
 import ShowUserPostMedias from './ShowUserPostMedias'
-import { Avatar, Box, Button, CardContent, CircularProgress, Icon, Paper, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Button, CardContent, CircularProgress, FormControl, Icon, Input, InputLabel, Paper, Stack, Typography } from '@mui/material'
 import { PostAddTwoTone } from '@mui/icons-material'
 import { sendDataToServer, sendDataWithProtectionToServer } from '../utils'
 import { AppContexts } from '../App'
@@ -286,31 +286,82 @@ let ShowGifSelectingElement = ({ handleValue, currentElement }) => {
   let handleSearchText = evt => setSearchText(evt.target.value)
 
   return (
-    <BoxElement>
+    <Box>
       <ShowGifSearch handleSearchText={handleSearchText} />
 
-      <Grid
-        onGifClick={handleOnGifClicked}
-        fetchGifs={fetchGifs}
-        width={window.innerWidth}
-        columns={7}
-        gutter={6}
-        key={searchText}
-      />
-    </BoxElement>
+      <Stack
+        sx={{
+          maxHeight: "290px",
+          overflowY: "scroll"
+        }}
+      >
+        <Grid
+          onGifClick={handleOnGifClicked}
+          fetchGifs={fetchGifs}
+          width={window.innerWidth}
+          columns={4}
+          gutter={6}
+          key={searchText}
+        />
+      </Stack>
+    </Box>
+    // <BoxElement>
+    //   <ShowGifSearch handleSearchText={handleSearchText} />
+
+    //   <Grid
+    //     onGifClick={handleOnGifClicked}
+    //     fetchGifs={fetchGifs}
+    //     width={window.innerWidth}
+    //     columns={7}
+    //     gutter={6}
+    //     key={searchText}
+    //   />
+    // </BoxElement>
   )
 }
 
 let ShowGifSearch = ({ handleSearchText }) => {
+  console.log("HERE!!")
   return (
-    <BoxElement>
-      <FormControlElement>
-        <InputLabelElement hFor={"url"} text={"Search Gif"} />
-        <SearchUserInputElement id={"url"} helperId={null} type={"text"} handleChange={handleSearchText} />
-      </FormControlElement>
-    </BoxElement>
+    // <Box>
+    <FormControl
+      sx={{
+        my: 1.1,
+        mt: 2.2,
+        width: "100%",
+      }}
+    >
+      <InputLabel htmlFor='url'>Search Gif</InputLabel>
+      <Input sx={{ fontSize: "x-large" }} type={"text"} id={"url"} aria-describedby={"search gif"} onChange={handleSearchText} fullWidth={true} />
+    </FormControl>
+    // </Box>
+    // <BoxElement style={{flexDirection: "column"}}>
+
+    //   <FormControlElement>
+    //     <InputLabel htmlFor='url'>Search Gif</InputLabel>
+    //     <Input type={"text"} id={"url"} aria-describedby={"search gif"} onChange={handleSearchText} fullWidth={true} />
+    //     <InputLabelElement hFor={"url"} text={"Search Gif"} />
+    //     <SearchUserInputElement id={"url"} helperId={null} type={"text"} handleChange={handleSearchText} />
+    //   </FormControlElement>
+    // </BoxElement>
   )
 }
+
+// let ShowGifSearch = ({ handleSearchText }) => {
+//   console.log("HERE!!")
+//   return (
+//     // <input type={"text"} />
+//     <BoxElement style={{flexDirection: "column"}}>
+
+//       <FormControlElement>
+//         <InputLabel htmlFor='url'>Search Gif</InputLabel>
+//         <Input type={"text"} id={"url"} aria-describedby={"search gif"} onChange={handleSearchText} fullWidth={true} />
+//         <InputLabelElement hFor={"url"} text={"Search Gif"} />
+//         <SearchUserInputElement id={"url"} helperId={null} type={"text"} handleChange={handleSearchText} />
+//       </FormControlElement>
+//     </BoxElement>
+//   )
+// }
 
 let ShowUrlGrabbingForm = ({ handleValue, currentElement }) => {
   let [value, setValue] = useState(null);
@@ -358,16 +409,16 @@ let ShowIconBtns = ({ item, handleAddedOptions }) => {
       variant='outlined'
       // startIcon={item.elem}
       sx={{
-        mx: .2, mt: 0, 
+        mx: .2, mt: 0,
         backgroundColor: "secondary.light", color: "text.primary",
         // minWidth: { xs: "auto", md: "auto" },
         minWidth: "fit-content",
-        display: "flex", alignItems: "center", 
+        display: "flex", alignItems: "center",
         // p: 0,
       }}
     >
       <Icon
-        sx={{ 
+        sx={{
           display: "flex",
           width: "fit-content"
           // p: {xs: .1, md: "auto"}
@@ -375,7 +426,7 @@ let ShowIconBtns = ({ item, handleAddedOptions }) => {
       >
         {item.elem}
       </Icon>
-      <Typography variant='h6' sx={{ color: "text.primary", display: {xs: "none", lg: "block"} }}>{item.name}</Typography>
+      <Typography variant='h6' sx={{ color: "text.primary", display: { xs: "none", lg: "block" } }}>{item.name}</Typography>
       {/* <TypographyElement styles={{ color: "text.primary", fontSize: "large" }} text={item.name} type={"span"} /> */}
     </Button>
   )
