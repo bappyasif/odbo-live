@@ -9,8 +9,9 @@ import { AccountCircleTwoTone, Check, Error, Facebook, GitHub, Google, LoginTwoT
 import { Link, useNavigate } from 'react-router-dom';
 import { VisualizeWordCountProgress } from '../components/CreatePost';
 import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside';
+import ConsentsPrompt from '../components/ConsentsPrompt';
 
-function LoginForm({nonRoute}) {
+function LoginForm({ nonRoute }) {
     let [errors, setErrors] = useState([]);
     let [formData, setFormData] = useState({});
     let [processingRequest, setProcessingRequest] = useState(null);
@@ -97,13 +98,13 @@ function LoginForm({nonRoute}) {
                 >
                     <Stack
                         sx={{
-                            display: {md: "flex", lg: "auto"},
+                            display: { md: "flex", lg: "auto" },
                             gap: 2, width: "fit-content", margin: "auto", justifyContent: ""
                         }}
                     >
                         <GuestUsers setFormData={setFormData} handleSubmit={handleSubmit} />
 
-                        <Paper 
+                        <Paper
                         // sx={{mb: 2}}
                         >
                             <WrapperDiv className="login-form">
@@ -319,7 +320,7 @@ let ThirdPartyLoginOutlets = () => {
                 // pl: 2, 
                 // mt: 1, 
                 borderRadius: 2,
-                marginTop: {xs: 1, lg: 0}
+                marginTop: { xs: 1, lg: 0 }
                 // pt: 2
                 // width: "fit-content",
                 // height: "max-content"
@@ -344,6 +345,9 @@ let ThirdPartyLoginOutlets = () => {
 }
 
 let RenderLoginOutlet = ({ item }) => {
+    let [beginConsent, setBeginConsent] = useState(false);
+    let [outletUrl, setOutletUrl] = useState(null)
+
     const navigate = useNavigate()
 
     let appCtx = useContext(AppContexts);
@@ -365,41 +369,57 @@ let RenderLoginOutlet = ({ item }) => {
             url = `${appCtx.baseUrl}/auth/twitter`
         }
 
+        // setBeginConsent(true);
+        setOutletUrl(url);
+        setBeginConsent(item.name);
 
         // alert("would have been available if this was hosted in a custom domain!! try using any of these guest accounts or (email / password) based login option, thanks for your interest :)")
 
-        let consent = prompt("currently this wont fully log you into this app but you will be registered noetheless but wont be logged in due to CORS issue but if this was hosted on a proprieratory server the it would have, if you still want to proceed, press Y", "N");
+        // let consent = prompt("currently this wont fully log you into this app but you will be registered noetheless but wont be logged in due to CORS issue but if this was hosted on a proprieratory server the it would have, if you still want to proceed, press Y", "N");
 
-        // console.log(consent, ["Y", "y"].includes(consent))
+        // // console.log(consent, ["Y", "y"].includes(consent))
 
-        if (["Y", "y"].includes(consent)) {
-            appCtx.toggleSsoLoginStatus();
-            loginPrompt(url, getAuthenticatedUserData)
-        } else {
-            alert("try using guest accounts for an user experience or perhaps consider registering with your email for Full Access, thank you :)")
-        }
+        // if (["Y", "y"].includes(consent)) {
+            // appCtx.toggleSsoLoginStatus();
+            // loginPrompt(url, getAuthenticatedUserData)
+        // } else {
+        //     alert("try using guest accounts for an user experience or perhaps consider registering with your email for Full Access, thank you :)")
+        // }
 
         // loginPrompt(url, getAuthenticatedUserData)
     }
 
+    const primaryConsentAction = () => {
+        setBeginConsent(null)
+        appCtx.toggleSsoLoginStatus();
+        loginPrompt(outletUrl, getAuthenticatedUserData)
+    }
+
+    const cancelConsentAction = () => {
+        setBeginConsent(null)
+    }
+
     return (
-        <Stack
-            onClick={handleClick}
-            sx={{
-                alignItems: "center", flexDirection: "row",
-                justifyContent: { xs: "space-between" },
-                width: { xs: "260px", lg: "290px" },
-                m: 1, p: 1, pl: 4, pr: 4, outline: "solid .2px",
-                borderRadius: 11, cursor: "pointer"
-            }}
-        >
-            <span>
-                <Icon sx={{ m: .4, color: "skyblue", textAlign: "left" }}>
-                    {item.icon}
-                </Icon>
-            </span>
-            <Typography variant='h4' sx={{ textAlign: "center", ml: 4 }}>{item.name}</Typography>
-        </Stack>
+        <>
+            { beginConsent ? <ConsentsPrompt elementName={beginConsent} titleText={"currently this wont fully log you into this app"} mainText={"you will be registered noetheless but wont be logged in due to CORS issue.... if this was hosted on a proper server then it would have, if you still want to proceed, press Yes otherwise No"} cancelAction={cancelConsentAction} primaryAction={primaryConsentAction} /> : null }
+            <Stack
+                onClick={handleClick}
+                sx={{
+                    alignItems: "center", flexDirection: "row",
+                    justifyContent: { xs: "space-between" },
+                    width: { xs: "260px", lg: "290px" },
+                    m: 1, p: 1, pl: 4, pr: 4, outline: "solid .2px",
+                    borderRadius: 11, cursor: "pointer"
+                }}
+            >
+                <span>
+                    <Icon sx={{ m: .4, color: "skyblue", textAlign: "left" }}>
+                        {item.icon}
+                    </Icon>
+                </span>
+                <Typography variant='h4' sx={{ textAlign: "center", ml: 4 }}>{item.name}</Typography>
+            </Stack>
+        </>
     )
 }
 

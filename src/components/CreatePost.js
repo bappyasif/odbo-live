@@ -286,7 +286,11 @@ let ShowGifSelectingElement = ({ handleValue, currentElement }) => {
   let handleSearchText = evt => setSearchText(evt.target.value)
 
   return (
-    <Box>
+    <Box
+      sx={{
+        width: "100vw"
+      }}
+    >
       <ShowGifSearch handleSearchText={handleSearchText} />
 
       <Stack
@@ -305,25 +309,11 @@ let ShowGifSelectingElement = ({ handleValue, currentElement }) => {
         />
       </Stack>
     </Box>
-    // <BoxElement>
-    //   <ShowGifSearch handleSearchText={handleSearchText} />
-
-    //   <Grid
-    //     onGifClick={handleOnGifClicked}
-    //     fetchGifs={fetchGifs}
-    //     width={window.innerWidth}
-    //     columns={7}
-    //     gutter={6}
-    //     key={searchText}
-    //   />
-    // </BoxElement>
   )
 }
 
 let ShowGifSearch = ({ handleSearchText }) => {
-  console.log("HERE!!")
   return (
-    // <Box>
     <FormControl
       sx={{
         my: 1.1,
@@ -334,34 +324,8 @@ let ShowGifSearch = ({ handleSearchText }) => {
       <InputLabel htmlFor='url'>Search Gif</InputLabel>
       <Input sx={{ fontSize: "x-large" }} type={"text"} id={"url"} aria-describedby={"search gif"} onChange={handleSearchText} fullWidth={true} />
     </FormControl>
-    // </Box>
-    // <BoxElement style={{flexDirection: "column"}}>
-
-    //   <FormControlElement>
-    //     <InputLabel htmlFor='url'>Search Gif</InputLabel>
-    //     <Input type={"text"} id={"url"} aria-describedby={"search gif"} onChange={handleSearchText} fullWidth={true} />
-    //     <InputLabelElement hFor={"url"} text={"Search Gif"} />
-    //     <SearchUserInputElement id={"url"} helperId={null} type={"text"} handleChange={handleSearchText} />
-    //   </FormControlElement>
-    // </BoxElement>
   )
 }
-
-// let ShowGifSearch = ({ handleSearchText }) => {
-//   console.log("HERE!!")
-//   return (
-//     // <input type={"text"} />
-//     <BoxElement style={{flexDirection: "column"}}>
-
-//       <FormControlElement>
-//         <InputLabel htmlFor='url'>Search Gif</InputLabel>
-//         <Input type={"text"} id={"url"} aria-describedby={"search gif"} onChange={handleSearchText} fullWidth={true} />
-//         <InputLabelElement hFor={"url"} text={"Search Gif"} />
-//         <SearchUserInputElement id={"url"} helperId={null} type={"text"} handleChange={handleSearchText} />
-//       </FormControlElement>
-//     </BoxElement>
-//   )
-// }
 
 let ShowUrlGrabbingForm = ({ handleValue, currentElement }) => {
   let [value, setValue] = useState(null);
