@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { VisualizeWordCountProgress } from '../components/CreatePost';
 import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside';
 import ConsentsPrompt from '../components/ConsentsPrompt';
+import AnnouncementAlert from '../components/AnnouncementAlert';
 
 function LoginForm({ nonRoute }) {
     let [errors, setErrors] = useState([]);
@@ -346,7 +347,8 @@ let ThirdPartyLoginOutlets = () => {
 
 let RenderLoginOutlet = ({ item }) => {
     let [beginConsent, setBeginConsent] = useState(false);
-    let [outletUrl, setOutletUrl] = useState(null)
+    let [outletUrl, setOutletUrl] = useState(null);
+    let [alertElem, setAlertElem] = useState(null)
 
     const navigate = useNavigate()
 
@@ -372,21 +374,6 @@ let RenderLoginOutlet = ({ item }) => {
         // setBeginConsent(true);
         setOutletUrl(url);
         setBeginConsent(item.name);
-
-        // alert("would have been available if this was hosted in a custom domain!! try using any of these guest accounts or (email / password) based login option, thanks for your interest :)")
-
-        // let consent = prompt("currently this wont fully log you into this app but you will be registered noetheless but wont be logged in due to CORS issue but if this was hosted on a proprieratory server the it would have, if you still want to proceed, press Y", "N");
-
-        // // console.log(consent, ["Y", "y"].includes(consent))
-
-        // if (["Y", "y"].includes(consent)) {
-            // appCtx.toggleSsoLoginStatus();
-            // loginPrompt(url, getAuthenticatedUserData)
-        // } else {
-        //     alert("try using guest accounts for an user experience or perhaps consider registering with your email for Full Access, thank you :)")
-        // }
-
-        // loginPrompt(url, getAuthenticatedUserData)
     }
 
     const primaryConsentAction = () => {
@@ -396,11 +383,17 @@ let RenderLoginOutlet = ({ item }) => {
     }
 
     const cancelConsentAction = () => {
-        setBeginConsent(null)
+        setBeginConsent(null);
+        setAlertElem("Try Another Login Option")
+    }
+
+    const handleAnnoucementAction = () => {
+        setAlertElem(null)
     }
 
     return (
         <>
+            {alertElem ? <AnnouncementAlert titleText={"Try Another Login Option"} mainText={"using guest accounts will give you an legit user experience or perhaps consider registering with your email for Full Access, thank you :)"} handleAnnoucement={handleAnnoucementAction} /> : null}
             { beginConsent ? <ConsentsPrompt elementName={beginConsent} titleText={"currently this wont fully log you into this app"} mainText={"you will be registered noetheless but wont be logged in due to CORS issue.... if this was hosted on a proper server then it would have, if you still want to proceed, press Yes otherwise No"} cancelAction={cancelConsentAction} primaryAction={primaryConsentAction} /> : null }
             <Stack
                 onClick={handleClick}
