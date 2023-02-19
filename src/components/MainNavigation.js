@@ -8,6 +8,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AppBar, Avatar, Box, Button, ButtonGroup, FormControl, FormControlLabel, Switch, Tooltip, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside';
+import ConsentsPrompt from './ConsentsPrompt';
+import AnnouncementAlert from './AnnouncementAlert';
 
 function MainNavigation() {
   let [showFloatingLogin, setShowFloatingLogin] = useState(true)
@@ -84,9 +86,15 @@ const FloatingAuthenticatedUserFunctionality = ({ appCtx }) => {
 }
 
 const DropdownMenu = ({ closeDropdown, toggleDropdown, showDropdown }) => {
+  let [annTxt, setAnnTxt] = useState({});
+
   let ref = useRef();
 
   useToCloseModalOnClickedOutside(ref, closeDropdown)
+
+  const handleAnnTxt = (data) => setAnnTxt(prev => ({ ...prev, ...data }))
+
+  const clearAnnTxt = () => setAnnTxt({})
 
   return (
     <Box ref={ref}>
@@ -107,7 +115,15 @@ const DropdownMenu = ({ closeDropdown, toggleDropdown, showDropdown }) => {
         </Tooltip>
       </Button>
 
-      {showDropdown ? <ShowAuthUserDropdowns closeDropdown={closeDropdown} /> : null}
+      {
+        annTxt?.elementName
+          ? <ConsentsPrompt elementName={annTxt.element} titleText={annTxt.titleText} mainText={annTxt.mainText} primaryAction={annTxt.primaryAction} cancelAction={annTxt.cancelAction} />
+          : annTxt?.mainText
+            ? <AnnouncementAlert titleText={"App Alert!!"} mainText={annTxt.mainText} handleAnnoucement={clearAnnTxt} />
+            : null
+      }
+
+      {showDropdown ? <ShowAuthUserDropdowns closeDropdown={closeDropdown} handleAnnTxt={handleAnnTxt} clearAnnTxt={clearAnnTxt} /> : null}
     </Box>
   )
 }
@@ -166,7 +182,7 @@ const AssistiveModeActivatingToggler = () => {
   )
 }
 
-let ShowAuthUserDropdowns = ({ closeDropdown }) => {
+let ShowAuthUserDropdowns = ({ closeDropdown, handleAnnTxt, clearAnnTxt }) => {
   const appCtx = useContext(AppContexts);
 
   let options = [
@@ -178,7 +194,7 @@ let ShowAuthUserDropdowns = ({ closeDropdown }) => {
     { name: "Delete Account", icon: <DeleteForeverTwoTone /> },
   ]
 
-  let renderOptions = () => options.map(item => <RenderDropDownOption key={item.name} item={item} closeDropdown={closeDropdown} />)
+  let renderOptions = () => options.map(item => <RenderDropDownOption key={item.name} item={item} closeDropdown={closeDropdown} handleAnnTxt={handleAnnTxt} clearAnnTxt={clearAnnTxt} />)
 
   return (
     <Stack
@@ -193,7 +209,7 @@ let ShowAuthUserDropdowns = ({ closeDropdown }) => {
 
 }
 
-const RenderDropDownOption = ({ item, closeDropdown }) => {
+const RenderDropDownOption = ({ item, closeDropdown, handleAnnTxt, clearAnnTxt }) => {
   let appCtx = useContext(AppContexts);
 
   const navigate = useNavigate();
@@ -209,15 +225,22 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
     logoutUserFromApp(url, clearOutUserData)
   }
 
-  const afterDelete = (result) => {
-    if (result?.success) {
-      alert("so sorry to see you go :( you can always choose to comeback again, see ya soon, tot ziens, tot zo :)")
-    } else {
-      alert("your token has expired, re-authorize first by loging in again to complete this action")
-    }
+  const clearingData = () => {
     removeJwtDataFromLocalStorage();
     appCtx.clearCurrentUserData();
     navigate("/login");
+  }
+
+  const afterDelete = (result) => {
+    if (result?.success) {
+      // alert("so sorry to see you go :( you can always choose to comeback again, see ya soon, tot ziens, tot zo :)")
+      handleAnnTxt({ mainText: "so sorry to see you go :( you can always choose to comeback again, see ya soon, tot ziens, tot zo :)" })
+    } else {
+      // alert("your token has expired, re-authorize first by loging in again to complete this action")
+      handleAnnTxt({ mainText: "your token has expired, re-authorize first by loging in again to complete this action" })
+    }
+
+    clearingData();
   }
 
   const deleteCurrentlyLoggedInUserAccount = () => {
@@ -227,18 +250,28 @@ const RenderDropDownOption = ({ item, closeDropdown }) => {
   }
 
   const handleDelete = () => {
-    const getConsent = prompt("Continue to delete your account? This process is irreversible!! Press Y to Delete Your Account", "N")
-
-    if (["Y", "y"].includes(getConsent)) {
-      if (["guest@een.com", "guest@twee.com"].includes(appCtx.user.email)) {
-        alert("nope!! no cant do, its a protected accounted")
-      } else {
-        deleteCurrentlyLoggedInUserAccount()
-      }
+    if (["guest@een.com", "guest@twee.com"].includes(appCtx.user.email)) {
+      // alert("nope!! no cant do, its a protected accounted")
+      handleAnnTxt({ mainText: "nope!! no cant do, its a protected accounted" })
     } else {
-      alert("Its nice to have you here, keep enjoying what you like :)")
+      // const getConsent = prompt("Continue to delete your account? This process is irreversible!! Press Y to Delete Your Account", "N")
+      handleAnnTxt({ elementName: "delete account", titleText: "Dangerous Action!! Proceed With Caution !!", mainText: "Continue to delete your account? This process is irreversible!! Press Y to Delete Your Account", primaryAction: deleteCurrentlyLoggedInUserAccount, cancelAction: clearAnnTxt })
     }
   }
+
+  // const handleDelete = () => {
+  //   const getConsent = prompt("Continue to delete your account? This process is irreversible!! Press Y to Delete Your Account", "N")
+
+  //   if (["Y", "y"].includes(getConsent)) {
+  //     if (["guest@een.com", "guest@twee.com"].includes(appCtx.user.email)) {
+  //       alert("nope!! no cant do, its a protected accounted")
+  //     } else {
+  //       deleteCurrentlyLoggedInUserAccount()
+  //     }
+  //   } else {
+  //     alert("Its nice to have you here, keep enjoying what you like :)")
+  //   }
+  // }
 
   const handleReset = () => {
     navigate("/reset-password");
@@ -402,77 +435,77 @@ let FloatingLogin = () => {
 
   return (
     // <WrapperDiv className="fl-wrapper">
-      <Stack
+    <Stack
+      sx={{
+        display: { xs: "none", md: "auto" },
+      }}
+    >
+      <Typography
         sx={{
-          display: { xs: "none", md: "auto" },
+          display: { xs: "none", xl: "block" },
+          fontSize: { lg: "1.1rem", xl: "1.5rem" }
         }}
+        variant='h5'
       >
-        <Typography
-          sx={{
-            display: { xs: "none", xl: "block" },
-            fontSize: { lg: "1.1rem", xl: "1.5rem" }
-          }}
-          variant='h5'
-        >
-          Login to your profile from here
-        </Typography>
-        <form
-          ref={ref} method={"post"} onSubmit={handleSubmit}
-          style={{ position: "relative", marginLeft: "11px" }}
-        >
-          {errors?.length ? <Typography variant='body2' sx={{ position: "absolute", color: "maroon", bottom: "-13px", left: "10.1px" }}>User email and password does not match!!</Typography> : null}
+        Login to your profile from here
+      </Typography>
+      <form
+        ref={ref} method={"post"} onSubmit={handleSubmit}
+        style={{ position: "relative", marginLeft: "11px" }}
+      >
+        {errors?.length ? <Typography variant='body2' sx={{ position: "absolute", color: "maroon", bottom: "-13px", left: "10.1px" }}>User email and password does not match!!</Typography> : null}
 
-          <Stack
-            sx={{
-              display: { xs: "none", md: "flex" },
-              flexDirection: "row",
-              alignItems: "baseline"
-            }}
+        <Stack
+          sx={{
+            display: { xs: "none", md: "flex" },
+            flexDirection: "row",
+            alignItems: "baseline"
+          }}
+        >
+          <FormControl
+            sx={{}}
           >
-            <FormControl
-              sx={{}}
+            <MuiInputElement
+              type={"email"}
+              id={"email"}
+              handleChange={handleChange}
+              text="enter email (e.g. t@e.st)"
+              required={true}
+              color={errors?.length ? "error" : "success"}
+              error={errors?.length ? true : false}
+              fontSize={{ xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }}
+            />
+          </FormControl>
+          <FormControl>
+            <MuiInputElement
+              type={"password"}
+              id={"password"}
+              handleChange={handleChange}
+              text="enter password"
+              required={true}
+              color={errors?.length ? "error" : "success"}
+              error={errors?.length ? true : false}
+              fontSize={{ xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }}
+            />
+          </FormControl>
+          <Button
+            color={"primary"}
+            variant="contained"
+            sx={{ height: "fit-content" }}
+            type={"submit"}
+          >
+            <Typography
+              sx={{
+                fontSize: { xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }
+              }}
+              variant='h6'
             >
-              <MuiInputElement
-                type={"email"}
-                id={"email"}
-                handleChange={handleChange}
-                text="enter email (e.g. t@e.st)"
-                required={true}
-                color={errors?.length ? "error" : "success"}
-                error={errors?.length ? true : false}
-                fontSize={{ xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }}
-              />
-            </FormControl>
-            <FormControl>
-              <MuiInputElement
-                type={"password"}
-                id={"password"}
-                handleChange={handleChange}
-                text="enter password"
-                required={true}
-                color={errors?.length ? "error" : "success"}
-                error={errors?.length ? true : false}
-                fontSize={{ xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }}
-              />
-            </FormControl>
-            <Button
-              color={"primary"}
-              variant="contained"
-              sx={{ height: "fit-content" }}
-              type={"submit"}
-            >
-              <Typography
-                sx={{
-                  fontSize: { xs: ".6em", md: ".9em", lg: "1.1em", xl: "1.3em" }
-                }}
-                variant='h6'
-              >
-                Login
-              </Typography>
-            </Button>
-          </Stack>
-        </form>
-      </Stack>
+              Login
+            </Typography>
+          </Button>
+        </Stack>
+      </form>
+    </Stack>
   )
 }
 

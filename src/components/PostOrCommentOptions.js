@@ -4,12 +4,19 @@ import React, { useContext, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AppContexts } from '../App';
 import { deleteProtectedDataFromServer, deleteResourceFromServer } from '../utils';
+import AnnouncementAlert from './AnnouncementAlert';
+import ConsentsPrompt from './ConsentsPrompt';
 
 export const PostOrCommentOptions = ({ postOwner, postId, commentId, deleteCommentFromDataset, userId, showEditableText }) => {
     let [showMenu, setShowMenu] = useState(false);
     let [anchorEl, setAnchorEl] = useState(null)
+    let [annTxt, setAnnTxt] = useState({});
 
     let ref = useRef();
+
+    const handleAnnTxt = (data) => setAnnTxt(prev => ({ ...prev, ...data }))
+
+    const clearAnnTxt = () => setAnnTxt({})
 
     let options = [{ text: "Edit", icon: <ModeEditTwoTone /> }, { text: "Delete", icon: <DangerousTwoTone /> }, { text: "Thread", icon: <DvrTwoTone /> }]
 
@@ -19,7 +26,7 @@ export const PostOrCommentOptions = ({ postOwner, postId, commentId, deleteComme
         options = options.filter(item => item.text !== "Edit");
     }
 
-    let renderOptions = () => options.map(item => <RenderPostOption key={item.text} postOwner={postOwner} item={item} postId={postId} commentId={commentId} deleteCommentFromDataset={deleteCommentFromDataset} openDropdown={setShowMenu} userId={userId} showEditableText={showEditableText} />)
+    let renderOptions = () => options.map(item => <RenderPostOption key={item.text} postOwner={postOwner} item={item} postId={postId} commentId={commentId} deleteCommentFromDataset={deleteCommentFromDataset} openDropdown={setShowMenu} userId={userId} showEditableText={showEditableText} handleAnnTxt={handleAnnTxt} clearAnnTxt={clearAnnTxt}  />)
 
     let handleClick = (e) => {
         setShowMenu(!showMenu)
@@ -31,6 +38,8 @@ export const PostOrCommentOptions = ({ postOwner, postId, commentId, deleteComme
         setAnchorEl(null)
     }
 
+    // console.log(annTxt, "ANNTXT!!!!")
+
     return (
         <Box
             ref={ref}
@@ -41,6 +50,14 @@ export const PostOrCommentOptions = ({ postOwner, postId, commentId, deleteComme
                 pr: .9
             }}
         >
+            {
+                annTxt?.elementName
+                    ? <ConsentsPrompt elementName={annTxt.element} titleText={annTxt.titleText} mainText={annTxt.mainText} primaryAction={annTxt.primaryAction} cancelAction={annTxt.cancelAction} />
+                    : annTxt?.mainText
+                        ? <AnnouncementAlert titleText={"App Alert!!"} mainText={annTxt.mainText} handleAnnoucement={clearAnnTxt} />
+                        : null
+            }
+
             <Tooltip title="click to open menu">
                 <IconButton
                     sx={{ color: "text.primary" }}
@@ -78,7 +95,7 @@ export const PostOrCommentOptions = ({ postOwner, postId, commentId, deleteComme
     )
 }
 
-let RenderPostOption = ({ postOwner, item, postId, commentId, deleteCommentFromDataset, openDropdown, userId, showEditableText }) => {
+let RenderPostOption = ({ handleAnnTxt, clearAnnTxt, postOwner, item, postId, commentId, deleteCommentFromDataset, openDropdown, userId, showEditableText }) => {
     let appCtx = useContext(AppContexts);
 
     const navigate = useNavigate()
@@ -91,15 +108,22 @@ let RenderPostOption = ({ postOwner, item, postId, commentId, deleteCommentFromD
         }
     }
 
-    const commenceDelete = (url, data) => {
-        const userChoice = prompt("Are you sure you want to delete? Deleted data is not again retrieveable....Type in Y to delete", "N")
+    const handleDelete = (url, data) => {
+        const refreshToken = appCtx?.user?.userJwt?.refreshToken;
+        deleteProtectedDataFromServer(url, data, deleteThisPostFromAppData, refreshToken)
+        clearAnnTxt();
+    }
 
-        if (userChoice === "Y" || userChoice === "y") {
-            // deleteResourceFromServer(url, data, deleteThisPostFromAppData)
-            deleteProtectedDataFromServer(url, data, deleteThisPostFromAppData)
-        } else {
-            alert("you chose not to delete :)")
-        }
+    const commenceDelete = (url, data) => {
+        // const userChoice = prompt("Are you sure you want to delete? Deleted data is not again retrieveable....Type in Y to delete", "N")
+        handleAnnTxt({ elementName: "delete action", titleText: "Irreversible Action!! Proceed With Care!!", mainText: "Are you sure you want to delete? Deleted data is not again retrieveable....Clic Yes to delete", primaryAction: () => handleDelete(url, data), cancelAction: clearAnnTxt})
+
+        // if (userChoice === "Y" || userChoice === "y") {
+        //     // deleteResourceFromServer(url, data, deleteThisPostFromAppData)
+        //     // deleteProtectedDataFromServer(url, data, deleteThisPostFromAppData)
+        // } else {
+        //     alert("you chose not to delete :)")
+        // }
     }
 
     const optionsActions = () => {
@@ -130,7 +154,8 @@ let RenderPostOption = ({ postOwner, item, postId, commentId, deleteCommentFromD
             ||
             (!appCtx?.user?._id && item.text !== "Thread")
         ) {
-            alert("This is not an authorized action, probably you are not owner of this content....")
+            // alert("This is not an authorized action, probably you are not owner of this content....")
+            handleAnnTxt({mainText: "This is not an authorized action, probably you are not owner of this content...."})
         } else {
             optionsActions()
         }
@@ -147,11 +172,11 @@ let RenderPostOption = ({ postOwner, item, postId, commentId, deleteCommentFromD
         >
             <Tooltip title={(!appCtx?.user?._id && item.text !== "Thread") ? `Login to ${item.text}` : item.text}>
                 <Button
-                    sx={{color: "text.primary", px: 2.4,}}
+                    sx={{ color: "text.primary", px: 2.4, }}
                     onClick={(!appCtx?.user?._id && item.text === "Thread") ? handleClick : (appCtx?.user?._id) ? handleClick : null}
                     startIcon={item.icon}
                 >
-                    <Typography variant='h6' sx={{color: "text.primary", fontWeight: "bold"}}>{item.text}</Typography>
+                    <Typography variant='h6' sx={{ color: "text.primary", fontWeight: "bold" }}>{item.text}</Typography>
                 </Button>
             </Tooltip>
         </MenuItem>

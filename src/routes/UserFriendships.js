@@ -7,6 +7,7 @@ import { useToCloseModalOnClickedOutside } from '../hooks/toDetectClickOutside';
 import { ButtonToIndicateHelp, HowToUseExistingFriendsListings, HowToUseFriendsRequestsListings } from '../components/HowToUseApp';
 import { performProtectedUpdateOperation, readDataFromServer, updateDataInDatabase, updateUserInDatabase } from '../utils';
 import { MutualFriends } from './ConnectUsers';
+import ConsentsPrompt from '../components/ConsentsPrompt';
 
 let UserFriendships = () => {
     const appCtx = useContext(AppContexts);
@@ -73,8 +74,13 @@ let RenderFriend = ({ friendID, baseUrl }) => {
     let [data, setData] = useState();
     let [showActionOptions, setShowActionOptions] = useState(false);
     let [showMenu, setShowMenu] = useState(null)
+    let [annTxt, setAnnTxt] = useState({});
 
     const menuRef = useRef();
+
+    const handleAnnTxt = (data) => setAnnTxt(prev => ({ ...prev, ...data }))
+
+    const clearAnnTxt = () => setAnnTxt({})
 
     const handleOpenMenu = (e) => {
         setShowMenu(e.currentTarget)
@@ -141,7 +147,15 @@ let RenderFriend = ({ friendID, baseUrl }) => {
                     </CardActions>
                 </Card>
 
-                {showActionOptions ? <ActionListOptions handleClose={handleCloseMenu} anchorEl={showMenu} friendId={data._id} toggleShowActionOptions={toggleShowActionOptions} /> : null}
+                {
+                    annTxt?.elementName
+                        ? <ConsentsPrompt elementName={annTxt.element} titleText={annTxt.titleText} mainText={annTxt.mainText} primaryAction={annTxt.primaryAction} cancelAction={annTxt.cancelAction} />
+                        // : annTxt?.mainText
+                        //     ? <AnnouncementAlert titleText={"App Alert!!"} mainText={annTxt.mainText} handleAnnoucement={clearAnnTxt} />
+                            : null
+                }
+
+                {showActionOptions ? <ActionListOptions handleAnnTxt={handleAnnTxt} clearAnnTxt={clearAnnTxt} handleClose={handleCloseMenu} anchorEl={showMenu} friendId={data._id} toggleShowActionOptions={toggleShowActionOptions} /> : null}
             </Stack>
             : null
     )
@@ -173,10 +187,10 @@ let FriendCardHeader = ({ data }) => {
     )
 }
 
-let ActionListOptions = ({ toggleShowActionOptions, friendId, anchorEl, handleClose }) => {
+let ActionListOptions = ({ handleAnnTxt, clearAnnTxt, toggleShowActionOptions, friendId, anchorEl, handleClose }) => {
     let options = [{ name: "View Profile", icon: <AccountCircleTwoTone /> }, { name: "Remove From Friend List", icon: <PersonOffTwoTone /> }]
 
-    let renderOptions = () => options.map(item => <RenderActionListOption key={item.name} item={item} toggleShowActionOptions={toggleShowActionOptions} friendId={friendId} />)
+    let renderOptions = () => options.map(item => <RenderActionListOption key={item.name} item={item} toggleShowActionOptions={toggleShowActionOptions} friendId={friendId} handleAnnTxt={handleAnnTxt} clearAnnTxt={clearAnnTxt} />)
 
     // making popper get appropriate mui props value to initiate menu opening or close sequence
     const open = Boolean(anchorEl)
@@ -199,7 +213,7 @@ let ActionListOptions = ({ toggleShowActionOptions, friendId, anchorEl, handleCl
     )
 }
 
-let RenderActionListOption = ({ item, toggleShowActionOptions, friendId }) => {
+let RenderActionListOption = ({ item, toggleShowActionOptions, friendId, handleAnnTxt, clearAnnTxt }) => {
     let appCtx = useContext(AppContexts)
 
     let navigate = useNavigate()
@@ -223,12 +237,13 @@ let RenderActionListOption = ({ item, toggleShowActionOptions, friendId }) => {
         if (item.name === "View Profile") {
             visitUserProfile()
         } else if (item.name.includes("Remove")) {
-            let userChose = prompt("Are you sure you want to REMOVE this user as a FRIEND? Type Y to continue", "N")
-            if (userChose === "Y" || userChose === "y") {
-                removeFromFriendList()
-            } else {
-                alert("You chose NOT TO REMOVE this user as a FRIEND")
-            }
+            // let userChose = prompt("Are you sure you want to REMOVE this user as a FRIEND? Type Y to continue", "N")
+            handleAnnTxt({ elementName: "delete action", titleText: "Dangerous Action!! Proceed With Caution!!", mainText: "Are you sure you want to REMOVE this user as a FRIEND? Type Y to continue", primaryAction: removeFromFriendList, cancelAction: clearAnnTxt })
+            // if (userChose === "Y" || userChose === "y") {
+            //     removeFromFriendList()
+            // } else {
+            //     alert("You chose NOT TO REMOVE this user as a FRIEND")
+            // }
         }
     }
 
@@ -375,7 +390,7 @@ let ShowFriendRequest = ({ friendId, actions }) => {
                         flexDirection: { xs: "column", md: "row" }, pl: 0
                     }}
                 >
-                    <Stack sx={{gap: .4, alignItems: "center", minWidth: "42%", justifyContent: "center"}}>
+                    <Stack sx={{ gap: .4, alignItems: "center", minWidth: "42%", justifyContent: "center" }}>
                         <Avatar
                             alt='user profile picture'
                             src={data?.ppUrl || 'https://random.imagecdn.app/76/56'}
