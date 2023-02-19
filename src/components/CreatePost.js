@@ -14,11 +14,14 @@ import { sendDataToServer, sendDataWithProtectionToServer } from '../utils'
 import { AppContexts } from '../App'
 import { useNavigate } from 'react-router-dom'
 import { ButtonToIndicateHelp, HowToUseCreatePostComponent } from './HowToUseApp'
+import ConsentsPrompt from './ConsentsPrompt'
+import AnnouncementAlert from './AnnouncementAlert'
 
 function CreatePost({ handleSuccessfullPostShared }) {
   let [addedOptions, setAddedOptions] = useState({})
   let [errors, setErrors] = useState([])
   let [postText, setPostText] = useState(null)
+  let [annTxt, setAnnTxt] = useState({});
 
   let ref = useRef();
 
@@ -53,6 +56,15 @@ function CreatePost({ handleSuccessfullPostShared }) {
     }
   }
 
+  const updateAnnouncementText = (data) => setAnnTxt(prev => ({ ...prev, ...data }))
+
+  const afterAlert = () => setAnnTxt({});
+
+  const afterConsentAction = () => {
+    setAnnTxt({});
+    navigate("/login")
+  };
+
   let createPost = () => {
     if (appCtx?.user?._id) {
       if (addedOptions.body) {
@@ -60,23 +72,36 @@ function CreatePost({ handleSuccessfullPostShared }) {
           let url = `${appCtx.baseUrl}/posts/post/create/${appCtx.user._id}`
           sendDataWithProtectionToServer(url, addedOptions, handlePostData, handleErrors, appCtx?.user?.userJwt?.refreshToken)
         } else {
-          alert("more than characters limit count found, maximum word count is 220")
+          // alert("more than characters limit count found, maximum word count is 220")
+          updateAnnouncementText({ mainText: "more than characters limit count found, maximum word count is 220" })
         }
       } else {
-        alert("at least post text needs to be there")
+        // alert("at least post text needs to be there")
+        updateAnnouncementText({ mainText: "at least post text needs to be there" })
       }
     } else {
       // re routing prompt for user consent to login page for authentication
-      let choose = prompt("you need to be registered or authenticated before creating any post, do you want to proceed to login Page? Y || N", "Y")
-      if (choose === "Y" || choose === "y") {
-        navigate("/login")
-      }
+      // let choose = prompt("you need to be registered or authenticated before creating any post, do you want to proceed to login Page? Y || N", "Y")
+      // updateAnnouncementText({elementName: "login prompt", mainText: "you need to be registered or authenticated before creating any post, do you want to proceed to login Page?", primaryAction: () => navigate("/login"), cancelAction: () => null})
+      updateAnnouncementText({ elementName: "login prompt", mainText: "you need to be registered or authenticated before creating any post, do you want to proceed to login Page?", primaryAction: afterConsentAction, cancelAction: () => setAnnTxt({}) })
+      // if (choose === "Y" || choose === "y") {
+      //   navigate("/login")
+      // }
     }
   }
+
+  console.log(annTxt,  "ANNTXT!!")
 
   return (
     <ContainerElement width={"md"}>
       <PaperElement position="relative">
+        {
+          (annTxt?.elementName)
+            ? <ConsentsPrompt elementName={annTxt.element} titleText={"Lets Log You In"} mainText={annTxt.mainText} primaryAction={annTxt.primaryAction} cancelAction={annTxt.cancelAction} />
+            : annTxt?.mainText
+              ? <AnnouncementAlert titleText={"App Alert!!"} mainText={annTxt.mainText} handleAnnoucement={afterAlert} />
+              : null
+        }
         <ButtonToIndicateHelp forWhichItem={"Create Post"} />
         {appCtx.dialogTextFor === "Create Post" ? <HowToUseCreatePostComponent /> : null}
         <PostCreatingModalUi
