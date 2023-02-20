@@ -135,6 +135,7 @@ function App() {
     setUser(prev => {
       if (action === "accept") {
         prev.friends.push(friendId)
+        prev.friendships.push({[friendId]: new Date().toISOString()})
       }
 
       let filtered = prev.frRecieved.filter(id => id !== friendId);
@@ -150,6 +151,11 @@ function App() {
   const removeUserIdFromCurrentUserFriendsList = (friendId) => {
     let filteredFriendsList = user.friends.filter(val => val !== friendId)
     setUser(prev => ({ ...prev, friends: filteredFriendsList }))
+  }
+
+  const removeFriendshipForThisFriendId = friendId => {
+    const filteredFriednships = user.friendships.filter(item => Object.keys(item)[0] !== friendId)
+    setUser(prev => ({...prev, friendships: filteredFriednships}))
   }
 
   let handleAvailablePostsFeeds = dataset => setUserAccessiblePostsDataset(dataset)
@@ -241,9 +247,6 @@ function App() {
     }
   }
 
-  // const makeRootBackgroundThemed = () => {
-  //   document.getElementById("root").style.backgroundColor = "secondary.dark"
-  // }
 
   const contexts = {
     // baseUrl: "http://localhost:3000",
@@ -279,7 +282,8 @@ function App() {
     updateSpecificPostData: updateSpecificPostData,
     toggleSsoLoginStatus: toggleSsoLogin,
     turnOffLoading: turnOffLoading,
-    turnOnLoading: turnOnLoading
+    turnOnLoading: turnOnLoading,
+    removeFriendshipForThisFriendId: removeFriendshipForThisFriendId
   }
 
   useEffect(() => {
@@ -317,8 +321,6 @@ function App() {
 
     // when a repload takes place this should make loading page to show up
     checkIfRoutesExists();
-
-    // makeRootBackgroundThemed()
   }, [])
 
   useEffect(() => {

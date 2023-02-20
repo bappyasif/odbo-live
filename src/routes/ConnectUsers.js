@@ -61,6 +61,7 @@ function ConnectUsers() {
 let RenderUser = ({ userData }) => {
   let [friendAlready, setFriendAlready] = useState(false);
   let [friendRequestSent, setFriendRequestSentAlready] = useState(false)
+  let [friendRequestRecieved, setFriendRequestRecieved] = useState(false);
 
   let { fullName, email, friends, created, bio, _id, ppUrl } = { ...userData }
 
@@ -89,6 +90,7 @@ let RenderUser = ({ userData }) => {
   useEffect(() => {
     setFriendAlready(appCtx?.user?.friends.includes(_id))
     setFriendRequestSentAlready(appCtx?.user?.frSent.includes(_id))
+    setFriendRequestRecieved(appCtx?.user?.frRecieved.includes(_id))
   }, [_id])
 
   // console.log(appCtx.user.frSent.includes(_id) || appCtx.user.friends.includes(_id), appCtx.user.frSent.includes(_id), appCtx.user.friends.includes(_id))
@@ -134,10 +136,10 @@ let RenderUser = ({ userData }) => {
                 ? null
                 : <BoxElement className="all-btns">
                   <ButtonElement
-                    text={friendRequestSent ? "Is Sent" : "Send"}
+                    text={friendRequestSent ? "Is Sent" : friendRequestRecieved ? "Is Recieved" : "Send"}
                     type="contained"
                     action={handleSend}
-                    disable={friendRequestSent || friendAlready}
+                    disable={friendRequestSent || friendAlready || friendRequestRecieved}
                   />
                   <ButtonElement
                     text={"Undo"}

@@ -1,5 +1,5 @@
 import { AccountCircleTwoTone, HowToRegRounded, MoreVertTwoTone, PersonOffRounded, PersonOffTwoTone, UndoTwoTone } from '@mui/icons-material';
-import { Avatar, Box, Card, CardActions, CardContent, CardHeader, ClickAwayListener, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Popper, Stack, Tooltip, Typography } from '@mui/material'
+import { Avatar, Box, Card, CardActions, CardContent, CardHeader, ClickAwayListener, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText, Menu, MenuItem, MenuList, Paper, Popper, Stack, Tooltip, Typography } from '@mui/material'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { AppContexts } from '../App'
@@ -8,6 +8,7 @@ import { ButtonToIndicateHelp, HowToUseExistingFriendsListings, HowToUseFriendsR
 import { performProtectedUpdateOperation, readDataFromServer, updateDataInDatabase, updateUserInDatabase } from '../utils';
 import { MutualFriends } from './ConnectUsers';
 import ConsentsPrompt from '../components/ConsentsPrompt';
+import moment from 'moment';
 
 let UserFriendships = () => {
     const appCtx = useContext(AppContexts);
@@ -47,6 +48,8 @@ let ExistingFriendList = () => {
 
     let renderFriends = () => appCtx?.user?.friends?.map(frnd => <RenderFriend key={frnd} friendID={frnd} baseUrl={appCtx.baseUrl} />)
 
+    // console.log(appCtx?.user?.friendships, appCtx?.user)
+
     return (
         <Paper sx={{ backgroundColor: "secondary.dark", color: "text.primary", width: { xs: "100%", lg: "100%" } }}>
             <Typography variant="h4">Friends Listings:</Typography>
@@ -61,7 +64,7 @@ let ExistingFriendList = () => {
                         variant="h6"
                         sx={{
                             // outline: "solid .6px lightskyblue",
-                            borderRadius: 2, 
+                            borderRadius: 2,
                             // mt: 4, 
                             p: 1.1
                         }}
@@ -156,7 +159,7 @@ let RenderFriend = ({ friendID, baseUrl }) => {
                         ? <ConsentsPrompt elementName={annTxt.element} titleText={annTxt.titleText} mainText={annTxt.mainText} primaryAction={annTxt.primaryAction} cancelAction={annTxt.cancelAction} />
                         // : annTxt?.mainText
                         //     ? <AnnouncementAlert titleText={"App Alert!!"} mainText={annTxt.mainText} handleAnnoucement={clearAnnTxt} />
-                            : null
+                        : null
                 }
 
                 {showActionOptions ? <ActionListOptions handleAnnTxt={handleAnnTxt} clearAnnTxt={clearAnnTxt} handleClose={handleCloseMenu} anchorEl={showMenu} friendId={data._id} toggleShowActionOptions={toggleShowActionOptions} /> : null}
@@ -166,28 +169,43 @@ let RenderFriend = ({ friendID, baseUrl }) => {
 }
 
 let FriendCardHeader = ({ data }) => {
+    const appCtx = useContext(AppContexts);
 
     let imgUrl = data.ppUrl || "https://random.imagecdn.app/76/56"
 
+    const getFriendSinceWhen = () => {
+        const obj = appCtx?.user?.friendships.find(item => Object.keys(item)[0] === data._id)
+        const sinceWhen = obj && moment(obj[data?._id]).fromNow()
+        return sinceWhen
+        // return obj[data._id];
+    }
+
+    // console.log(data, "data!!", getFriendSinceWhen())
+
     return (
-        <CardHeader
-            sx={{
-                width: "20vw", position: "relative",
-                flexDirection: { xs: "column", md: "row" },
-                alignItems: { xs: "baseline", md: "center" },
-                backgroundColor: "secondary.dark",
-                color: "text.primary"
-            }}
-            avatar={
-                <Avatar
-                    src={imgUrl}
-                    sx={{ width: { xs: "42px", lg: "92px" }, height: { xs: "42px", lg: "62px" } }}
-                />
-            }
-            title={<Typography sx={{ fontSize: { xs: "small", md: "large", lg: "larger" }, wordBreak: "break-all" }} variant='h5'>{data.fullName}</Typography>}
-            subheader={"Friend Since!!"}
-        >
-        </CardHeader>
+        data?._id
+            ?
+            <CardHeader
+                sx={{
+                    // width: "20vw", 
+                    position: "relative",
+                    flexDirection: { xs: "column", md: "row" },
+                    alignItems: { xs: "baseline", md: "center" },
+                    backgroundColor: "secondary.dark",
+                    color: "text.primary",
+                    p: 1.1
+                }}
+                avatar={
+                    <Avatar
+                        src={imgUrl}
+                        sx={{ width: { xs: "42px", lg: "92px" }, height: { xs: "42px", lg: "62px" } }}
+                    />
+                }
+                title={<Typography sx={{ fontSize: { xs: "small", md: "large", lg: "larger" }, wordBreak: "break-all" }} variant='h5'>{data.fullName}</Typography>}
+                subheader={"Friend Since " + getFriendSinceWhen()}
+            >
+            </CardHeader>
+            : null
     )
 }
 
@@ -201,7 +219,7 @@ let ActionListOptions = ({ handleAnnTxt, clearAnnTxt, toggleShowActionOptions, f
 
     return (
         <Popper
-            sx={{ left: "-164px !important" }}
+            sx={{ left: { xs: "-2px !important", md: "-92px !important", lg: "-164px !important" } }}
             open={open}
             anchorEl={anchorEl}
             onClose={handleClose}
@@ -222,7 +240,10 @@ let RenderActionListOption = ({ item, toggleShowActionOptions, friendId, handleA
 
     let navigate = useNavigate()
 
-    let removeFromCurentUserStateVariable = () => appCtx.removeIdFromCurrentUserFriendsList(friendId)
+    let removeFromCurentUserStateVariable = () => {
+        appCtx.removeIdFromCurrentUserFriendsList(friendId)
+        appCtx.removeFriendshipForThisFriendId(friendId)
+    }
 
     let removeFromFriendList = () => {
         const url = `${appCtx.baseUrl}/users/${appCtx.user._id}/remove`
@@ -390,10 +411,10 @@ let ShowFriendRequest = ({ friendId, actions }) => {
 
                 <ListItem
                     sx={{
-                        outline: "solid .6px", outlineColor: "primary.dark", borderRadius: 2, 
+                        outline: "solid .6px", outlineColor: "primary.dark", borderRadius: 2,
                         justifyContent: "space-around",
                         // flexDirection: { xs: "column", md: "row" }, 
-                        flexDirection: "row", 
+                        flexDirection: "row",
                         pl: 0
                     }}
                 >
@@ -401,7 +422,7 @@ let ShowFriendRequest = ({ friendId, actions }) => {
                         <Avatar
                             alt='user profile picture'
                             src={data?.ppUrl || 'https://random.imagecdn.app/76/56'}
-                            sx={{ width: {xs: 49, md: 74, lg: 110}, height: 47 }}
+                            sx={{ width: { xs: 49, md: 74, lg: 110 }, height: 47 }}
                         />
 
                         <Typography sx={{ mx: .6, wordBreak: "break-all", px: 4, width: "-webkit-fill-available" }} variant="h6" noWrap>{data?.fullName}</Typography>
