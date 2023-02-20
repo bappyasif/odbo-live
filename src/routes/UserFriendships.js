@@ -23,15 +23,16 @@ let UserFriendships = () => {
             sx={{
                 display: "flex",
                 // flexDirection: "row",
-                flexDirection: { md: "column", lg: "row" },
+                flexDirection: { xs: "column", lg: "row" },
                 justifyContent: "center",
                 alignItems: "flex-start",
                 // backgroundColor: "info.dark",
                 color: "info.contrastText",
                 // gap: 9
-                gap: { xs: 1.1, md: 2.2, lg: 6 },
+                gap: { xs: 4, md: 5, lg: 6 },
                 padding: "0 65px",
-                height: "100vh"
+                // height: "100vh"
+                height: "100%"
             }}
         >
             <ExistingFriendList />
@@ -47,8 +48,9 @@ let ExistingFriendList = () => {
     let renderFriends = () => appCtx?.user?.friends?.map(frnd => <RenderFriend key={frnd} friendID={frnd} baseUrl={appCtx.baseUrl} />)
 
     return (
-        <Paper sx={{ backgroundColor: "secondary.dark", color: "text.primary", width: { xs: "100%", lg: "50%" } }}>
+        <Paper sx={{ backgroundColor: "secondary.dark", color: "text.primary", width: { xs: "100%", lg: "100%" } }}>
             <Typography variant="h4">Friends Listings:</Typography>
+            <Divider sx={{ height: 2, my: .8, backgroundColor: "darkslategray" }} />
             <Stack sx={{ gap: 1.1 }}>
                 {renderFriends()}
             </Stack>
@@ -58,8 +60,10 @@ let ExistingFriendList = () => {
                     <Typography
                         variant="h6"
                         sx={{
-                            outline: "solid .6px lightskyblue",
-                            borderRadius: 2, mt: 4, p: 1.1
+                            // outline: "solid .6px lightskyblue",
+                            borderRadius: 2, 
+                            // mt: 4, 
+                            p: 1.1
                         }}
                     >
                         Friends list is empty, add some :)
@@ -127,7 +131,7 @@ let RenderFriend = ({ friendID, baseUrl }) => {
                         alignItems: "flex-start",
                         position: "relative",
                         justifyContent: "space-between",
-                        backgroundColor: "info.light", color: "info.contrastText"
+                        backgroundColor: "secondary.light", color: "text.primary"
                     }}
                 >
                     <ButtonToIndicateHelp forWhichItem={"Existing Friends Listings"} />
@@ -171,8 +175,8 @@ let FriendCardHeader = ({ data }) => {
                 width: "20vw", position: "relative",
                 flexDirection: { xs: "column", md: "row" },
                 alignItems: { xs: "baseline", md: "center" },
-                backgroundColor: "info.dark",
-                color: "info.contrastText"
+                backgroundColor: "secondary.dark",
+                color: "text.primary"
             }}
             avatar={
                 <Avatar
@@ -180,7 +184,7 @@ let FriendCardHeader = ({ data }) => {
                     sx={{ width: { xs: "42px", lg: "92px" }, height: { xs: "42px", lg: "62px" } }}
                 />
             }
-            title={<Typography sx={{ fontSize: { xs: "small", md: "large", lg: "larger" } }} variant='h5'>{data.fullName}</Typography>}
+            title={<Typography sx={{ fontSize: { xs: "small", md: "large", lg: "larger" }, wordBreak: "break-all" }} variant='h5'>{data.fullName}</Typography>}
             subheader={"Friend Since!!"}
         >
         </CardHeader>
@@ -197,7 +201,7 @@ let ActionListOptions = ({ handleAnnTxt, clearAnnTxt, toggleShowActionOptions, f
 
     return (
         <Popper
-            sx={{ left: "-128px !important" }}
+            sx={{ left: "-164px !important" }}
             open={open}
             anchorEl={anchorEl}
             onClose={handleClose}
@@ -238,7 +242,7 @@ let RenderActionListOption = ({ item, toggleShowActionOptions, friendId, handleA
             visitUserProfile()
         } else if (item.name.includes("Remove")) {
             // let userChose = prompt("Are you sure you want to REMOVE this user as a FRIEND? Type Y to continue", "N")
-            handleAnnTxt({ elementName: "delete action", titleText: "Dangerous Action!! Proceed With Caution!!", mainText: "Are you sure you want to REMOVE this user as a FRIEND? Type Y to continue", primaryAction: removeFromFriendList, cancelAction: clearAnnTxt })
+            handleAnnTxt({ elementName: "delete action", titleText: "Dangerous Action!! Proceed With Caution!!", mainText: "Are you sure you want to REMOVE this user as a FRIEND? Click Yes to Remove", primaryAction: removeFromFriendList, cancelAction: clearAnnTxt })
             // if (userChose === "Y" || userChose === "y") {
             //     removeFromFriendList()
             // } else {
@@ -256,11 +260,11 @@ let RenderActionListOption = ({ item, toggleShowActionOptions, friendId, handleA
                     mt: .11,
                     mr: .11,
                     pr: 1.1,
-                    backgroundColor: 'info.main',
-                    color: "info.contrastText",
+                    backgroundColor: 'secondary.dark',
+                    color: "text.primary",
                     '&:hover': {
-                        color: "floralwhite",
-                        backgroundColor: 'lightskyblue',
+                        // color: "gainsboro",
+                        backgroundColor: 'secondary.light',
                     },
                 }}
                 onClick={handleClick}
@@ -271,7 +275,7 @@ let RenderActionListOption = ({ item, toggleShowActionOptions, friendId, handleA
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                    secondary={<Typography sx={{ fontSize: { xs: "small", md: "large", lg: "larger" }, fontWeight: "bolder" }} variant="h6">{item.name}</Typography>}
+                    secondary={<Typography sx={{ fontSize: { xs: "small", md: "large", lg: "larger" }, fontWeight: "bolder", wordBreak: "break-all", px: 4 }} variant="h6">{item.name}</Typography>}
                 />
             </ListItem>
         </MenuItem>
@@ -320,7 +324,7 @@ const RenderAllFriendReuests = () => {
     const renderRequestTypes = () => requestTypes.map(item => <ReuseableFriendRequestsList key={item.type} friendsList={item.list} requestType={item.type} listAssets={item.actions} />)
 
     return (
-        <Stack sx={{ gap: 6 }}>
+        <Stack sx={{ gap: 6, width: "100%", alignItems: "center" }}>
             {renderRequestTypes()}
         </Stack>
     )
@@ -336,10 +340,10 @@ const ReuseableFriendRequestsList = ({ friendsList, requestType, listAssets }) =
             sx={{
                 minWidth: "29vw",
                 minHeight: "20vh",
-                width: { xs: "100%", lg: "50%" },
+                width: { xs: "100%", lg: "83%" },
                 backgroundColor: "secondary.dark",
                 color: "text.primary",
-                p: .9
+                // p: .9
             }}
         >
             <Typography variant={'h4'}>Friend Requests {requestType}</Typography>
@@ -386,18 +390,21 @@ let ShowFriendRequest = ({ friendId, actions }) => {
 
                 <ListItem
                     sx={{
-                        outline: "solid .6px", outlineColor: "primary.dark", borderRadius: 2, justifyContent: "space-around",
-                        flexDirection: { xs: "column", md: "row" }, pl: 0
+                        outline: "solid .6px", outlineColor: "primary.dark", borderRadius: 2, 
+                        justifyContent: "space-around",
+                        // flexDirection: { xs: "column", md: "row" }, 
+                        flexDirection: "row", 
+                        pl: 0
                     }}
                 >
                     <Stack sx={{ gap: .4, alignItems: "center", minWidth: "42%", justifyContent: "center" }}>
                         <Avatar
                             alt='user profile picture'
                             src={data?.ppUrl || 'https://random.imagecdn.app/76/56'}
-                            sx={{ width: 110, height: 47 }}
+                            sx={{ width: {xs: 49, md: 74, lg: 110}, height: 47 }}
                         />
 
-                        <Typography sx={{ mx: .6 }} variant="h6">{data?.fullName}</Typography>
+                        <Typography sx={{ mx: .6, wordBreak: "break-all", px: 4, width: "-webkit-fill-available" }} variant="h6" noWrap>{data?.fullName}</Typography>
                     </Stack>
                     <MutualFriends friends={data?.friends} variantType="p" actions={actions} />
                     <Stack

@@ -241,6 +241,10 @@ function App() {
     }
   }
 
+  // const makeRootBackgroundThemed = () => {
+  //   document.getElementById("root").style.backgroundColor = "secondary.dark"
+  // }
+
   const contexts = {
     // baseUrl: "http://localhost:3000",
     baseUrl: "https://busy-lime-dolphin-hem.cyclic.app",
@@ -313,6 +317,8 @@ function App() {
 
     // when a repload takes place this should make loading page to show up
     checkIfRoutesExists();
+
+    // makeRootBackgroundThemed()
   }, [])
 
   useEffect(() => {
@@ -323,7 +329,7 @@ function App() {
 
   return (
     <AppContexts.Provider value={contexts}>
-      <div className="App" style={{ backgroundColor: "grey[400]", minHeight: "100vh", minWidth: "fit-content" }}>
+      <div className="App" style={{ backgroundColor: "#6c757d", minHeight: "100vh", minWidth: "fit-content" }}>
         <MainNavigation />
 
         {(!localStorage.getItem("token") && routeBeforeSessionExpired) ? <ShowSessionExpiredDialog /> : null}

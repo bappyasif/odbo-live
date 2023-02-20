@@ -321,8 +321,8 @@ let ThirdPartyLoginOutlets = () => {
                 // pl: 2, 
                 // mt: 1, 
                 borderRadius: 2,
-                marginTop: { xs: 1, lg: 0 }
-                // pt: 2
+                marginTop: { xs: 1, lg: 0 },
+                pt: 1.1
                 // width: "fit-content",
                 // height: "max-content"
             }}
