@@ -219,7 +219,7 @@ let ActionListOptions = ({ handleAnnTxt, clearAnnTxt, toggleShowActionOptions, f
 
     return (
         <Popper
-            sx={{ left: { xs: "-2px !important", md: "-92px !important", lg: "-164px !important" } }}
+            sx={{ left: { xs: "-81px !important", md: "-92px !important", lg: "-164px !important" } }}
             open={open}
             anchorEl={anchorEl}
             onClose={handleClose}
@@ -425,7 +425,7 @@ let ShowFriendRequest = ({ friendId, actions }) => {
                             sx={{ width: { xs: 49, md: 74, lg: 110 }, height: 47 }}
                         />
 
-                        <Typography sx={{ mx: .6, wordBreak: "break-all", px: 4, width: "-webkit-fill-available" }} variant="h6" noWrap>{data?.fullName}</Typography>
+                        <Typography sx={{ mx: .6, wordBreak: "break-all", px: 4, width: "-webkit-fill-available", textAlign: "center" }} variant="h6" noWrap>{data?.fullName}</Typography>
                     </Stack>
                     <MutualFriends friends={data?.friends} variantType="p" actions={actions} />
                     <Stack
