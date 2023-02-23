@@ -3,6 +3,7 @@ import { Gif, VideoOverlay } from '@giphy/react-components';
 import { ChevronLeftTwoTone, ChevronRightTwoTone } from '@mui/icons-material';
 import { Alert, Box, Divider, ListItem, ListItemButton, ListItemText, Paper, Stack, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react'
+import { isMobile } from 'react-device-detect';
 import { AppContexts } from '../App';
 import { performProtectedUpdateOperation, updateDataInDatabase } from '../utils';
 import { ShowRespectiveIcon } from './ChoosePrivacy';
@@ -16,6 +17,7 @@ function ShowUserPostMedias({ mediaContents }) {
                 content.push(<img key={"Image"} src={mediaContents[key]} style={{ order: 1 }} />)
             } else if (key === "Image" && !mediaContents[key]?.includes("http")) {
                 content.push(<img key={"Image"} src={handleMediaFileChecks(mediaContents[key])} style={{ order: 1 }} />)
+                // console.log("THIS CONTENTS")
             } else if (key === "Video" && mediaContents[key]?.includes("http")) {
                 content.push(<video key={"Video"} height={200} src={mediaContents[key]} controls style={{ order: 2 }} />)
             } else if (key === "Gif" && mediaContents[key]) {
@@ -238,9 +240,21 @@ const RenderPollOption = ({ setVoteAttempted, option, numberOfOptions, updatePos
 // handling media file checks
 export let handleMediaFileChecks = (mediaFile) => {
     let mediaSrc = mediaFile;
-    if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
-        mediaSrc = URL.createObjectURL(mediaFile)
+    if(isMobile) {
+        if (mediaFile instanceof File || mediaFile instanceof Blob) {
+            mediaSrc = URL.createObjectURL(mediaFile)
+        }
+        // console.log("THIS MOBILE!!")
+    } else {
+        if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
+            mediaSrc = URL.createObjectURL(mediaFile)
+        } 
+        // console.log("THIS DESKTOP")
     }
+    // if (mediaFile instanceof File || mediaFile instanceof Blob || mediaFile instanceof MediaSource) {
+    // if (mediaFile instanceof File || mediaFile instanceof Blob) {
+    //     mediaSrc = URL.createObjectURL(mediaFile)
+    // }
     return mediaSrc;
 }
 

@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { ButtonToIndicateHelp, HowToUseCreatePostComponent } from './HowToUseApp'
 import ConsentsPrompt from './ConsentsPrompt'
 import AnnouncementAlert from './AnnouncementAlert'
+import { isMobile } from 'react-device-detect'
 
 function CreatePost({ handleSuccessfullPostShared }) {
   let [addedOptions, setAddedOptions] = useState({})
@@ -248,6 +249,7 @@ let ShowRichTextEditor = ({ handleChange, setPostText }) => {
               setPostText(editor.getContent().replace(regExp, ''))
             });
           },
+          browsers : isMobile ? "msie,gecko,opera,safari" : null,
           height: 161,
           branding: false,
           menubar: false,
