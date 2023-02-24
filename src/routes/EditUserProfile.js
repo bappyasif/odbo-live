@@ -71,13 +71,23 @@ function EditUserProfile() {
         <Box
 
         >
-            <Typography sx={{ position: "relative" }} variant='h1'>Edit User Profile</Typography>
+            <Typography sx={{ position: "relative" }} variant='h1'>Edit Your Profile</Typography>
             <ButtonToIndicateHelp alertPosition={{ left: 0 }} forWhichItem={"Edit User Profile Page"} />
             {appCtx.dialogTextFor === "Edit User Profile Page" ? <HowToUseEditUserProfilePage /> : null}
 
             {userData.created ? <RenderPhoto cpUrl={userData.cpUrl || fakeDataModel[0].coverPhotoUrl} fullName={userData.fullName} /> : null}
             {userData.created ? <RenderFormWithData handleData={handleData} data={userData} updateTopicsDataFromChooser={updateUserEditTopicsDataFromChooser} /> : null}
             {userData.created ? <RenderFormActionButtons userData={userData} appCtx={appCtx} /> : null}
+
+            {/* <Stack
+                sx={{
+                    // flexDirection: {xs: "column", lg: "row"}
+                }}
+            >
+                {userData.created ? <RenderPhoto cpUrl={userData.cpUrl || fakeDataModel[0].coverPhotoUrl} fullName={userData.fullName} /> : null}
+                {userData.created ? <RenderFormWithData handleData={handleData} data={userData} updateTopicsDataFromChooser={updateUserEditTopicsDataFromChooser} /> : null}
+                {userData.created ? <RenderFormActionButtons userData={userData} appCtx={appCtx} /> : null}
+            </Stack> */}
         </Box>
     )
 }
@@ -208,11 +218,11 @@ let RenderFormWithData = ({ handleData, data, updateTopicsDataFromChooser }) => 
     }
 
     return (
-        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 11 }}>
+        <Box sx={{ display: "flex", flexDirection: { xs: "column", lg: "row" }, justifyContent: "center", alignItems: "center", gap: {xs: 2, lg: 11} }}>
             <Stack>
                 <RenderPhoto ppUrl={data.ppUrl || fakeDataModel[0].profilePhotoUrl} fullName={data.fullName} />
             </Stack>
-            <Stack sx={{ width: "45%" }}>
+            <Stack sx={{ width: { xs: "fit-content", lg: "45%" } }}>
                 {renderData}
             </Stack>
         </Box>
@@ -415,7 +425,13 @@ export let RenderPhoto = ({ ppUrl, cpUrl, fullName }) => {
     }
 
     return (
-        <ImageListItem sx={{ width: ppUrl && "650px" }}>
+        <ImageListItem 
+            sx={{ 
+                // width: ppUrl && "650px" 
+                width: ppUrl && {xs: "100vw", lg: "650px" },
+                height: {xs: "240px !important", md: "330px !important", lg: "440px !important"}
+            }}
+        >
             <img
                 src={decideImgResourceUrl()}
                 // srcSet={`${decideImgResourceUrl()}&dpr=2 2x`}

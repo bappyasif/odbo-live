@@ -21,7 +21,11 @@ function UserProfile() {
 
     return (
         <Paper
-            sx={{ backgroundColor: "secondary.dark", color: "info", fontSize: { xs: "small", md: "large", lg: "larger" }, }}
+            sx={{ 
+                backgroundColor: "secondary.dark", 
+                color: "info", 
+                fontSize: { xs: "small", md: "large", lg: "larger" }, 
+            }}
         >
             <UserProfileInfoSection appCtx={appCtx} />
             <Typography variant="h2">User Profile</Typography>
@@ -54,19 +58,19 @@ let UserProfileTabs = () => {
                             fontWeight: "bold"
                         }}
                     >
-                        <Tab label="All Posts" value="1" />
-                        <Tab label="Liked Posts" value="2" />
-                        <Tab label="Loved Posts" value="3" />
-                        <Tab label="Shared Posts" value="4" />
-                        <Tab label="Commented Posts" value="5" />
-                        <Tab label="Disliked Posts" value="6" />
+                        <Tab label="All" value="1" />
+                        <Tab label="Liked" value="2" />
+                        <Tab label="Loved" value="3" />
+                        <Tab label="Shared" value="4" />
+                        <Tab label="Replied" value="5" />
+                        <Tab label="Disliked" value="6" />
                     </TabList>
                 </Box>
                 <TabPanel value="1"><RenderAllPostsTab /></TabPanel>
                 <TabPanel value="2"><RenderActionSpecificPosts actionType={"Like"} /></TabPanel>
                 <TabPanel value="3"><RenderActionSpecificPosts actionType={"Love"} /></TabPanel>
                 <TabPanel value="4"><RenderActionSpecificPosts actionType={"Share"} /></TabPanel>
-                <TabPanel value="5"><RenderActionSpecificPosts actionType={"Comment"} /></TabPanel>
+                <TabPanel value="5"><RenderActionSpecificPosts actionType={"Replie"} /></TabPanel>
                 <TabPanel value="6"><RenderActionSpecificPosts actionType={"Dislike"} /></TabPanel>
             </TabContext>
         </Box>
@@ -123,7 +127,7 @@ export let RenderAllPostsTab = () => {
 const ShowUserToVisitNewsFeeds = ({ text }) => {
     return (
         <>
-            <Typography variant='h2'>No Posts are {text}</Typography>
+            <Typography variant='h2'>No Posts Has Been {text} Yet</Typography>
             <Typography variant="h4">Perhaps consder visting and playing around from <Link to={"/"}>Timeline Feeds</Link> would help!! Try now :)</Typography>
         </>
     )
@@ -140,7 +144,8 @@ let RenderActionSpecificPosts = ({ actionType }) => {
 
     return (
         <Paper>
-            <Typography variant="h3">All {actionType}d Posts</Typography>
+            {postsData?.length ? <Typography variant="h3">All {actionType}d Posts</Typography> : null}
+            {/* <Typography variant="h3">All {actionType}d Posts</Typography> */}
             {/* <Container> */}
             {postsData?.length ? renderAllPosts() : <ShowUserToVisitNewsFeeds text={`${actionType}d`} />}
             {/* </Container> */}
