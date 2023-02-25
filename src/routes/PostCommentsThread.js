@@ -77,7 +77,7 @@ function PostCommentsThread() {
     )
 }
 
-let RenderThisPostComments = (props) => {
+let RenderThisPostComments = ({commentsData, updateCommentTextFromThread}) => {
     let [showFab, setShowFab] = useState(false);
 
     const container = document.querySelector("#top-marker-container")
@@ -93,7 +93,8 @@ let RenderThisPostComments = (props) => {
 
     container?.addEventListener("scroll", handleScroll)
 
-    let renderComments = () => props?.commentsData?.sort((a, b) => a.created < b.created ? 1 : -1)?.map((commentData, idx) => <RenderComment key={commentData._id} commentData={commentData} updateCommentTextFromThread={props.updateCommentTextFromThread} fromThread={true} />)
+    // let renderComments = () => props?.commentsData?.sort((a, b) => a.created < b.created ? 1 : -1)?.map((commentData, idx) => <RenderComment key={commentData._id} commentData={commentData} updateCommentTextFromThread={props.updateCommentTextFromThread} fromThread={true} />)
+    let renderComments = () => commentsData?.sort((a, b) => a.created < b.created ? 1 : -1)?.map((commentData, idx) => <RenderComment key={commentData._id} commentData={commentData} updateCommentTextFromThread={updateCommentTextFromThread} fromThread={true} />)
 
     return (
         <Stack
@@ -113,7 +114,7 @@ let RenderThisPostComments = (props) => {
                 sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: .6, position: "relative" }}
             >
                 {
-                    (props?.commentsData?.length) === 0
+                    (commentsData?.length) === 0
                         ?
                         <Box>
                             <Divider />
@@ -123,7 +124,8 @@ let RenderThisPostComments = (props) => {
                         : null
                 }
 
-                {props.commentsData ? renderComments() : null}
+                {/* {props.commentsData ? renderComments() : null} */}
+                {commentsData ? renderComments() : null}
                 
                 {
                     renderComments().length > 4

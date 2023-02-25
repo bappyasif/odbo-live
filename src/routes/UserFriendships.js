@@ -38,7 +38,7 @@ let UserFriendships = () => {
         >
             <ExistingFriendList />
             {/* <FriendsRequests /> */}
-            <RenderAllFriendReuests />
+            <RenderAllFriendRequests />
         </Paper>
     )
 }
@@ -51,7 +51,13 @@ let ExistingFriendList = () => {
     // console.log(appCtx?.user?.friendships, appCtx?.user)
 
     return (
-        <Paper sx={{ backgroundColor: "secondary.dark", color: "text.primary", width: { xs: "100%", lg: "100%" } }}>
+        <Paper
+            sx={{
+                backgroundColor: "secondary.dark", color: "text.primary",
+                // width: { xs: "fit-content", lg: "100%" }
+                width: "100%"
+            }}
+        >
             <Typography variant="h4">Friends Listings:</Typography>
             <Divider sx={{ height: 2, my: .8, backgroundColor: "darkslategray" }} />
             <Stack sx={{ gap: 1.1 }}>
@@ -140,7 +146,12 @@ let RenderFriend = ({ friendID, baseUrl }) => {
                     <ButtonToIndicateHelp forWhichItem={"Existing Friends Listings"} />
                     {appCtx.dialogTextFor === "Existing Friends Listings" ? <HowToUseExistingFriendsListings /> : null}
                     <FriendCardHeader data={data} toggleShowActionOptions={toggleShowActionOptions} />
-                    <CardContent sx={{ alignSelf: "center", width: "29%" }}>
+                    <CardContent
+                        sx={{
+                            alignSelf: "center",
+                            // width: "29%" 
+                        }}
+                    >
                         <MutualFriends friends={data.friends} variantType="subtitle2" />
                     </CardContent>
                     <CardActions>
@@ -335,7 +346,7 @@ let RenderActionListOption = ({ item, toggleShowActionOptions, friendId, handleA
 //     )
 // }
 
-const RenderAllFriendReuests = () => {
+const RenderAllFriendRequests = () => {
     let appCtx = useContext(AppContexts);
     const requestTypes = [
         { list: appCtx?.user?.frRecieved, type: "Recieved", actions: listAssets },
