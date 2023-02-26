@@ -54,8 +54,8 @@ let ExistingFriendList = () => {
         <Paper
             sx={{
                 backgroundColor: "secondary.dark", color: "text.primary",
-                // width: { xs: "fit-content", lg: "100%" }
-                width: "100%"
+                width: { xs: "100vw", lg: "100%" }
+                // width: "100%"
             }}
         >
             <Typography variant="h4">Friends Listings:</Typography>
@@ -149,7 +149,8 @@ let RenderFriend = ({ friendID, baseUrl }) => {
                     <CardContent
                         sx={{
                             alignSelf: "center",
-                            // width: "29%" 
+                            width: "33%" 
+                            // width: {xs: "33%", lg: "65%"}
                         }}
                     >
                         <MutualFriends friends={data.friends} variantType="subtitle2" />
@@ -198,7 +199,8 @@ let FriendCardHeader = ({ data }) => {
             ?
             <CardHeader
                 sx={{
-                    // width: "20vw", 
+                    // width: "33%", 
+                    width: {xs: "33%", md: "50%", lg: "65%"},
                     position: "relative",
                     flexDirection: { xs: "column", md: "row" },
                     alignItems: { xs: "baseline", md: "center" },
@@ -213,7 +215,8 @@ let FriendCardHeader = ({ data }) => {
                     />
                 }
                 title={<Typography sx={{ fontSize: { xs: "small", md: "large", lg: "larger" }, wordBreak: "break-all" }} variant='h5'>{data.fullName}</Typography>}
-                subheader={"Friend Since " + getFriendSinceWhen()}
+                // subheader={"Friend Since " + getFriendSinceWhen()}
+                subheader={<Typography sx={{maxWidth: {xs: "121px", sm: "177px", md: "max-width"}, overflow: "hidden"}} noWrap={{xs: true, md: false}}>{"Friend Since " + getFriendSinceWhen()}</Typography>}
             >
             </CardHeader>
             : null
@@ -356,7 +359,14 @@ const RenderAllFriendRequests = () => {
     const renderRequestTypes = () => requestTypes.map(item => <ReuseableFriendRequestsList key={item.type} friendsList={item.list} requestType={item.type} listAssets={item.actions} />)
 
     return (
-        <Stack sx={{ gap: 6, width: "100%", alignItems: "center" }}>
+        <Stack 
+            sx={{ 
+                gap: 6, 
+                // width: "100%", 
+                width: { xs: "100vw", lg: "100%" },
+                alignItems: "center" 
+            }}
+        >
             {renderRequestTypes()}
         </Stack>
     )
@@ -372,7 +382,8 @@ const ReuseableFriendRequestsList = ({ friendsList, requestType, listAssets }) =
             sx={{
                 minWidth: "29vw",
                 minHeight: "20vh",
-                width: { xs: "100%", lg: "83%" },
+                // width: { xs: "100%", lg: "83%" },
+                width: { xs: "100vw", lg: "83%" },
                 backgroundColor: "secondary.dark",
                 color: "text.primary",
                 // p: .9

@@ -188,7 +188,7 @@ export const MutualFriends = ({ friends, variantType, forProfile, actions }) => 
     <Stack
       sx={{
         flexDirection: forProfile ? "row" : actions?.length === 2 ? "column" : "row",
-        alignItems: forProfile ? "baseline" : actions?.length === 2 ? "center" : "baseline",
+        alignItems: forProfile ? "baseline" : actions?.length === 2 ? "center" : {xs: "center", sm: "baseline"},
         gap: forProfile ? 3 : 1.3,
         minWidth: forProfile ? "auto" : actions?.length === 1 ? "45%" : "29%",
         px: .9

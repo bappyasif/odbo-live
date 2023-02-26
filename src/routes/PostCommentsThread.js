@@ -60,7 +60,8 @@ function PostCommentsThread() {
         data.postData
             ?
             <Box
-                width={990}
+                // width={990}
+                width={{xs: "100vw", lg: 990}}
                 margin="auto"
                 border={"dotted .4px blue"}
                 marginBottom={1.5}
