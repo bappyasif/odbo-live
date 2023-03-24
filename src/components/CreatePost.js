@@ -42,7 +42,16 @@ function CreatePost({ handleSuccessfullPostShared }) {
 
   let handleAddedOptions = (evt, elm, val) => {
     if (elm === "Gif") {
-      setAddedOptions(prev => ({ ...prev, [elm]: val?.id, current: elm }))
+      console.log(elm, "GIF!!", val)
+      // setAddedOptions(prev => ({ ...prev, [elm]: val?.id, current: elm }))
+      val
+      ? setAddedOptions(prev => ({ ...prev, [elm]: val?.id, current: elm }))
+      : setAddedOptions(prev => {
+        // checking if same element actionable component is Open already, if so then we will toggle it by changing its value something which does not have any Component tied to it
+        const chk = prev["current"] === elm
+
+        return ({ ...prev, current: chk ? "Choose Again" : elm })
+      })
     } else if (elm !== "body") {
       val
         ? setAddedOptions(prev => ({ ...prev, [elm]: val, current: elm }))
@@ -172,6 +181,8 @@ const PostCreatingModalUi = ({ appCtx, handleAddedOptions, setPostText, postText
           </Stack>
         </Stack>
 
+        {/* {(addedOptions.current === "Image" || addedOptions.current === "Video") ? <p style={{paddingTop: "11px"}}>Grabber Form For {addedOptions.current}</p> : null } */}
+        { (addedOptions.current && addedOptions.current !== "Choose Again") ? <Typography sx={{mt: "11px", bgcolor: "secondary.light", fontSize: {xs: "17px", sm: "20px", md: "22px", lg: "29px"}}}>Grabber Form For {addedOptions.current}</Typography> : null}
         <ShowClickActionsFunctionality currentElement={addedOptions.current} handleValue={handleAddedOptions} />
 
         <ShowUserPostMedias mediaContents={addedOptions} />
@@ -372,16 +383,19 @@ let ShowUrlGrabbingForm = ({ handleValue, currentElement }) => {
   }
 
   return (
-    <Box sx={{ m: 2 }}>
+    <Box sx={{ m: 2, bgcolor: "honeydew", pt:.6, pb: 2 }}>
       <FormElement handleSubmit={handleSubmit}>
-        <FormControlElement>
+        <FormControlElement 
+          // styles={{outline: "solid 2px darblue", width: "100%"}}
+        >
+          {/* <legend style={{color: "darkblue"}}>Url Grabber For {currentElement}</legend> */}
           <InputLabelElement hFor={"url"} text={"Enter Url Of Media Resource Here"} />
           <UserInputElement id={"url"} helperId="url-helper-text" type={"text"} handleChange={handleChange} />
           <HelperTextElement id={"url-helper-text"} text={"Enter a valid a url of your media resource"} />
         </FormControlElement>
         <Stack
           sx={{
-            flexDirection: "row", justifyContent: "space-between", px: .9
+            flexDirection: "row", justifyContent: "space-between", px: .9, pt: 1.5
           }}
         >
           <ButtonElement type={"submit"} text="Upload" variant={"contained"} />
@@ -393,6 +407,7 @@ let ShowUrlGrabbingForm = ({ handleValue, currentElement }) => {
 }
 
 let ShowIconBtns = ({ item, handleAddedOptions }) => {
+  // console.log(item.name, "item.name", item.name === "Gif")
 
   return (
     <Button

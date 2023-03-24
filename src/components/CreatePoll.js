@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 function CreatePoll({ handleValue, currentElement }) {
     return (
         <Box>
-            <Typography variant='h4' component={"h2"}>Create Poll</Typography>
+            {/* <Typography variant='h4' component={"h2"}>Create Poll</Typography> */}
             <ShowPollUI handleValue={handleValue} currentElement={currentElement} />
         </Box>
     )

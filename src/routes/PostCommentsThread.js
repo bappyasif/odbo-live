@@ -69,7 +69,7 @@ function PostCommentsThread() {
                 borderRadius={1.1}
                 position={"relative"}
             >
-                <RenderPostDataEssentials postData={data.postData} />
+                <RenderPostDataEssentials forPostThread={true} postData={data.postData} />
                 {data?.postData?.includedSharedPostId ? <ShowIncludedSharedPost appCtx={appCtx} includedPostId={data.postData.includedSharedPostId} /> : null}
                 <UserEngagementWithPost postData={data.postData} appCtx={appCtx} setShowCreatePost={() => null} handleCommentsDataUpdate={updateCommentsData} />
                 <RenderThisPostComments commentsData={data.commentsData} updateCommentTextFromThread={updateCommentTextFromThread} />

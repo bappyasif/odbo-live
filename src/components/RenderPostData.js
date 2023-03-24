@@ -7,7 +7,7 @@ import ShowUserPostMedias from './ShowUserPostMedias'
 import { readDataFromServer } from '../utils'
 import { sanitize } from 'dompurify'
 
-function RenderPostDataEssentials({ postData, shareMode, forShareModal }) {
+function RenderPostDataEssentials({ forPostThread, postData, shareMode, forShareModal }) {
     let { body, created, gif, poll, privacy, imageUrl, videoUrl, _id } = { ...postData }
 
     let [userData, setUserData] = useState({})
@@ -47,26 +47,27 @@ function RenderPostDataEssentials({ postData, shareMode, forShareModal }) {
 
                 {shareMode ? null : <Typography sx={{ display: {xs: "none", sm: "block"}, position: "absolute", top: 29, right: 20, color: "text.secondary" }} variant="subtitle2">{`Live Since: ${moment(created).fromNow()}`}</Typography>}
 
-                <RenderCardContent postId={postData._id} body={body} preparingAdditionalsForRendering={preparingAdditionalsForRendering} />
+                <RenderCardContent forPostThread={forPostThread} postId={postData._id} body={body} preparingAdditionalsForRendering={preparingAdditionalsForRendering} />
             </Card>
         </>
     )
 }
 
-export const RenderCardContent = ({ postId, body, preparingAdditionalsForRendering }) => {
+export const RenderCardContent = ({ forPostThread, postId, body, preparingAdditionalsForRendering }) => {
     const params = useParams();
 
     const navigate = useNavigate()
 
     let handleShowThread = () => {
-        navigate(`/posts/${postId}/comments/`)
+        !forPostThread && navigate(`/posts/${postId}/comments/`)
     }
 
     return (
         <CardContent
             sx={{
                 cursor: params.postId ? "auto" : "pointer",
-                pointerEvents: (params.postId && !preparingAdditionalsForRendering["Poll"]?.question) ? "none" : "auto"
+                pointerEvents: ( !forPostThread && params.postId && !preparingAdditionalsForRendering["Poll"]?.question) ? "none" : "auto"
+                // pointerEvents: (params.postId && !preparingAdditionalsForRendering["Poll"]?.question) ? "none" : "auto"
             }}
             onClick={handleShowThread}
         >

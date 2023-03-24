@@ -19,6 +19,7 @@ function ShowUserPostMedias({ mediaContents }) {
                 content.push(<img key={"Image"} src={handleMediaFileChecks(mediaContents[key])} style={{ order: 1 }} />)
                 // console.log("THIS CONTENTS")
             } else if (key === "Video" && mediaContents[key]?.includes("http")) {
+                // console.log(mediaContents[key], "mediaContents[key]")
                 content.push(<video key={"Video"} height={200} src={mediaContents[key]} controls style={{ order: 2 }} />)
             } else if (key === "Gif" && mediaContents[key]) {
                 content.push(<ShowGif key={"Gif"} id={mediaContents[key]} />)
@@ -34,7 +35,6 @@ function ShowUserPostMedias({ mediaContents }) {
     }
 
     let renderContents = () => [...generateContents()]
-
     return (
         <Box
             sx={{ display: "flex", flexDirection: "column", mb: 2, gap: 2, justifyContent: "stretch", }}
